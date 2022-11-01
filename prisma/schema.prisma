@@ -6,7 +6,7 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
@@ -15,26 +15,27 @@ model modules {
   name   String   @unique
   users  users[]
   sprint sprint[]
+  videos videos[]
 }
 
 model users {
-  id        String   @id @default(uuid())
-  name      String
-  email     String   @unique
-  password  String
-  isAdmin   Boolean  @default(false)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @default(now())
+  id          String   @id @default(uuid())
+  name        String
+  email       String   @unique
+  password    String
+  isAdmin     Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @default(now())
+  lastModules String[]
 
-  modules   modules  @relation(fields: [modulesId], references: [id], onDelete: Cascade)
+  modules   modules @relation(fields: [modulesId], references: [id])
   modulesId String
-  videos    videos[]
 }
 
 model sprint {
   id        String   @id @default(uuid())
   name      String
-  modules   modules  @relation(fields: [modulesId], references: [id], onDelete: Cascade)
+  modules   modules  @relation(fields: [modulesId], references: [id])
   modulesId String
   videos    videos[]
 }
@@ -47,10 +48,11 @@ model videos {
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now())
 
-  sprint       sprint         @relation(fields: [sprintId], references: [id], onDelete: Cascade)
-  sprintId     String
-  users        users          @relation(fields: [usersId], references: [id], onDelete: Cascade)
-  usersId      String
+  sprint    sprint  @relation(fields: [sprintId], references: [id])
+  sprintId  String
+  modules   modules @relation(fields: [modulesId], references: [id])
+  modulesId String
+
   video_marker video_marker[]
 }
 

@@ -2,7 +2,7 @@ export interface IUsersRequest {
   name: string;
   email: string;
   password: string;
-  modulesId: string;
+  moduleId: string;
   isAdmin?: boolean;
 }
 

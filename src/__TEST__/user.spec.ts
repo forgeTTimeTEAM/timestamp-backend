@@ -2,27 +2,23 @@ import request from "supertest";
 import { prisma } from "../prisma/index";
 import { app } from "../server";
 
-afterAll(async () => {
-  await prisma.video_marker.deleteMany();
-  await prisma.videos.deleteMany();
-  await prisma.sprint.deleteMany();
-  await prisma.users.deleteMany();
-  await prisma.modules.deleteMany();
-});
+// afterAll(async () => {
+//   await prisma.video_marker.deleteMany();
+//   await prisma.videos.deleteMany();
+//   await prisma.sprint.deleteMany();
+//   await prisma.users.deleteMany();
+//   await prisma.modules.deleteMany();
+// });
 
 describe("describe user context ", () => {
   test("should create a user", async () => {
-    const moduleCreated = await prisma.modules.create({
-      data: {
-        name: "M4",
-      },
-    });
+    const modules = await prisma.modules.findMany();
 
     const user = {
       name: "yuran",
       email: "yuran@example.com",
       password: "password",
-      modulesId: moduleCreated.id,
+      modulesId: modules,
     };
 
     const res = await request(app).post("/users").send(user);

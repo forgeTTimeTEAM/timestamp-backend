@@ -6,7 +6,7 @@ import { AppError } from "../../errors/AppError";
 const createUserService = async ({
   email,
   password,
-  modulesId,
+  moduleId,
   name,
   isAdmin,
 }: IUsersRequest) => {
@@ -24,7 +24,7 @@ const createUserService = async ({
 
   const moduleExists = await prisma.modules.findFirst({
     where: {
-      id: modulesId,
+      id: moduleId,
     },
   });
 
@@ -41,7 +41,7 @@ const createUserService = async ({
       email: email,
       name: name,
       password: await hash(password, 10),
-      modulesId: modulesId,
+      modules: {},
       isAdmin: isAdmin,
     },
   });
@@ -49,4 +49,14 @@ const createUserService = async ({
   return userCreated;
 };
 
-export { createUserService };
+const findUserService = async () => {
+  const data = await prisma.users.findMany({
+    include: {
+      modules: true,
+    },
+  });
+
+  return data;
+};
+
+export { createUserService, findUserService };
