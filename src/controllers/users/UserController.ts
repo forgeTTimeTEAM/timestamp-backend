@@ -1,21 +1,24 @@
 import { Request, Response } from "express";
+
 import {
   createUserService,
-  findUserService,
+  findUsersByGroupService,
 } from "../../services/users/UserService";
 
 const createUserController = async (req: Request, res: Response) => {
   const user = req.body;
 
-  const createUser = await createUserService(user);
+  const createdUser = await createUserService(user);
 
-  return res.status(201).json(createUser);
+  return res.status(201).json(createdUser);
 };
 
-const findManyUserController = async (req: Request, res: Response) => {
-  const users = await findUserService();
+const findUsersByGroupController = async (req: Request, res: Response) => {
+  const { id } = req.params;
+
+  const users = await findUsersByGroupService(id);
 
   return res.status(200).json(users);
 };
 
-export { createUserController, findManyUserController };
+export { createUserController, findUsersByGroupController };

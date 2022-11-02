@@ -4,7 +4,7 @@ CREATE TYPE "Role" AS ENUM ('STUDENT', 'ADM', 'INSTRUCTOR');
 -- CreateTable
 CREATE TABLE "group" (
     "id" TEXT NOT NULL,
-    "number" BIGSERIAL NOT NULL,
+    "number" SERIAL NOT NULL,
 
     CONSTRAINT "group_pkey" PRIMARY KEY ("id")
 );
@@ -34,7 +34,6 @@ CREATE TABLE "users" (
     "name" TEXT NOT NULL,
     "email" TEXT NOT NULL,
     "password" TEXT NOT NULL,
-    "isAdmin" BOOLEAN NOT NULL DEFAULT false,
     "role" "Role" NOT NULL DEFAULT 'STUDENT',
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -46,10 +45,10 @@ CREATE TABLE "users" (
 -- CreateTable
 CREATE TABLE "users_modules" (
     "id" TEXT NOT NULL,
-    "usersId" TEXT NOT NULL,
-    "modulesId" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "userId" TEXT NOT NULL,
+    "moduleId" TEXT NOT NULL,
 
     CONSTRAINT "users_modules_pkey" PRIMARY KEY ("id")
 );
@@ -95,10 +94,10 @@ ALTER TABLE "sprint" ADD CONSTRAINT "sprint_modulesId_fkey" FOREIGN KEY ("module
 ALTER TABLE "users" ADD CONSTRAINT "users_groupId_fkey" FOREIGN KEY ("groupId") REFERENCES "group"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "users_modules" ADD CONSTRAINT "users_modules_usersId_fkey" FOREIGN KEY ("usersId") REFERENCES "users"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "users_modules" ADD CONSTRAINT "users_modules_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "users_modules" ADD CONSTRAINT "users_modules_modulesId_fkey" FOREIGN KEY ("modulesId") REFERENCES "modules"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE "users_modules" ADD CONSTRAINT "users_modules_moduleId_fkey" FOREIGN KEY ("moduleId") REFERENCES "modules"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "videos" ADD CONSTRAINT "videos_sprintId_fkey" FOREIGN KEY ("sprintId") REFERENCES "sprint"("id") ON DELETE RESTRICT ON UPDATE CASCADE;

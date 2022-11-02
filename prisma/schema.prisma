@@ -12,7 +12,7 @@ datasource db {
 
 model group {
   id      String    @id @default(uuid())
-  number  BigInt    @default(autoincrement())
+  number  Int    @default(autoincrement())
   modules modules[]
   users   users[]
 }
@@ -42,7 +42,6 @@ model users {
   name      String
   email     String   @unique
   password  String
-  isAdmin   Boolean  @default(false)
   role      Role     @default(STUDENT)
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now())
@@ -54,12 +53,13 @@ model users {
 
 model users_modules {
   id        String   @id @default(uuid())
-  user      users    @relation(fields: [usersId], references: [id])
-  usersId   String
-  module    modules  @relation(fields: [modulesId], references: [id])
-  modulesId String
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now())
+
+  user      users    @relation(fields: [userId], references: [id])
+  userId   String
+  module    modules  @relation(fields: [moduleId], references: [id])
+  moduleId String
 }
 
 model videos {

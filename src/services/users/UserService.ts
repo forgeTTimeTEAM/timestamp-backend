@@ -1,62 +1,87 @@
-import { IUsersRequest } from "../../interfaces/users";
 import { prisma } from "../../prisma/index";
+
 import { hash } from "bcryptjs";
+
 import { AppError } from "../../errors/AppError";
 
+import { IUsersRequest } from "../../interfaces/users";
+
 const createUserService = async ({
+  name,
   email,
   password,
-  moduleId,
-  name,
-  isAdmin,
+  groupId,
 }: IUsersRequest) => {
   const userExists = await prisma.users.findFirst({
     where: {
-      email: email,
+      email,
     },
   });
 
   if (userExists) {
-    throw new AppError(" already exists");
+    throw new AppError("Email is already in use");
   }
 
-  console.log();
-
-  const moduleExists = await prisma.modules.findFirst({
+  const groupExists = await prisma.group.findFirst({
     where: {
-      id: moduleId,
+      id: groupId,
     },
   });
 
-  if (!moduleExists) {
-    throw new AppError("module id not found", 404);
+  if (!groupExists) {
+    throw new AppError("Group not found", 404);
   }
 
-  const userCreated = await prisma.users.create({
+  const createdUser = await prisma.users.create({
     select: {
       name: true,
       email: true,
+      role: true,
+      createdAt: true,
+      updatedAt: true,
     },
     data: {
-      email: email,
-      name: name,
+      email,
+      name,
       password: await hash(password, 10),
-      modules: {},
-      isAdmin: isAdmin,
+      groupId,
     },
   });
 
-  return userCreated;
+  return createdUser;
 };
 
-const findUserService = async () => {
-  const data = await prisma.users.findMany({
+const findUsersByGroupService = async (groupId: string) => {
+  const groupExists = await prisma.group.findFirst({
+    where: {
+      id: groupId,
+    },
+  });
+
+  if (!groupExists) {
+    throw new AppError("Group not found", 404);
+  }
+
+  const data = await prisma.group.findMany({
+    where: {
+      id: groupId,
+    },
     include: {
-      modules: true,
+      users: {
+        select: {
+          id: true,
+          name: true,
+          email: true,
+          role: true,
+          createdAt: true,
+          updatedAt: true,
+          groupId: true,
+        },
+      },
     },
   });
 
   return data;
 };
 
-export { createUserService, findUserService };
+export { createUserService, findUsersByGroupService };
