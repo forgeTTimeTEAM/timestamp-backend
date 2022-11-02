@@ -1,10 +1,8 @@
-import { prisma } from "../../prisma/index";
-
 import { hash } from "bcryptjs";
 
 import { AppError } from "../../errors/AppError";
-
 import { IUsersRequest } from "../../interfaces/users";
+import { prisma } from "../../prisma";
 
 const createUserService = async ({
   name,
@@ -51,37 +49,4 @@ const createUserService = async ({
   return createdUser;
 };
 
-const findUsersByGroupService = async (groupId: string) => {
-  const groupExists = await prisma.group.findFirst({
-    where: {
-      id: groupId,
-    },
-  });
-
-  if (!groupExists) {
-    throw new AppError("Group not found", 404);
-  }
-
-  const data = await prisma.group.findMany({
-    where: {
-      id: groupId,
-    },
-    include: {
-      users: {
-        select: {
-          id: true,
-          name: true,
-          email: true,
-          role: true,
-          createdAt: true,
-          updatedAt: true,
-          groupId: true,
-        },
-      },
-    },
-  });
-
-  return data;
-};
-
-export { createUserService, findUsersByGroupService };
+export { createUserService };
