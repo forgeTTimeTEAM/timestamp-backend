@@ -7,9 +7,7 @@ import { IUserLogin } from "../../interfaces/users";
 
 const loginUserService = async ({ email, password }: IUserLogin) => {
   const user = await prisma.users.findUnique({
-    where: {
-      email
-    }
+    where: { email },
   });
 
   if (!user) throw new AppError("User not registered.", 404);
@@ -18,7 +16,11 @@ const loginUserService = async ({ email, password }: IUserLogin) => {
 
   if (!matchPassword) throw new AppError("Wrong email/password.", 403);
 
-  return jwt.sign({ role: user.role, groupId: user.groupId }, process.env.SECRET_KEY as string, { expiresIn: "24h", subject: user.id })
-}
+  return jwt.sign(
+    { role: user.role, groupId: user.groupId },
+    process.env.SECRET_KEY!,
+    { expiresIn: "24h", subject: user.id }
+  );
+};
 
-export { loginUserService }
+export { loginUserService };
