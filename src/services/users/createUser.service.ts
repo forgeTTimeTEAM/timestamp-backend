@@ -35,6 +35,7 @@ const createUserService = async ({
       name: true,
       email: true,
       role: true,
+      groupId: true,
       createdAt: true,
       updatedAt: true,
     },
