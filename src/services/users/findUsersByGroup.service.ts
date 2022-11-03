@@ -1,5 +1,6 @@
 import { AppError } from "../../errors/AppError";
 import { prisma } from "../../prisma";
+import { removeObjectProperty } from "../../utils/removeObjectProperty";
 
 const findUsersByGroupService = async (groupId: string) => {
   const groupExists = await prisma.groups.findFirst({
@@ -17,17 +18,7 @@ const findUsersByGroupService = async (groupId: string) => {
       id: groupId,
     },
     include: {
-      users: {
-        select: {
-          id: true,
-          name: true,
-          email: true,
-          role: true,
-          createdAt: true,
-          updatedAt: true,
-          groupId: true,
-        },
-      },
+      users: true,
     },
   });
 
