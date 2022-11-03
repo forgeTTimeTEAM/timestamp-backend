@@ -1,11 +1,11 @@
-export interface IVideoMarkerRequest {
+interface marks {
   time: string;
   title: string;
   videoId: string;
 }
 
-export interface IVideoMarkerResponse extends IVideoMarkerRequest {
-  id: string;
-  createdAt: Date;
-  updatedAt: Date;
+export interface IVideoMarkerRequest {
+  marks: marks[];
+  videoId: string;
+  groupId: string | undefined;
 }
