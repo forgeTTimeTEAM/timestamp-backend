@@ -1,6 +1,5 @@
 import request from "supertest";
 import { prisma } from "../prisma/index";
-import { usersRouter } from "../routes/users.routes";
 import { app } from "../server";
 
 // afterAll(async () => {
