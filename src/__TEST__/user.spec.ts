@@ -8,6 +8,7 @@ afterAll(async () => {
   await prisma.sprints.deleteMany();
   await prisma.users.deleteMany();
   await prisma.modules.deleteMany();
+  await prisma.groups.deleteMany();
 });
 
 describe("describe user context ", () => {
@@ -16,25 +17,12 @@ describe("describe user context ", () => {
       name: "yuran",
       email: "yuran@example.com",
       password: "password",
-      groupId: "75b6ad75-561d-47dc-94bb-405f48fd6018",
+      groupId: null,
     };
 
     const res = await request(app).post("/users").send(user);
     expect(res.status).toBe(201);
     expect(res.body).toHaveProperty("name");
     expect(res.body).toHaveProperty("email");
-  });
-
-  test("should not be able create user if without module", async () => {
-    const user = {
-      name: "rick",
-      email: "rick@parece.falso",
-      password: "password",
-      modulesId: "ID NOT VALID",
-    };
-
-    const res = await request(app).post("/users").send(user);
-    expect(res.status).toBe(404);
-    expect(res.body).toHaveProperty("message");
   });
 });
