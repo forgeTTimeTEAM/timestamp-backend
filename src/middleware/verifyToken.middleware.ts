@@ -37,7 +37,7 @@ const verifyTokenMiddleware: RequestHandler = (req, res, next) => {
     }
   );
 
-  next();
+  return next();
 };
 
 export { verifyTokenMiddleware };
