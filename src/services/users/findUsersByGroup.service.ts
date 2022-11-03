@@ -2,7 +2,7 @@ import { AppError } from "../../errors/AppError";
 import { prisma } from "../../prisma";
 
 const findUsersByGroupService = async (groupId: string) => {
-  const groupExists = await prisma.group.findFirst({
+  const groupExists = await prisma.groups.findFirst({
     where: {
       id: groupId,
     },
@@ -12,7 +12,7 @@ const findUsersByGroupService = async (groupId: string) => {
     throw new AppError("Group not found", 404);
   }
 
-  const data = await prisma.group.findMany({
+  const data = await prisma.groups.findMany({
     where: {
       id: groupId,
     },

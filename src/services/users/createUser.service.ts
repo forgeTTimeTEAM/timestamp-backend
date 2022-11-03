@@ -8,7 +8,7 @@ const createUserService = async ({
   name,
   email,
   password,
-  groupId,
+  groupId = null,
 }: IUsersRequest) => {
   const userExists = await prisma.users.findFirst({
     where: {
@@ -20,14 +20,14 @@ const createUserService = async ({
     throw new AppError("Email is already in use");
   }
 
-  const groupExists = await prisma.group.findFirst({
-    where: {
-      id: groupId,
-    },
-  });
+  if (groupId) {
+    const groupExists = await prisma.groups.findFirst({
+      where: {
+        id: groupId,
+      },
+    });
 
-  if (!groupExists) {
-    throw new AppError("Group not found", 404);
+    if (!groupExists) throw new AppError("Group not found", 404);
   }
 
   const createdUser = await prisma.users.create({
@@ -42,7 +42,7 @@ const createUserService = async ({
       email,
       name,
       password: await hash(password, 10),
-      groupId,
+      groupId: groupId || null,
     },
   });
 
