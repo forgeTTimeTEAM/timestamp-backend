@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "ts-node-dev ./src/server.ts",
-    "test": "dotenv -e .env.test jest -- --forceExit",
+    "test": "dotenv -e .env.test jest --forceExit",
     "migrate:schema.test": "dotenv -e .env.test -- npx prisma migrate dev --name "
   },
   "keywords": [],
