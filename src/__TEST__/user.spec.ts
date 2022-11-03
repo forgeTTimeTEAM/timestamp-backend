@@ -16,11 +16,11 @@ const user = {
 
 describe("routes - users/", () => {
   test("should create a user", async () => {
-    const modules = await prisma.modules.findMany();
-    const userCreate = {
-      ...user,
+    const user = {
       name: "yuran",
-      modulesId: modules,
+      email: "yuran@example.com",
+      password: "password",
+      groupId: "75b6ad75-561d-47dc-94bb-405f48fd6018",
     };
     const res = await request(app).post("/users").send(userCreate);
 
