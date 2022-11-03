@@ -4,3 +4,8 @@ export interface IUsersRequest {
   password: string;
   groupId: string | null;
 }
+
+export interface IUserLogin {
+  email: string;
+  password: string;
+}
