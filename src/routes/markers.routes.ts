@@ -5,13 +5,13 @@ import {
   verifyTokenMiddleware,
 } from "../middleware";
 
-const markers = Router();
+const markersRouter = Router();
 
-markers.post(
+markersRouter.post(
   "/",
   verifyTokenMiddleware,
   verifyAdmPermissionMiddleware,
   createMarkerController
 );
 
-export { markers };
+export { markersRouter };

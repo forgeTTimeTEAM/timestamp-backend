@@ -56,10 +56,10 @@ const createMarkers = async ({
     );
   }
 
-  const timeValidate = /(^(0\d)|(1\d|2[0-3]):[0-5]\d:[0-5]\d$)/;
+  const timeValidate = /(^(0[0-9])|(1[0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$)/;
 
   marks.map((marker) => {
-    if (timeValidate.test(marker.time)) {
+    if (!timeValidate.test(marker.time)) {
       throw new AppError("time not validate");
     }
   });
