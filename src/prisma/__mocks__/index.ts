@@ -1,6 +1,6 @@
 import { PrismaClient } from "@prisma/client";
 import { execSync } from "child_process";
-import { join, resolve } from "path";
+import { resolve } from "path";
 import { URL } from "url";
 import { v4 as uuid } from "uuid";
 
