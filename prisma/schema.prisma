@@ -69,7 +69,7 @@ model users_modules {
 model videos {
   id          String   @id @default(uuid())
   title       String
-  url         String
+  url         String?
   releaseDate DateTime
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt

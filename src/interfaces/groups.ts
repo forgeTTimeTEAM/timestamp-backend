@@ -1,4 +1,4 @@
 export interface IGroupRequest {
-  moduleName: string;
-  sprintName: string;
+  modulePrefixName?: string;
+  sprintPrefixName?: string;
 }

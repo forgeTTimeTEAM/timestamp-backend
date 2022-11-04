@@ -1,17 +1,17 @@
 import { Router } from "express";
-import { createGroupController } from "../controllers/groups";
+import { createMarkerController } from "../controllers/markers";
 import {
   verifyAdmPermissionMiddleware,
   verifyTokenMiddleware,
 } from "../middleware";
 
-const groupsRouter = Router();
+const markers = Router();
 
-groupsRouter.post(
+markers.post(
   "/",
   verifyTokenMiddleware,
   verifyAdmPermissionMiddleware,
-  createGroupController
+  createMarkerController
 );
 
-export { groupsRouter };
+export { markers };

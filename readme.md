@@ -8,8 +8,12 @@
 
 # POST /users
 
-está rota cria usuário, basta enviar os dados a baixo.
-`name: string; email: string; password: string; moduleId: string;`
-ela retornará somente nome e email
+Rota responsável por criar um usuário, deve ser enviado no corpo da requisição os seguintes campos: {
+  name,
+  email,
+  password,
+  groupId (propriedade opcional, caso não seja passada, será automaticamente enviada com valor null)
+}
+
 
 ### All rights reserved.

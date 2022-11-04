@@ -2,7 +2,8 @@ export interface IUsersRequest {
   name: string;
   email: string;
   password: string;
-  groupId: string | null;
+  groupId: string;
+  moduleId: string;
 }
 
 export interface IUserLogin {
