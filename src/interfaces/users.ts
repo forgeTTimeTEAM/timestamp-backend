@@ -2,12 +2,11 @@ export interface IUsersRequest {
   name: string;
   email: string;
   password: string;
-  modulesId: string;
-  isAdmin?: boolean;
+  groupId: string;
+  moduleId: string;
 }
 
-export interface IUsersResponse extends IUsersRequest {
-  id: string;
-  createdAt: Date;
-  updatedAt: Date;
+export interface IUserLogin {
+  email: string;
+  password: string;
 }
