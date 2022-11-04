@@ -3,6 +3,7 @@ import { hash } from "bcryptjs";
 import { AppError } from "../../errors/AppError";
 import { IUsersRequest } from "../../interfaces/users";
 import { prisma } from "../../prisma";
+import { removeObjectProperty } from "../../utils/removeObjectProperty";
 
 const createUserService = async ({
   name,
@@ -31,14 +32,6 @@ const createUserService = async ({
   }
 
   const createdUser = await prisma.users.create({
-    select: {
-      name: true,
-      email: true,
-      role: true,
-      groupId: true,
-      createdAt: true,
-      updatedAt: true,
-    },
     data: {
       email,
       name,
@@ -46,6 +39,8 @@ const createUserService = async ({
       groupId: groupId || null,
     },
   });
+
+  removeObjectProperty(createdUser, "password");
 
   return createdUser;
 };
