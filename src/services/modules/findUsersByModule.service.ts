@@ -12,10 +12,6 @@ const findUsersByModuleService = async ({
     },
   });
 
-  if (user!.role === "STUDENT") {
-    throw new AppError("Not authorized");
-  }
-
   const moduleExists = await prisma.modules.findFirst({
     where: {
       id: moduleId,
