@@ -1,15 +1,5 @@
 import request from "supertest";
-import { prisma } from "../../prisma";
-import { app } from "../../server";
-
-afterAll(async () => {
-  await prisma.video_markers.deleteMany();
-  await prisma.videos.deleteMany();
-  await prisma.sprints.deleteMany();
-  await prisma.users_modules.deleteMany();
-  await prisma.users.deleteMany();
-  await prisma.modules.deleteMany();
-});
+import { app } from "../../app";
 
 const user = {
   email: "yuran@example.com",
@@ -17,7 +7,101 @@ const user = {
 };
 
 describe("routes - users/", () => {
-  test("should be able to create a user", async () => {
+  test("should not be able to create a user without name", async () => {
+    const createUser = {
+      ...user,
+    };
+    const res = await request(app).post("/users").send(createUser);
+
+    expect(res.status).toBe(400);
+    expect(res.body).toHaveProperty("message");
+  });
+
+  test("should not be able to create a user without password", async () => {
+    const createUser = {
+      email: "alv7teste@email.com",
+      name: "alves",
+    };
+
+    const res = await request(app).post("/users").send(createUser);
+
+    expect(res.status).toBe(400);
+    expect(res.body).toHaveProperty("message");
+  });
+
+  test("should not be able to create a user without email", async () => {
+    const createUser = {
+      name: "alves",
+      password: "alves123",
+    };
+
+    const res = await request(app).post("/users").send(createUser);
+
+    expect(res.status).toBe(400);
+    expect(res.body).toHaveProperty("message");
+  });
+
+  test("should not be able to create a user with same email", async () => {
+    const createUser = {
+      email: "alvteste@email.com",
+      password: "alves123",
+      name: "alves",
+    };
+
+    await request(app).post("/users").send(createUser);
+
+    const res = await request(app).post("/users").send(createUser);
+
+    expect(res.status).toBe(409);
+    expect(res.body).toHaveProperty("message");
+  });
+
+  test("should not be able to create a user with invalid group id", async () => {
+    const createUser = {
+      email: "alvteste2@email.com",
+      password: "alves123",
+      name: "alves",
+      groupId: "batata",
+    };
+
+    const res = await request(app).post("/users").send(createUser);
+
+    expect(res.status).toBe(404);
+    expect(res.body).toHaveProperty("message");
+  });
+
+  test("should  be able to create a user with valid group id", async () => {
+    const login = await request(app)
+      .post("/users/login")
+      .send({ email: "alvteste2@email.com", password: "alves123" });
+
+    const token = `Bearer ${login.body.token}`;
+
+    const createGroupRequest = { moduleName: "Módulo 1", sprintName: "sprint" };
+
+    const userGroup = await request(app)
+      .post("/groups")
+      .set("Authorization", token)
+      .send(createGroupRequest);
+
+    const createUser = {
+      email: "alvteste3@email.com",
+      password: "alves123",
+      name: "alves",
+      groupId: userGroup.body.id,
+    };
+
+    const res = await request(app).post("/users").send(createUser);
+
+    expect(res.status).toBe(201);
+    expect(res.body).toHaveProperty("id");
+    expect(res.body).toHaveProperty("name");
+    expect(res.body).toHaveProperty("email");
+    expect(res.body).not.toHaveProperty("password");
+    expect(res.body).toHaveProperty("role");
+  });
+
+  test("should be able to create a user without groupId", async () => {
     const createUser = {
       ...user,
       name: "yuran",
