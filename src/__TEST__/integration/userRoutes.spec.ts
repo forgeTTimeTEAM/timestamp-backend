@@ -1,15 +1,7 @@
 import request from "supertest";
 import { prisma } from "../../prisma";
+import { hash } from "bcryptjs";
 import { app } from "../../server";
-
-afterAll(async () => {
-  await prisma.video_markers.deleteMany();
-  await prisma.videos.deleteMany();
-  await prisma.sprints.deleteMany();
-  await prisma.users_modules.deleteMany();
-  await prisma.users.deleteMany();
-  await prisma.modules.deleteMany();
-});
 
 const user = {
   email: "yuran@example.com",
@@ -51,27 +43,27 @@ describe("routes - users/", () => {
     expect(res.body).toHaveProperty("message");
   });
 
-  test("should not be able to create a user with same email", async () => {
+  test("should not be able to create a user without group id", async () => {
     const createUser = {
-      email: "alvteste@email.com",
-      password: "alves123",
       name: "alves",
+      email: "alv7teste@email.com",
+      password: "alves123",
+      moduleId: "batata",
     };
-
-    await request(app).post("/users").send(createUser);
 
     const res = await request(app).post("/users").send(createUser);
 
-    expect(res.status).toBe(409);
+    expect(res.status).toBe(400);
     expect(res.body).toHaveProperty("message");
   });
 
   test("should not be able to create a user with invalid group id", async () => {
     const createUser = {
-      email: "alvteste2@email.com",
+      email: "alvteste1@email.com",
       password: "alves123",
       name: "alves",
       groupId: "batata",
+      moduleId: "batata",
     };
 
     const res = await request(app).post("/users").send(createUser);
@@ -80,43 +72,140 @@ describe("routes - users/", () => {
     expect(res.body).toHaveProperty("message");
   });
 
-  test("should  be able to create a user with valid group id", async () => {
-    const login = await request(app)
+  test("should not be able to create a user without module id", async () => {
+    const createUser = await prisma.users.create({
+      data: {
+        email: "alvteste2@email.com",
+        name: "alves123",
+        password: await hash("alves123", 10),
+      },
+    });
+
+    await request(app).post("/users").send(createUser);
+
+    const userLogin = await request(app)
       .post("/users/login")
       .send({ email: "alvteste2@email.com", password: "alves123" });
-
-    const token = `Bearer ${login.body.token}`;
-
-    const createGroupRequest = { moduleName: "Módulo 1", sprintName: "sprint" };
+    const userToken = `Bearer ${userLogin.body.token}`;
 
     const userGroup = await request(app)
       .post("/groups")
-      .set("Authorization", token)
-      .send(createGroupRequest);
+      .set("Authorization", userToken)
+      .send({ moduleName: "Módulo", sprintName: "sprint" });
 
-    const createUser = {
-      email: "alvteste3@email.com",
-      password: "alves123",
+    const createUserRequest = {
       name: "alves",
+      email: "alv7teste@email.com",
+      password: "alves123",
       groupId: userGroup.body.id,
     };
 
-    const res = await request(app).post("/users").send(createUser);
+    const res = await request(app).post("/users").send(createUserRequest);
 
-    expect(res.status).toBe(201);
-    expect(res.body).toHaveProperty("id");
-    expect(res.body).toHaveProperty("name");
-    expect(res.body).toHaveProperty("email");
-    expect(res.body).not.toHaveProperty("password");
-    expect(res.body).toHaveProperty("role");
+    expect(res.status).toBe(400);
+    expect(res.body).toHaveProperty("message");
   });
 
-  test("should be able to create a user without groupId", async () => {
-    const createUser = {
-      ...user,
-      name: "yuran",
+  test("should not be able to create a user with invalid module id", async () => {
+    const createUser = await prisma.users.create({
+      data: {
+        email: "alvteste3@email.com",
+        name: "alves123",
+        password: await hash("alves123", 10),
+      },
+    });
+
+    await request(app).post("/users").send(createUser);
+
+    const userLogin = await request(app)
+      .post("/users/login")
+      .send({ email: "alvteste3@email.com", password: "alves123" });
+    const userToken = `Bearer ${userLogin.body.token}`;
+
+    const userGroup = await request(app)
+      .post("/groups")
+      .set("Authorization", userToken)
+      .send({ moduleName: "Módulo", sprintName: "sprint" });
+
+    const createUserRequest = {
+      name: "alves",
+      email: "alv7teste@email.com",
+      password: "alves123",
+      groupId: userGroup.body.id,
+      moduleId: "batata",
     };
-    const res = await request(app).post("/users").send(createUser);
+
+    const res = await request(app).post("/users").send(createUserRequest);
+
+    expect(res.status).toBe(404);
+    expect(res.body).toHaveProperty("message");
+  });
+
+  test("should not be able to create a user with same email", async () => {
+    const createUser = await prisma.users.create({
+      data: {
+        email: "alvteste4@email.com",
+        name: "alves123",
+        password: await hash("alves123", 10),
+      },
+    });
+
+    await request(app).post("/users").send(createUser);
+
+    const userLogin = await request(app)
+      .post("/users/login")
+      .send({ email: "alvteste4@email.com", password: "alves123" });
+    const userToken = `Bearer ${userLogin.body.token}`;
+
+    const userGroup = await request(app)
+      .post("/groups")
+      .set("Authorization", userToken)
+      .send({ moduleName: "Módulo", sprintName: "sprint" });
+
+    const createUserRequest = {
+      name: "alves",
+      email: "alv4teste@email.com",
+      password: "alves123",
+      groupId: userGroup.body.id,
+      moduleId: userGroup.body.modules[0].id,
+    };
+
+    const res = await request(app).post("/users").send(createUserRequest);
+
+    expect(res.status).toBe(409);
+    expect(res.body).toHaveProperty("message");
+  });
+
+  test("should be able to create a user", async () => {
+    const createUser = await prisma.users.create({
+      data: {
+        email: "alvteste5@email.com",
+        name: "alves123",
+        password: await hash("alves123", 10),
+      },
+    });
+
+    await request(app).post("/users").send(createUser);
+
+    const userLogin = await request(app)
+      .post("/users/login")
+      .send({ email: "alvteste5@email.com", password: "alves123" });
+    const userToken = `Bearer ${userLogin.body.token}`;
+
+    const userGroup = await request(app)
+      .post("/groups")
+      .set("Authorization", userToken)
+      .send({ moduleName: "Módulo", sprintName: "sprint" });
+
+    const createUserRequest = {
+      name: "alves",
+      email: "alvteste6@email.com",
+      password: "alves123",
+      groupId: userGroup.body.id,
+      moduleId: userGroup.body.modules[0].id,
+    };
+
+    const res = await request(app).post("/users").send(createUserRequest);
 
     expect(res.status).toBe(201);
     expect(res.body).toHaveProperty("id");
@@ -124,6 +213,12 @@ describe("routes - users/", () => {
     expect(res.body).toHaveProperty("email");
     expect(res.body).not.toHaveProperty("password");
     expect(res.body).toHaveProperty("role");
+    expect(res.body).toHaveProperty("createdAt");
+    expect(res.body).toHaveProperty("updatedAt");
+    expect(res.body).toHaveProperty("groupId");
+    expect(res.body).toHaveProperty("modules");
+    expect(res.body.modules[0].id).toEqual(userGroup.body.modules[0].id);
+    expect(res.body.modules[0].userId).toEqual(res.body.id);
   });
 
   test("should be able to login", async () => {
@@ -179,7 +274,7 @@ describe("routes - users/", () => {
   });
 
   test("should not be able to return all user data with invalid token", async () => {
-    const token = "Bearer 774husuduw428is2ujsa";
+    const token = "Bearer e7d4hu5sps45ud0uw428is2ujsa";
 
     const response = await request(app)
       .get("/users/profile")
@@ -190,18 +285,22 @@ describe("routes - users/", () => {
   });
 
   test("should be able to return all user data", async () => {
-    const createUser = {
-      ...user,
-      name: "alves",
-    };
+    const createUser = await prisma.users.create({
+      data: {
+        email: "alvteste7@email.com",
+        name: "alv",
+        password: await hash("alves123", 10),
+      },
+    });
+
     await request(app).post("/users").send(createUser);
 
     const userLogin = await request(app)
       .post("/users/login")
-      .send({ ...user });
+      .send({ email: "alvteste7@email.com", password: "alves123" });
     const userToken = `Bearer ${userLogin.body.token}`;
 
-    const createGroupRequest = { moduleName: "Módulo 1", sprintName: "sprint" };
+    const createGroupRequest = { moduleName: "Módulo", sprintName: "sprint" };
 
     const userGroup = await request(app)
       .post("/groups")
@@ -210,15 +309,16 @@ describe("routes - users/", () => {
 
     const createUserRequest = {
       name: "alves",
-      email: "alvesteste@email.com",
+      email: "alvesteste10@email.com",
       password: "alves123",
       groupId: userGroup.body.id,
+      moduleId: userGroup.body.modules[0].id,
     };
 
     await request(app).post("/users").send(createUserRequest);
 
     const loginRequest = {
-      email: "alvesteste@email.com",
+      email: "alvesteste10@email.com",
       password: "alves123",
     };
 
