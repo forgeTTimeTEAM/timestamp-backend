@@ -1,7 +1,7 @@
 import request from "supertest";
 import { prisma } from "../../prisma";
 import { hash } from "bcryptjs";
-import { app } from "../../server";
+import { app } from "../../app";
 
 const user = {
   email: "yuran@example.com",
