@@ -4,6 +4,7 @@ import { groupsRouter } from "./groups.routes";
 import { modulesRouter } from "./modules.routes";
 import { usersRouter } from "./users.routes";
 import { videosRouter } from "./videos.routes";
+import { markers } from "./markers.routes";
 
 const router = Router();
 
