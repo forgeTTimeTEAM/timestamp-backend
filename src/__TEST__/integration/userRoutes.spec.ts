@@ -1,15 +1,5 @@
 import request from "supertest";
-import { prisma } from "../../prisma";
-import { app } from "../../server";
-
-afterAll(async () => {
-  await prisma.video_markers.deleteMany();
-  await prisma.videos.deleteMany();
-  await prisma.sprints.deleteMany();
-  await prisma.users_modules.deleteMany();
-  await prisma.users.deleteMany();
-  await prisma.modules.deleteMany();
-});
+import { app } from "../../app";
 
 const user = {
   email: "yuran@example.com",
