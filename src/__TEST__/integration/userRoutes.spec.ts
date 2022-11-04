@@ -1,6 +1,6 @@
 import request from "supertest";
 import { prisma } from "../../prisma";
-import { hash } from "bcryptjs";
+import { hash, hashSync } from "bcryptjs";
 import { app } from "../../app";
 
 afterAll(async () => {
@@ -101,7 +101,7 @@ describe("routes - users/", () => {
     const userGroup = await request(app)
       .post("/groups")
       .set("Authorization", userToken)
-      .send({ moduleName: "Módulo", sprintName: "sprint" });
+      .send({ modulePrefixName: "Módulo", sprintPrefixName: "sprint" });
 
     const createUserRequest = {
       name: "alves",
@@ -117,15 +117,14 @@ describe("routes - users/", () => {
   });
 
   test("should not be able to create a user with invalid module id", async () => {
-    const createUser = await prisma.users.create({
+    await prisma.users.create({
       data: {
         email: "alvteste3@email.com",
         name: "alves123",
-        password: await hash("alves123", 10),
+        password: hashSync("alves123", 10),
+        role: "ADM",
       },
     });
-
-    await request(app).post("/users").send(createUser);
 
     const userLogin = await request(app)
       .post("/users/login")
@@ -134,8 +133,8 @@ describe("routes - users/", () => {
 
     const userGroup = await request(app)
       .post("/groups")
-      .set("Authorization", userToken)
-      .send({ moduleName: "Módulo", sprintName: "sprint" });
+      .send({ modulePrefixName: "Módulo", sprintPrefixName: "sprint" })
+      .set("Authorization", userToken);
 
     const createUserRequest = {
       name: "alves",
@@ -152,15 +151,14 @@ describe("routes - users/", () => {
   });
 
   test("should not be able to create a user with same email", async () => {
-    const createUser = await prisma.users.create({
+    await prisma.users.create({
       data: {
         email: "alvteste4@email.com",
         name: "alves123",
         password: await hash("alves123", 10),
+        role: "ADM",
       },
     });
-
-    await request(app).post("/users").send(createUser);
 
     const userLogin = await request(app)
       .post("/users/login")
@@ -170,7 +168,7 @@ describe("routes - users/", () => {
     const userGroup = await request(app)
       .post("/groups")
       .set("Authorization", userToken)
-      .send({ moduleName: "Módulo", sprintName: "sprint" });
+      .send({ modulePrefixName: "Módulo", sprintPrefixName: "sprint" });
 
     const createUserRequest = {
       name: "alves",
@@ -189,15 +187,14 @@ describe("routes - users/", () => {
   });
 
   test("should be able to create a user", async () => {
-    const createUser = await prisma.users.create({
+    await prisma.users.create({
       data: {
         email: "alvteste5@email.com",
         name: "alves123",
         password: await hash("alves123", 10),
+        role: "ADM",
       },
     });
-
-    await request(app).post("/users").send(createUser);
 
     const userLogin = await request(app)
       .post("/users/login")
@@ -207,7 +204,7 @@ describe("routes - users/", () => {
     const userGroup = await request(app)
       .post("/groups")
       .set("Authorization", userToken)
-      .send({ moduleName: "Módulo", sprintName: "sprint" });
+      .send({ modulePrefixName: "Módulo", sprintPrefixName: "sprint" });
 
     const createUserRequest = {
       name: "alves",
@@ -241,38 +238,16 @@ describe("routes - users/", () => {
       },
     });
 
-    await request(app).post("/users").send(createUser);
-
-    const userLogin = await request(app)
-      .post("/users/login")
-      .send({ email: "alvteste7@email.com", password: "alves123" });
-    const userToken = `Bearer ${userLogin.body.token}`;
-
-    const userGroup = await request(app)
-      .post("/groups")
-      .set("Authorization", userToken)
-      .send({ moduleName: "Módulo", sprintName: "sprint" });
-
-    const createUserRequest = {
-      name: "alves",
-      email: "alvteste8@email.com",
-      password: "alves123",
-      groupId: userGroup.body.id,
-      moduleId: userGroup.body.modules[0].id,
-    };
-
-    await request(app).post("/users").send(createUserRequest);
-
     const res = await request(app)
       .post("/users/login")
-      .send({ email: "alvteste8@email.com", password: "alves123" });
+      .send({ email: "alvteste7@email.com", password: "alves123" });
 
     expect(res.status).toBe(200);
     expect(res.body).toHaveProperty("token");
   });
 
   test("should not be able to login with wrong password", async () => {
-    const createUser = await prisma.users.create({
+    await prisma.users.create({
       data: {
         email: "alvteste9@email.com",
         name: "alves123",
@@ -280,31 +255,9 @@ describe("routes - users/", () => {
       },
     });
 
-    await request(app).post("/users").send(createUser);
-
-    const userLogin = await request(app)
-      .post("/users/login")
-      .send({ email: "alvteste9@email.com", password: "alves123" });
-    const userToken = `Bearer ${userLogin.body.token}`;
-
-    const userGroup = await request(app)
-      .post("/groups")
-      .set("Authorization", userToken)
-      .send({ moduleName: "Módulo", sprintName: "sprint" });
-
-    const createUserRequest = {
-      name: "alves",
-      email: "alvteste10@email.com",
-      password: "alves123",
-      groupId: userGroup.body.id,
-      moduleId: userGroup.body.modules[0].id,
-    };
-
-    await request(app).post("/users").send(createUserRequest);
-
     const res = await request(app)
       .post("/users/login")
-      .send({ email: "alvteste10@email.com", password: "alves1234" });
+      .send({ email: "alvteste9@email.com", password: "errado" });
 
     expect(res.status).toBe(403);
     expect(res.body).toHaveProperty("message");
@@ -348,6 +301,7 @@ describe("routes - users/", () => {
         email: "alvteste11@email.com",
         name: "alv",
         password: await hash("alves123", 10),
+        role: "ADM",
       },
     });
 
@@ -358,7 +312,10 @@ describe("routes - users/", () => {
       .send({ email: "alvteste11@email.com", password: "alves123" });
     const userToken = `Bearer ${userLogin.body.token}`;
 
-    const createGroupRequest = { moduleName: "Módulo", sprintName: "sprint" };
+    const createGroupRequest = {
+      modulePrefixName: "Módulo",
+      sprintPrefixName: "sprint",
+    };
 
     const userGroup = await request(app)
       .post("/groups")
