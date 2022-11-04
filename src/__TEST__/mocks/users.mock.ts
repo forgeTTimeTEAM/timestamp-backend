@@ -19,6 +19,7 @@ export const userStudentMock: IUsersRequest = {
   name: "student",
   password: "1234",
   groupId: "",
+  moduleId: "",
 };
 
 export const loginStudentMock: IUserLogin = {

@@ -26,6 +26,7 @@ describe("POST /groups", () => {
     await prisma.video_markers.deleteMany();
     await prisma.videos.deleteMany();
     await prisma.sprints.deleteMany();
+    await prisma.users_modules.deleteMany();
     await prisma.modules.deleteMany();
     await prisma.users.deleteMany();
     await prisma.groups.deleteMany();
@@ -66,12 +67,15 @@ describe("POST /groups", () => {
     });
 
     test("without adm permission", async () => {
-      const group = await prisma.groups.findFirst();
-      userStudentMock.groupId = group?.id!;
+      const group = await prisma.groups.findFirst({
+        include: {
+          modules: true,
+        },
+      });
+      userStudentMock.groupId = group!.id;
+      userStudentMock.moduleId = group!.modules[0].id;
 
-      const userStudent = await request(app)
-        .post("/users")
-        .send(userStudentMock);
+      await request(app).post("/users").send(userStudentMock);
       const loginStudent = await request(app)
         .post("/users/login")
         .send(loginStudentMock);
