@@ -10,8 +10,9 @@ const router = Router();
 
 router.use("/users", usersRouter);
 router.use("/groups", groupsRouter);
-router.use("/videos", videosRouter);
 router.use("/modules", modulesRouter);
+router.use("/modules", moduleRoutes);
+router.use("/videos", videosRouter);
 router.use(errorMiddleware);
 
 export { router };
