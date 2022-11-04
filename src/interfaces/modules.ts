@@ -1,3 +1,4 @@
 export interface IModulesRequest {
-  name: string;
+  moduleId: string;
+  userId: string;
 }
