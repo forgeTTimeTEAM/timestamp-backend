@@ -11,6 +11,18 @@ const createUserService = async ({
   password,
   groupId = null,
 }: IUsersRequest) => {
+  if (!name) {
+    throw new AppError("You must provide a name");
+  }
+
+  if (!email) {
+    throw new AppError("You must provide a email");
+  }
+
+  if (!password) {
+    throw new AppError("You must provide a password");
+  }
+
   const userExists = await prisma.users.findFirst({
     where: {
       email,
@@ -18,7 +30,7 @@ const createUserService = async ({
   });
 
   if (userExists) {
-    throw new AppError("Email is already in use");
+    throw new AppError("Email is already in use", 409);
   }
 
   if (groupId) {
@@ -28,7 +40,9 @@ const createUserService = async ({
       },
     });
 
-    if (!groupExists) throw new AppError("Group not found", 404);
+    if (!groupExists) {
+      throw new AppError("Group not found", 404);
+    }
   }
 
   const createdUser = await prisma.users.create({
