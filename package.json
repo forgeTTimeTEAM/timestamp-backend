@@ -6,6 +6,8 @@
   "scripts": {
     "dev": "ts-node-dev ./src/server.ts",
     "test": "dotenv -e .env.test jest -- --forceExit",
+    "build": "tsc",
+    "start": "node ./dist/src/server.js",
     "migrate:schema.test": "dotenv -e .env.test -- npx prisma migrate dev"
   },
   "keywords": [],
