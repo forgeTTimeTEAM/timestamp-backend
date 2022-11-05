@@ -11,7 +11,6 @@ const router = Router();
 router.use("/users", usersRouter);
 router.use("/groups", groupsRouter);
 router.use("/modules", modulesRouter);
-router.use("/modules", moduleRoutes);
 router.use("/videos", videosRouter);
 router.use(errorMiddleware);
 

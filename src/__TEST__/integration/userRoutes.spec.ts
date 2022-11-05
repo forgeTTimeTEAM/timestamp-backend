@@ -1,7 +1,7 @@
 import request from "supertest";
 import { prisma } from "../../prisma";
-import { hash, hashSync } from "bcryptjs";
 import { app } from "../../app";
+import { hash, hashSync } from "bcryptjs";
 
 afterAll(async () => {
   await prisma.video_markers.deleteMany();
@@ -13,15 +13,11 @@ afterAll(async () => {
   await prisma.groups.deleteMany();
 });
 
-const user = {
-  email: "yuran@example.com",
-  password: "password",
-};
-
 describe("routes - users/", () => {
   test("should not be able to create a user without name", async () => {
     const createUser = {
-      ...user,
+      email: "alvesteste@email.com",
+      password: "alves123",
     };
     const res = await request(app).post("/users").send(createUser);
 
@@ -304,8 +300,6 @@ describe("routes - users/", () => {
         role: "ADM",
       },
     });
-
-    await request(app).post("/users").send(createUser);
 
     const userLogin = await request(app)
       .post("/users/login")
