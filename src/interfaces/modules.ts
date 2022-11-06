@@ -1,4 +1,5 @@
-export interface IModulesRequest {
-  moduleId: string;
-  userId: string;
+export interface IModuleRequest {
+  groupId: string;
+  name: string;
+  sprintPrefixName?: string;
 }

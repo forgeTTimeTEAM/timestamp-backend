@@ -5,8 +5,8 @@ import { app } from "../../app";
 import {
   loginAdmMock,
   loginStudentMock,
-  userAdmMock,
-  userStudentMock,
+  admUserMock,
+  studentUserMock,
   validGroupMock,
 } from "../mocks";
 
@@ -15,7 +15,7 @@ describe("POST /groups", () => {
 
   beforeAll(async () => {
     await prisma.users.create({
-      data: userAdmMock,
+      data: admUserMock,
     });
 
     const loginAdm = await request(app).post("/users/login").send(loginAdmMock);
@@ -72,10 +72,10 @@ describe("POST /groups", () => {
           modules: true,
         },
       });
-      userStudentMock.groupId = group!.id;
-      userStudentMock.moduleId = group!.modules[0].id;
+      studentUserMock.groupId = group!.id;
+      studentUserMock.moduleId = group!.modules[0].id;
 
-      await request(app).post("/users").send(userStudentMock);
+      await request(app).post("/users").send(studentUserMock);
       const loginStudent = await request(app)
         .post("/users/login")
         .send(loginStudentMock);

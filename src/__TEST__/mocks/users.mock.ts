@@ -1,21 +1,22 @@
 import { Prisma } from "@prisma/client";
 import { hashSync } from "bcryptjs";
+import { v4 } from "uuid";
 import { IUserLogin, IUsersRequest } from "../../interfaces/users";
 
-export const userAdmMock: Prisma.usersCreateInput = {
-  email: "lucas.jozefovicz@mail.com",
+export const admUserMock: Prisma.usersCreateInput = {
+  email: `lucas.jozefovicz${v4()}@mail.com`,
   name: "Lucas",
   password: hashSync("1234", 10),
   role: "ADM",
 };
 
 export const loginAdmMock: IUserLogin = {
-  email: "lucas.jozefovicz@mail.com",
+  email: admUserMock.email,
   password: "1234",
 };
 
-export const userStudentMock: IUsersRequest = {
-  email: "student@mail.com",
+export const studentUserMock: IUsersRequest = {
+  email: `student${v4()}@mail.com`,
   name: "student",
   password: "1234",
   groupId: "",
@@ -23,6 +24,6 @@ export const userStudentMock: IUsersRequest = {
 };
 
 export const loginStudentMock: IUserLogin = {
-  email: "student@mail.com",
+  email: studentUserMock.email,
   password: "1234",
 };
