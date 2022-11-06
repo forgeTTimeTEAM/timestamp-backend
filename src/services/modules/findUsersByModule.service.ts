@@ -28,7 +28,7 @@ const findUsersByModuleService = async ({
       id: moduleId,
     },
     include: {
-      users_modules: {
+      users: {
         include: {
           user: true,
         },
@@ -37,14 +37,14 @@ const findUsersByModuleService = async ({
   });
 
   if (
-    users[0].users_modules.every((el) => el.user.id !== user!.id) &&
+    users[0].users.every((el) => el.user.id !== user!.id) &&
     user!.role === "INSTRUCTOR"
   ) {
     throw new AppError("You dont have access to this module", 403);
   }
 
-  users.forEach(({ users_modules }, index) => {
-    removeObjectProperty(users_modules[index].user, "password");
+  users.forEach(({ users }, index) => {
+    removeObjectProperty(users[index].user, "password");
   });
 
   return users;
