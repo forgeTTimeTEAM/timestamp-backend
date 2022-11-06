@@ -3,7 +3,7 @@ import { prisma } from "../../prisma";
 import { app } from "../../app";
 import { hash, hashSync } from "bcryptjs";
 
-describe("routes - /users", () => {
+describe("routes - users/", () => {
   afterAll(async () => {
     await prisma.video_markers.deleteMany();
     await prisma.videos.deleteMany();

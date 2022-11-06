@@ -1,12 +1,8 @@
 import { AppError } from "../../errors/AppError";
-import { IModulesRequest } from "../../interfaces/modules";
 import { prisma } from "../../prisma";
 import { removeObjectProperty } from "../../utils/removeObjectProperty";
 
-const findUsersByModuleService = async ({
-  moduleId,
-  userId,
-}: IModulesRequest) => {
+const findUsersByModuleService = async (moduleId: string, userId: string) => {
   const user = await prisma.users.findUnique({
     where: {
       id: userId,

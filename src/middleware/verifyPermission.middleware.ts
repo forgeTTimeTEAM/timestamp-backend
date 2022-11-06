@@ -8,7 +8,7 @@ const verifyPermissionMiddleware =
     const { role } = req.user;
 
     if (role !== rolePermission) {
-      throw new AppError("Unauthorizedd", 403);
+      throw new AppError("Access denied", 403);
     }
 
     return next();

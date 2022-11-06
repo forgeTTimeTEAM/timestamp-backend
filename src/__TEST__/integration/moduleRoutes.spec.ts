@@ -2,8 +2,30 @@ import request from "supertest";
 import { prisma } from "../../prisma";
 import { app } from "../../app";
 import { hash } from "bcryptjs";
+import {
+  loginAdmMock,
+  admUserMock,
+  studentUserMock,
+  validGroupMock,
+  validModuleMock,
+  modulewithInvalidGroupMock,
+  modulewithoutGroupMock,
+  modulewithoutNameMock,
+  loginStudentMock,
+} from "../mocks";
 
 describe("routes - /modules", () => {
+  let authorization: string;
+
+  beforeAll(async () => {
+    await prisma.users.create({
+      data: admUserMock,
+    });
+
+    const loginAdm = await request(app).post("/users/login").send(loginAdmMock);
+    authorization = `Bearer ${loginAdm.body.token}`;
+  });
+
   afterAll(async () => {
     await prisma.video_markers.deleteMany();
     await prisma.videos.deleteMany();
@@ -12,6 +34,120 @@ describe("routes - /modules", () => {
     await prisma.modules.deleteMany();
     await prisma.users.deleteMany();
     await prisma.groups.deleteMany();
+  });
+
+  test("should be able to create a module", async () => {
+    const group = await request(app)
+      .post("/groups")
+      .send(validGroupMock)
+      .set("Authorization", authorization);
+    validModuleMock.groupId = group.body.id;
+
+    studentUserMock.groupId = group.body.id;
+    studentUserMock.moduleId = group.body.modules[0].id;
+    const studentUser = await request(app).post("/users").send(studentUserMock);
+
+    const response = await request(app)
+      .post("/modules")
+      .send(validModuleMock)
+      .set("Authorization", authorization);
+
+    expect(response.status).toBe(201);
+    expect(response.body).toHaveProperty("id");
+    expect(response.body).toHaveProperty("name", validModuleMock.name);
+    expect(response.body).toHaveProperty("groupId", group.body.id);
+    expect(response.body).toHaveProperty("createdAt");
+
+    expect(response.body).toHaveProperty("sprints");
+    const { sprints } = response.body;
+    expect(sprints).toHaveLength(8);
+    expect(sprints[0]).toHaveProperty("id");
+    expect(sprints[0]).toHaveProperty(
+      "name",
+      `${validModuleMock.sprintPrefixName}1`
+    );
+    expect(sprints[0]).toHaveProperty("moduleId");
+
+    expect(response.body).toHaveProperty("users");
+    const { users } = response.body;
+    expect(users).toHaveLength(1);
+    expect(users[0]).toHaveProperty("id");
+    expect(users[0]).toHaveProperty("createdAt");
+    expect(users[0]).toHaveProperty("updatedAt");
+
+    const { user } = users[0];
+    expect(user).toHaveProperty("id", studentUser.body.id);
+    expect(user).toHaveProperty("groupId", studentUser.body.groupId);
+    expect(user).toHaveProperty("name", studentUser.body.name);
+    expect(user).toHaveProperty("email", studentUser.body.email);
+    expect(user).not.toHaveProperty("password");
+    expect(user).toHaveProperty("role", studentUser.body.role);
+    expect(user).toHaveProperty("createdAt", studentUser.body.createdAt);
+    expect(user).toHaveProperty("updatedAt", studentUser.body.updatedAt);
+  });
+
+  test("should not be able to create a module without token", async () => {
+    const response = await request(app).post("/modules");
+
+    expect(response.status).toBe(401);
+    expect(response.body).toHaveProperty("message");
+  });
+
+  test("should not be able to create a module invalid/expired token", async () => {
+    const response = await request(app)
+      .post("/modules")
+      .set(
+        "Authorization",
+        "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiQURNIiwiZ3JvdXBJZCI6bnVsbCwiaWF0IjoxNjY3NTkzOTUxLCJleHAiOjE2Njc2ODAzNTEsInN1YiI6ImRmNmZmODg3LTBkZGMtNDAyNi05ZTBkLTUyZDQzMDg0MjVlZiJ9.oLO7jp5RyWfQhteGkJ21lYCZ3z2gWhTsUD97nzdafY"
+      );
+
+    expect(response.status).toBe(401);
+    expect(response.body).toHaveProperty("message");
+  });
+
+  test("should not be able to create a module without adm permission", async () => {
+    await request(app).post("/users").send(studentUserMock);
+    const loginStudent = await request(app)
+      .post("/users/login")
+      .send(loginStudentMock);
+    const studentAuthorization = `Bearer ${loginStudent.body.token}`;
+
+    const response = await request(app)
+      .post("/modules")
+      .set("Authorization", studentAuthorization);
+
+    expect(response.status).toBe(403);
+    expect(response.body).toHaveProperty("message");
+  });
+
+  test("should not be able to create a module with invalid group", async () => {
+    const response = await request(app)
+      .post("/modules")
+      .send(modulewithInvalidGroupMock)
+      .set("Authorization", authorization);
+
+    expect(response.status).toBe(404);
+    expect(response.body).toHaveProperty("message");
+  });
+
+  test("should not be able to create a module without groupId", async () => {
+    const response = await request(app)
+      .post("/modules")
+      .send(modulewithoutGroupMock)
+      .set("Authorization", authorization);
+
+    expect(response.status).toBe(400);
+    expect(response.body).toHaveProperty("message");
+  });
+
+  test("should not be able to create a module without name", async () => {
+    const response = await request(app)
+      .post("/modules")
+      .send(modulewithoutNameMock)
+      .set("Authorization", authorization);
+
+    expect(response.status).toBe(400);
+    expect(response.body).toHaveProperty("message");
   });
 
   test("should not be able to return all users without token", async () => {

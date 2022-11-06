@@ -5,8 +5,8 @@ import { app } from "../../app";
 import {
   loginAdmMock,
   loginStudentMock,
-  userAdmMock,
-  userStudentMock,
+  admUserMock,
+  studentUserMock,
   validGroupMock,
 } from "../mocks";
 
@@ -15,7 +15,7 @@ describe("routes - /groups", () => {
 
   beforeAll(async () => {
     await prisma.users.create({
-      data: userAdmMock,
+      data: admUserMock,
     });
 
     const loginAdm = await request(app).post("/users/login").send(loginAdmMock);
@@ -66,16 +66,26 @@ describe("routes - /groups", () => {
     expect(response.body).toHaveProperty("message");
   });
 
+  test("should not be able to create group with invalid token", async () => {
+    const response = await request(app)
+      .post("/groups")
+      .send(validGroupMock)
+      .set("Authorization", "Bearer batata");
+
+    expect(response.status).toBe(401);
+    expect(response.body).toHaveProperty("message");
+  });
+
   test("should not be able to create group without adm permission", async () => {
     const group = await prisma.groups.findFirst({
       include: {
         modules: true,
       },
     });
-    userStudentMock.groupId = group!.id;
-    userStudentMock.moduleId = group!.modules[0].id;
+    studentUserMock.groupId = group!.id;
+    studentUserMock.moduleId = group!.modules[0].id;
 
-    await request(app).post("/users").send(userStudentMock);
+    await request(app).post("/users").send(studentUserMock);
     const loginStudent = await request(app)
       .post("/users/login")
       .send(loginStudentMock);
@@ -123,14 +133,23 @@ describe("routes - /groups", () => {
     expect(user).toHaveProperty("updatedAt");
   });
 
-  test("should not be able to create group without token", async () => {
+  test("should not be able to list all groups without token", async () => {
     const response = await request(app).get("/groups");
 
     expect(response.status).toBe(401);
     expect(response.body).toHaveProperty("message");
   });
 
-  test("should not be able to create group without adm permission", async () => {
+  test("should not be able to list all groups with invalid token", async () => {
+    const response = await request(app)
+      .get("/groups")
+      .set("Authorization", "Bearer batata");
+
+    expect(response.status).toBe(401);
+    expect(response.body).toHaveProperty("message");
+  });
+
+  test("should not be able to list all groups without adm permission", async () => {
     const loginStudent = await request(app)
       .post("/users/login")
       .send(loginStudentMock);
