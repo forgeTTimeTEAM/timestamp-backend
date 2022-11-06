@@ -3,17 +3,17 @@ import { prisma } from "../../prisma";
 import { app } from "../../app";
 import { hash, hashSync } from "bcryptjs";
 
-afterAll(async () => {
-  await prisma.video_markers.deleteMany();
-  await prisma.videos.deleteMany();
-  await prisma.sprints.deleteMany();
-  await prisma.users_modules.deleteMany();
-  await prisma.modules.deleteMany();
-  await prisma.users.deleteMany();
-  await prisma.groups.deleteMany();
-});
+describe("routes - /users", () => {
+  afterAll(async () => {
+    await prisma.video_markers.deleteMany();
+    await prisma.videos.deleteMany();
+    await prisma.sprints.deleteMany();
+    await prisma.users_modules.deleteMany();
+    await prisma.modules.deleteMany();
+    await prisma.users.deleteMany();
+    await prisma.groups.deleteMany();
+  });
 
-describe("routes - users/", () => {
   test("should not be able to create a user without name", async () => {
     const createUser = {
       email: "alvesteste@email.com",

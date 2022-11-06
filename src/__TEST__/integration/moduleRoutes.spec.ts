@@ -3,17 +3,17 @@ import { prisma } from "../../prisma";
 import { app } from "../../app";
 import { hash } from "bcryptjs";
 
-afterAll(async () => {
-  await prisma.video_markers.deleteMany();
-  await prisma.videos.deleteMany();
-  await prisma.sprints.deleteMany();
-  await prisma.users_modules.deleteMany();
-  await prisma.modules.deleteMany();
-  await prisma.users.deleteMany();
-  await prisma.groups.deleteMany();
-});
+describe("routes - /modules", () => {
+  afterAll(async () => {
+    await prisma.video_markers.deleteMany();
+    await prisma.videos.deleteMany();
+    await prisma.sprints.deleteMany();
+    await prisma.users_modules.deleteMany();
+    await prisma.modules.deleteMany();
+    await prisma.users.deleteMany();
+    await prisma.groups.deleteMany();
+  });
 
-describe("routes - /groups", () => {
   test("should not be able to return all users without token", async () => {
     const res = await request(app).get("/modules/id");
 
@@ -192,9 +192,9 @@ describe("routes - /groups", () => {
     expect(res.body[0]).toHaveProperty("name");
     expect(res.body[0]).toHaveProperty("createdAt");
     expect(res.body[0]).toHaveProperty("groupId");
-    expect(res.body[0]).toHaveProperty("users_modules");
-    expect(res.body[0].users_modules.length).toEqual(2);
-    expect(res.body[0].users_modules[0].user).not.toHaveProperty("password");
+    expect(res.body[0]).toHaveProperty("users");
+    expect(res.body[0].users.length).toEqual(2);
+    expect(res.body[0].users[0].user).not.toHaveProperty("password");
     expect(res.status).toBe(200);
   });
 
@@ -234,9 +234,9 @@ describe("routes - /groups", () => {
     expect(res.body[0]).toHaveProperty("name");
     expect(res.body[0]).toHaveProperty("createdAt");
     expect(res.body[0]).toHaveProperty("groupId");
-    expect(res.body[0]).toHaveProperty("users_modules");
-    expect(res.body[0].users_modules.length).toEqual(1);
-    expect(res.body[0].users_modules[0].user).not.toHaveProperty("password");
+    expect(res.body[0]).toHaveProperty("users");
+    expect(res.body[0].users.length).toEqual(1);
+    expect(res.body[0].users[0].user).not.toHaveProperty("password");
     expect(res.status).toBe(200);
   });
 });
