@@ -15,14 +15,6 @@ const createGroupService = async ({
   };
   const modules = { create: moduleToCreate };
 
-  const include = {
-    modules: {
-      include: {
-        sprints: true,
-      },
-    },
-  };
-
   const createdGroup = await prisma.groups.create({
     data: {
       modules,

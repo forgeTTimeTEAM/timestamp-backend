@@ -1,2 +1,2 @@
-export { handleSequencialObject } from "./handleSequencialCreation";
+export { handleSequencialObject } from "./handleSequencialObject";
 export { removeObjectProperty } from "./removeObjectProperty";
