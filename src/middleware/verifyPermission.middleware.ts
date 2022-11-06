@@ -1,14 +1,17 @@
 import { RequestHandler } from "express";
 import { AppError } from "../errors/AppError";
+import { Role } from "../interfaces/users";
 
-const verifyPermissionMiddleware = ( rolePermission: string ): RequestHandler => (req, res, next) => {
-  const { role } = req.user;
+const verifyPermissionMiddleware =
+  (rolePermission: Role): RequestHandler =>
+  (req, res, next) => {
+    const { role } = req.user;
 
-  if (role !== rolePermission) {
-    throw new AppError("Unauthorizedd", 401);
-  }
+    if (role !== rolePermission) {
+      throw new AppError("Unauthorizedd", 401);
+    }
 
-  return next();
-};
+    return next();
+  };
 
 export { verifyPermissionMiddleware };

@@ -8,7 +8,17 @@ import {
 
 const markersRouter = Router();
 
-markersRouter.post("/", verifyTokenMiddleware, verifyPermissionMiddleware("ADM"), createMarkerController);
-markersRouter.delete("/:id", verifyTokenMiddleware, verifyPermissionMiddleware("INSTRUCTOR"), deleteMarkersController)
+markersRouter.post(
+  "/",
+  verifyTokenMiddleware,
+  verifyPermissionMiddleware("ADM"),
+  createMarkerController
+);
+markersRouter.delete(
+  "/:id",
+  verifyTokenMiddleware,
+  verifyPermissionMiddleware("INSTRUCTOR"),
+  deleteMarkersController
+);
 
 export { markersRouter };
