@@ -5,10 +5,10 @@ import { findUsersByModuleController } from "../controllers/modules/findUsersByM
 
 import {
   validateSchemaMiddleware,
-  verifyAdmPermissionMiddleware,
+  verifyInstructorOrAdmPermissionMiddleware,
+  verifyPermissionMiddleware,
   verifyTokenMiddleware,
 } from "../middleware";
-import { verifyInstructorOrAdmPermissionMiddleware } from "../middleware/verifyInstructorOrAdmPermission.middleware";
 import { createModuleSchema } from "../schemas/modules";
 import { createModuleController } from "../controllers/modules/createModule.controller";
 
@@ -17,7 +17,7 @@ const modulesRouter = Router();
 modulesRouter.post(
   "/",
   verifyTokenMiddleware,
-  verifyAdmPermissionMiddleware,
+  verifyPermissionMiddleware("ADM"),
   validateSchemaMiddleware(createModuleSchema),
   createModuleController
 );
