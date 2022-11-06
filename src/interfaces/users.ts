@@ -1,3 +1,5 @@
+export type Role = "ADM" | "INSTRUCTOR" | "STUDENT";
+
 export interface IUsersRequest {
   name: string;
   email: string;

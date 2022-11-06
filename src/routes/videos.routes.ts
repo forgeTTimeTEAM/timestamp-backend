@@ -4,10 +4,7 @@ import {
   deleteVideoController,
 } from "../controllers/videos";
 
-import {
-  verifyAdmPermissionMiddleware,
-  verifyTokenMiddleware,
-} from "../middleware";
+import { verifyTokenMiddleware } from "../middleware";
 
 const videosRouter = Router();
 
