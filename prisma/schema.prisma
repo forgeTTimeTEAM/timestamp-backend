@@ -26,8 +26,8 @@ model modules {
   group   groups @relation(fields: [groupId], references: [id])
   groupId String
 
-  sprints       sprints[]
-  users_modules users_modules[]
+  sprints sprints[]
+  users   users_modules[]
 }
 
 model sprints {
@@ -49,9 +49,9 @@ model users {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  group     groups? @relation(fields: [groupId], references: [id])
-  groupId   String?
-  modules   users_modules[]
+  group   groups?         @relation(fields: [groupId], references: [id])
+  groupId String?
+  modules users_modules[]
 }
 
 model users_modules {

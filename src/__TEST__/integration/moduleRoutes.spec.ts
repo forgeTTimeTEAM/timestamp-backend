@@ -64,7 +64,7 @@ describe("routes - /modules", () => {
     expect(sprints[0]).toHaveProperty("id");
     expect(sprints[0]).toHaveProperty(
       "name",
-      `${validModuleMock.sprintPrefixName} 1`
+      `${validModuleMock.sprintPrefixName}1`
     );
     expect(sprints[0]).toHaveProperty("moduleId");
 
@@ -80,7 +80,7 @@ describe("routes - /modules", () => {
     expect(user).toHaveProperty("groupId", studentUser.body.groupId);
     expect(user).toHaveProperty("name", studentUser.body.name);
     expect(user).toHaveProperty("email", studentUser.body.email);
-    expect(user).toHaveProperty("password", studentUser.body.password);
+    expect(user).not.toHaveProperty("password");
     expect(user).toHaveProperty("role", studentUser.body.role);
     expect(user).toHaveProperty("createdAt", studentUser.body.createdAt);
     expect(user).toHaveProperty("updatedAt", studentUser.body.updatedAt);
@@ -328,9 +328,9 @@ describe("routes - /modules", () => {
     expect(res.body[0]).toHaveProperty("name");
     expect(res.body[0]).toHaveProperty("createdAt");
     expect(res.body[0]).toHaveProperty("groupId");
-    expect(res.body[0]).toHaveProperty("users_modules");
-    expect(res.body[0].users_modules.length).toEqual(2);
-    expect(res.body[0].users_modules[0].user).not.toHaveProperty("password");
+    expect(res.body[0]).toHaveProperty("users");
+    expect(res.body[0].users.length).toEqual(2);
+    expect(res.body[0].users[0].user).not.toHaveProperty("password");
     expect(res.status).toBe(200);
   });
 
@@ -370,9 +370,9 @@ describe("routes - /modules", () => {
     expect(res.body[0]).toHaveProperty("name");
     expect(res.body[0]).toHaveProperty("createdAt");
     expect(res.body[0]).toHaveProperty("groupId");
-    expect(res.body[0]).toHaveProperty("users_modules");
-    expect(res.body[0].users_modules.length).toEqual(1);
-    expect(res.body[0].users_modules[0].user).not.toHaveProperty("password");
+    expect(res.body[0]).toHaveProperty("users");
+    expect(res.body[0].users.length).toEqual(1);
+    expect(res.body[0].users[0].user).not.toHaveProperty("password");
     expect(res.status).toBe(200);
   });
 });
