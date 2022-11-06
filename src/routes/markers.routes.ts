@@ -1,17 +1,14 @@
 import { Router } from "express";
 import { createMarkerController } from "../controllers/markers";
+import { deleteMarkersController } from "../controllers/markers/deleteMarkers.controller";
 import {
-  verifyAdmPermissionMiddleware,
+  verifyPermissionMiddleware,
   verifyTokenMiddleware,
 } from "../middleware";
 
-const markers = Router();
+const markersRouter = Router();
 
-markers.post(
-  "/",
-  verifyTokenMiddleware,
-  verifyAdmPermissionMiddleware,
-  createMarkerController
-);
+markersRouter.post("/", verifyTokenMiddleware, verifyPermissionMiddleware("ADM"), createMarkerController);
+markersRouter.delete("/:id", verifyTokenMiddleware, verifyPermissionMiddleware("INSTRUCTOR"), deleteMarkersController)
 
-export { markers };
+export { markersRouter };
