@@ -13,7 +13,7 @@ afterAll(async () => {
   await prisma.groups.deleteMany();
 });
 
-describe("routes - users/", () => {
+describe("routes - /users", () => {
   test("should not be able to create a user without name", async () => {
     const createUser = {
       email: "alvesteste@email.com",
@@ -79,15 +79,13 @@ describe("routes - users/", () => {
   });
 
   test("should not be able to create a user without module id", async () => {
-    const createUser = await prisma.users.create({
+    await prisma.users.create({
       data: {
         email: "alvteste2@email.com",
         name: "alves123",
         password: await hash("alves123", 10),
       },
     });
-
-    await request(app).post("/users").send(createUser);
 
     const userLogin = await request(app)
       .post("/users/login")
@@ -168,13 +166,11 @@ describe("routes - users/", () => {
 
     const createUserRequest = {
       name: "alves",
-      email: "alv4teste@email.com",
+      email: "alvteste4@email.com",
       password: "alves123",
       groupId: userGroup.body.id,
       moduleId: userGroup.body.modules[0].id,
     };
-
-    await request(app).post("/users").send(createUserRequest);
 
     const res = await request(app).post("/users").send(createUserRequest);
 
@@ -226,7 +222,7 @@ describe("routes - users/", () => {
   });
 
   test("should be able to login", async () => {
-    const createUser = await prisma.users.create({
+    await prisma.users.create({
       data: {
         email: "alvteste7@email.com",
         name: "alves123",
@@ -260,14 +256,12 @@ describe("routes - users/", () => {
   });
 
   test("should be able to return error when logging in without email and password", async () => {
-    const usernameWithoutPasswordAndEmail = {
+    const invalidLogin = {
       email: "",
       password: "",
     };
 
-    const res = await request(app)
-      .post("/users/login")
-      .send(usernameWithoutPasswordAndEmail);
+    const res = await request(app).post("/users/login").send(invalidLogin);
 
     expect(res.status).toBe(403);
     expect(res.body).toHaveProperty("message");
@@ -281,18 +275,16 @@ describe("routes - users/", () => {
   });
 
   test("should not be able to return all user data with invalid token", async () => {
-    const token = "Bearer e7d4hu5sps45ud0uw428is2ujsa";
-
     const response = await request(app)
       .get("/users/profile")
-      .set("Authorization", token);
+      .set("Authorization", "Bearer e7d4hu5sps45ud0uw428is2ujsa");
 
     expect(response.status).toBe(401);
     expect(response.body).toHaveProperty("message");
   });
 
   test("should be able to return all user data", async () => {
-    const createUser = await prisma.users.create({
+    await prisma.users.create({
       data: {
         email: "alvteste11@email.com",
         name: "alv",

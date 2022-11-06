@@ -66,6 +66,16 @@ describe("POST /groups", () => {
       expect(response.body).toHaveProperty("message");
     });
 
+    test("with invalid token", async () => {
+      const response = await request(app)
+        .post("/groups")
+        .set("Authorization", "Bearer batata")
+        .send(validGroupMock);
+
+      expect(response.status).toBe(401);
+      expect(response.body).toHaveProperty("message");
+    });
+
     test("without adm permission", async () => {
       const group = await prisma.groups.findFirst({
         include: {

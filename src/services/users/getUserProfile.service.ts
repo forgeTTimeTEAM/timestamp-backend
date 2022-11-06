@@ -33,7 +33,9 @@ const getUserProfileService = async (id: string) => {
     },
   });
 
-  return removeObjectProperty(user!, "password");
+  removeObjectProperty(user!, "password");
+
+  return user;
 };
 
 export { getUserProfileService };

@@ -13,7 +13,7 @@ afterAll(async () => {
   await prisma.groups.deleteMany();
 });
 
-describe("routes - /groups", () => {
+describe("routes - /modules", () => {
   test("should not be able to return all users without token", async () => {
     const res = await request(app).get("/modules/id");
 
@@ -24,25 +24,20 @@ describe("routes - /groups", () => {
   test("should not be able to return all users with invalid token", async () => {
     const res = await request(app)
       .get("/modules/id")
-      .set(
-        "Authorization",
-        "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiQURNIiwiZ3JvdXBJZCI6bnVsbCwiaWF0IjoxNjY3NTkzOTUxLCJleHAiOjE2Njc2ODAzNTEsInN1YiI6ImRmNmZmODg3LTBkZGMtNDAyNi05ZTBkLTUyZDQzMDg0MjVlZiJ9.oLO7jp5RyWfQhteGkJ21lYCZ3z2gWhTsUD97nzdafY"
-      );
+      .set("Authorization", "Bearer eyJhbGciOuh2uh42uhuh8sa824");
 
     expect(res.body).toHaveProperty("message");
     expect(res.status).toBe(401);
   });
 
   test("should not be able to return all users with student token", async () => {
-    const createUser = await prisma.users.create({
+    await prisma.users.create({
       data: {
         name: "alv",
         email: "alvteste12@email.com",
         password: await hash("alves123", 10),
       },
     });
-
-    await request(app).post("/users").send(createUser);
 
     const login = await request(app)
       .post("/users/login")
@@ -57,7 +52,7 @@ describe("routes - /groups", () => {
   });
 
   test("should not be able to return all users with invalid module id", async () => {
-    const createUser = await prisma.users.create({
+    await prisma.users.create({
       data: {
         name: "alv",
         email: "alvteste13@email.com",
@@ -65,8 +60,6 @@ describe("routes - /groups", () => {
         role: "INSTRUCTOR",
       },
     });
-
-    await request(app).post("/users").send(createUser);
 
     const login = await request(app)
       .post("/users/login")
