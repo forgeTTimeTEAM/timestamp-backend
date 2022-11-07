@@ -9,7 +9,7 @@ const verifyInstructorOrAdmPermissionMiddleware: RequestHandler = (
   const { role } = req.user;
 
   if (role === "STUDENT") {
-    throw new AppError("Unauthorized", 401);
+    throw new AppError("Unauthorized", 403);
   }
 
   return next();
