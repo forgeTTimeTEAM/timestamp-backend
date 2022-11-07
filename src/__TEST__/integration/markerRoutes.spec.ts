@@ -3,16 +3,6 @@ import { prisma } from "../../prisma";
 import { hash } from "bcryptjs";
 import { app } from "../../app";
 
-afterAll(async () => {
-  await prisma.video_markers.deleteMany();
-  await prisma.videos.deleteMany();
-  await prisma.sprints.deleteMany();
-  await prisma.users_modules.deleteMany();
-  await prisma.modules.deleteMany();
-  await prisma.users.deleteMany();
-  await prisma.groups.deleteMany();
-});
-
 describe("marker test", () => {
   let video: any;
   let group: any;
@@ -86,6 +76,16 @@ describe("marker test", () => {
     authorization = `Bearer ${userLogin.body.token}`;
 
     authorizationStudent = `Bearer ${studentUserLogin.body.token}`;
+  });
+
+  afterAll(async () => {
+    await prisma.video_markers.deleteMany();
+    await prisma.videos.deleteMany();
+    await prisma.sprints.deleteMany();
+    await prisma.users_modules.deleteMany();
+    await prisma.modules.deleteMany();
+    await prisma.users.deleteMany();
+    await prisma.groups.deleteMany();
   });
 
   it("should be able create a marker", async () => {
@@ -184,7 +184,7 @@ describe("marker test", () => {
     expect(res.body).toHaveProperty("message");
   });
 
-  it("should not be able create a marker with access to count student", async () => {
+  it("should not be able create a marker without adm access", async () => {
     const Marker = {
       marks: [
         {
@@ -212,7 +212,7 @@ describe("marker test", () => {
       .set("Authorization", authorizationStudent)
       .send(Marker);
 
-    expect(res.status).toBe(401);
+    expect(res.status).toBe(403);
     expect(res.body).toHaveProperty("message");
   });
 

@@ -6,7 +6,7 @@ import {
 } from "../controllers/markers";
 
 import {
-  verifyPermissionMiddleware,
+  verifyInstructorOrAdmPermissionMiddleware,
   verifyTokenMiddleware,
 } from "../middleware";
 
@@ -15,18 +15,15 @@ const markersRouter = Router();
 markersRouter.post(
   "/",
   verifyTokenMiddleware,
-  verifyPermissionMiddleware("ADM"),
+  verifyInstructorOrAdmPermissionMiddleware,
   createMarkerController
 );
 
-<<<<<<< HEAD
-=======
 markersRouter.delete(
   "/:id",
   verifyTokenMiddleware,
-  verifyPermissionMiddleware("INSTRUCTOR"),
+  verifyInstructorOrAdmPermissionMiddleware,
   deleteMarkerController
 );
 
->>>>>>> develop
 export { markersRouter };
