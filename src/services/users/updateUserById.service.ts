@@ -6,20 +6,15 @@ const updateUserByIdService = async (
   userRequest: IUserUpdateById,
   id: string
 ) => {
-  const info = userRequest;
-
-  //não possui
-  /*  if (!("name" in info) && !("groupId" in info)) {
-    throw new AppError("Only can change name and groupId");
-  } */
-
-  //possui ou um ou outro
-  //
-  /*  if ("name" in info || "groupId" in info) {
-    if ([...(info as string[])].length >= 3) {
-      throw new AppError("Only can change name and groupId");
+  for (const key in userRequest) {
+    if (key !== "groupId") {
+      throw new AppError("It is only possible to update the groupId");
     }
-  } */
+  }
+
+  if (!("groupId" in userRequest)) {
+    throw new AppError("Need to provide the data in the request");
+  }
 
   const userExists = await prisma.users.findFirst({
     where: {
@@ -28,30 +23,31 @@ const updateUserByIdService = async (
   });
 
   if (!userExists) {
-    throw new AppError("User not exists");
+    throw new AppError("User not exists", 404);
   }
 
   const groupExists = await prisma.groups.findFirst({
     where: {
-      id: info.groupId,
+      id: userRequest.groupId,
     },
   });
 
   if (!groupExists) {
-    throw new AppError("Group not exists");
+    throw new AppError("Group not exists", 404);
+  }
+
+  if (userExists.groupId === userRequest.groupId) {
+    throw new AppError("Provide a different groupId than the current one", 404);
   }
 
   const userUpdated = await prisma.users.update({
     data: {
-      name: info.name,
-      groupId: info.groupId,
+      groupId: userRequest.groupId,
     },
     where: {
       id: id,
     },
   });
-
-  console.log(userUpdated);
 
   return userUpdated;
 };

@@ -14,6 +14,5 @@ export interface IUserLogin {
 }
 
 export interface IUserUpdateById {
-  name?: string;
-  groupId?: string;
+  groupId: string;
 }

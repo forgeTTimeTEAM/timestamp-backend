@@ -4,7 +4,7 @@ import { updateUserByIdService } from "../../services/users/updateUserById.servi
 
 const updateUserById: RequestHandler = async (req, res) => {
   const userDataUpdate: IUserUpdateById = req.body;
-  const { id } = req.params;
+  const id = req.params.id;
 
   const userUpdated = await updateUserByIdService(userDataUpdate, id);
 
