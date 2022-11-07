@@ -213,14 +213,9 @@ describe("routes - /groups", () => {
       .post("/users/login")
       .send({ email: "giuseppecadurinha@email.com", password: "alves123" });
 
-    console.log(loginAdm.body.token);
-
     const response = await request(app)
       .get("/groups/group")
       .set("Authorization", `Bearer ${loginAdm.body.token}`);
-
-    console.log(response.body);
-    console.log(response.status);
 
     expect(response.status).toBe(404);
     expect(response.body).toHaveProperty("message");
