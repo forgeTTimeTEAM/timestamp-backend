@@ -4,11 +4,7 @@ import { listModulesController } from "../controllers/modules/listModules.contro
 import { findUsersByModuleController } from "../controllers/modules/findUsersByModule.controller";
 
 import {
-  verifyAdmPermissionMiddleware,
-  verifyTokenMiddleware,
-} from "../middleware";
-import { verifyInstructorOrAdmPermissionMiddleware } from "../middleware/verifyInstructorOrAdmPermission.middleware";
-import { validateSchemaMiddleware,
+  validateSchemaMiddleware,
   verifyInstructorOrAdmPermissionMiddleware,
   verifyPermissionMiddleware,
   verifyTokenMiddleware,
@@ -22,7 +18,7 @@ const modulesRouter = Router();
 modulesRouter.get(
   "/",
   verifyTokenMiddleware,
-  verifyAdmPermissionMiddleware,
+  verifyPermissionMiddleware("ADM"),
   listModulesController
 );
 
