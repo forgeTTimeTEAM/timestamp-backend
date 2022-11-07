@@ -20,7 +20,6 @@ const deleteUserService = async (id: string) => {
     }
 
     if (error.meta.cause !== "Record to delete does not exist.") {
-      console.log("test");
       throw error;
     }
 
