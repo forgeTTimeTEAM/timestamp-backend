@@ -64,7 +64,7 @@ const createVideoService = async (
     },
     data: {
       title,
-      releaseDate,
+      releaseDate: new Date(releaseDate),
       url: url || null,
       sprintId,
     },

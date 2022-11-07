@@ -4,17 +4,27 @@ import { listModulesController } from "../controllers/modules/listModules.contro
 import { findUsersByModuleController } from "../controllers/modules/findUsersByModule.controller";
 
 import {
-  verifyAdmPermissionMiddleware,
+  validateSchemaMiddleware,
+  verifyInstructorOrAdmPermissionMiddleware,
+  verifyPermissionMiddleware,
   verifyTokenMiddleware,
 } from "../middleware";
-import { verifyInstructorOrAdmPermissionMiddleware } from "../middleware/verifyInstructorOrAdmPermission.middleware";
+import { createModuleSchema } from "../schemas/modules";
+import { createModuleController } from "../controllers/modules/createModule.controller";
 
 const modulesRouter = Router();
 
+modulesRouter.post(
+  "/",
+  verifyTokenMiddleware,
+  verifyPermissionMiddleware("ADM"),
+  validateSchemaMiddleware(createModuleSchema),
+  createModuleController
+);
 modulesRouter.get(
   "/",
   verifyTokenMiddleware,
-  verifyAdmPermissionMiddleware,
+  verifyPermissionMiddleware("ADM"),
   listModulesController
 );
 modulesRouter.get(
