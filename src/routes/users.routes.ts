@@ -6,6 +6,7 @@ import {
   listUsersController,
   findUserProfileController,
   findUserController,
+  deleteUserController,
 } from "../controllers/users";
 
 import { loginUserController } from "../controllers/users/loginUser.controller";
@@ -39,6 +40,12 @@ usersRouter.get(
   verifyTokenMiddleware,
   verifyPermissionMiddleware("ADM"),
   findUserController
+);
+usersRouter.delete(
+  "/:id",
+  verifyTokenMiddleware,
+  verifyPermissionMiddleware("ADM"),
+  deleteUserController
 );
 
 export { usersRouter };
