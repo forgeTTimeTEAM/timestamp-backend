@@ -4,15 +4,34 @@ import { listModulesController } from "../controllers/modules/listModules.contro
 import { findUsersByModuleController } from "../controllers/modules/findUsersByModule.controller";
 
 import {
-  validateSchemaMiddleware,
+  verifyAdmPermissionMiddleware,
+  verifyTokenMiddleware,
+} from "../middleware";
+import { verifyInstructorOrAdmPermissionMiddleware } from "../middleware/verifyInstructorOrAdmPermission.middleware";
+import { validateSchemaMiddleware,
   verifyInstructorOrAdmPermissionMiddleware,
   verifyPermissionMiddleware,
   verifyTokenMiddleware,
 } from "../middleware";
+
 import { createModuleSchema } from "../schemas/modules";
 import { createModuleController } from "../controllers/modules/createModule.controller";
 
 const modulesRouter = Router();
+
+modulesRouter.get(
+  "/",
+  verifyTokenMiddleware,
+  verifyAdmPermissionMiddleware,
+  listModulesController
+);
+
+modulesRouter.get(
+  "/:id",
+  verifyTokenMiddleware,
+  verifyInstructorOrAdmPermissionMiddleware,
+  findUsersByModuleController
+);
 
 modulesRouter.post(
   "/",
@@ -20,13 +39,6 @@ modulesRouter.post(
   verifyPermissionMiddleware("ADM"),
   validateSchemaMiddleware(createModuleSchema),
   createModuleController
-);
-modulesRouter.get("/", listModulesController);
-modulesRouter.get(
-  "/:id",
-  verifyTokenMiddleware,
-  verifyInstructorOrAdmPermissionMiddleware,
-  findUsersByModuleController
 );
 
 export { modulesRouter };
