@@ -8,6 +8,7 @@ import {
 } from "../controllers/users";
 
 import { loginUserController } from "../controllers/users/loginUser.controller";
+import { updateUserById } from "../controllers/users/updateUserById.controller";
 
 import {
   verifyPermissionMiddleware,
@@ -26,5 +27,11 @@ usersRouter.get(
 );
 usersRouter.get("/profile", verifyTokenMiddleware, findUserProfileController);
 usersRouter.get("/group/:id", findUsersByGroupController);
+usersRouter.patch(
+  "/:id",
+  verifyTokenMiddleware,
+  verifyPermissionMiddleware("ADM"),
+  updateUserById
+);
 
 export { usersRouter };
