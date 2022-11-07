@@ -366,6 +366,8 @@ describe("routes - /modules", () => {
       .get(`/modules/${moduleId}`)
       .set("Authorization", `Bearer ${login.body.token}`);
 
+    console.log(res.body);
+
     expect(res.body[0]).toHaveProperty("id");
     expect(res.body[0]).toHaveProperty("name");
     expect(res.body[0]).toHaveProperty("createdAt");
