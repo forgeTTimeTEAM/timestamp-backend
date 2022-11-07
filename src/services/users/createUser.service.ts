@@ -6,7 +6,7 @@ import { AppError } from "../../errors/AppError";
 
 import { IUsersRequest } from "../../interfaces/users";
 
-import { removeObjectProperty } from "../../utils/removeObjectProperty";
+import { removeObjectProperty } from "../../utils";
 
 const createUserService = async ({
   name,

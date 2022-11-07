@@ -2,7 +2,7 @@ import { Router } from "express";
 
 import {
   createMarkerController,
-  deleteMarkersController,
+  deleteMarkerController,
 } from "../controllers/markers";
 
 import {
@@ -23,7 +23,7 @@ markersRouter.delete(
   "/:id",
   verifyTokenMiddleware,
   verifyPermissionMiddleware("INSTRUCTOR"),
-  deleteMarkersController
+  deleteMarkerController
 );
 
 export { markersRouter };

@@ -19,7 +19,7 @@ const findGroupByIdService = async (id: string) => {
     throw new AppError("Group not found", 404);
   }
 
-  if (group.users.length > 0) {
+  if (group.users.length) {
     group.users.forEach((user) => {
       removeObjectProperty(user, "password");
     });

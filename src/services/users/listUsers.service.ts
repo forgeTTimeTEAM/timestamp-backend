@@ -1,6 +1,6 @@
 import { prisma } from "../../prisma";
 
-import { removeObjectProperty } from "../../utils/removeObjectProperty";
+import { removeObjectProperty } from "../../utils";
 
 const listUsersService = async () => {
   const users = await prisma.users.findMany();

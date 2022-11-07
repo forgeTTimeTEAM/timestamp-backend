@@ -4,7 +4,7 @@ import { AppError } from "../../errors/AppError";
 
 import { Role } from "../../interfaces/users";
 
-import { removeObjectProperty } from "../../utils/removeObjectProperty";
+import { removeObjectProperty } from "../../utils";
 
 const findUsersByModuleService = async (
   moduleId: string,
@@ -49,7 +49,7 @@ const findUsersByModuleService = async (
     },
   });
 
-  if (module[0].users.length > 0) {
+  if (module[0].users.length) {
     module.forEach(({ users }, index) => {
       removeObjectProperty(users[index].user, "password");
     });

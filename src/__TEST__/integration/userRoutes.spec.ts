@@ -2,8 +2,26 @@ import request from "supertest";
 import { prisma } from "../../prisma";
 import { app } from "../../app";
 import { hash, hashSync } from "bcryptjs";
+import {
+  admUserMock,
+  loginAdmMock,
+  loginStudentMock,
+  studentUserMock,
+  validGroupMock,
+} from "../mocks";
 
 describe("routes - users/", () => {
+  let authorization: string;
+
+  beforeAll(async () => {
+    await prisma.users.create({
+      data: admUserMock,
+    });
+
+    const loginAdm = await request(app).post("/users/login").send(loginAdmMock);
+    authorization = `Bearer ${loginAdm.body.token}`;
+  });
+
   afterAll(async () => {
     await prisma.video_markers.deleteMany();
     await prisma.videos.deleteMany();
@@ -420,5 +438,93 @@ describe("routes - users/", () => {
     expect(response.body[0]).toHaveProperty("createdAt");
     expect(response.body[0]).toHaveProperty("updatedAt");
     expect(response.body[0]).toHaveProperty("groupId");
+  });
+
+  test("should be able to find user", async () => {
+    const group = await request(app)
+      .post("/groups")
+      .send(validGroupMock)
+      .set("Authorization", authorization);
+    studentUserMock.groupId = group.body.id;
+    studentUserMock.moduleId = group.body.modules[0].id;
+
+    const studentUser = await request(app).post("/users").send(studentUserMock);
+    const { id, groupId, email, name, role, createdAt, updatedAt } =
+      studentUser.body;
+
+    const response = await request(app)
+      .get(`/users/${id}`)
+      .set("Authorization", authorization);
+
+    expect(response.status).toBe(200);
+    expect(response.body).toHaveProperty("id", id);
+    expect(response.body).toHaveProperty("groupId", groupId);
+    expect(response.body).toHaveProperty("email", email);
+    expect(response.body).toHaveProperty("name", name);
+    expect(response.body).not.toHaveProperty("password");
+    expect(response.body).toHaveProperty("role", role);
+    expect(response.body).toHaveProperty("createdAt", createdAt);
+    expect(response.body).toHaveProperty("updatedAt", updatedAt);
+  });
+
+  test("should not be able to find a user without token", async () => {
+    const loginStudent = await request(app)
+      .post("/users/login")
+      .send(loginStudentMock);
+    const studentAuth = `Bearer ${loginStudent.body.token}`;
+    const studentProfile = await request(app)
+      .get("/users/profile")
+      .set("Authorization", studentAuth);
+    const { id } = studentProfile.body;
+
+    const response = await request(app).get(`/users/${id}`);
+
+    expect(response.status).toBe(401);
+    expect(response.body).toHaveProperty("message");
+  });
+
+  test("should not be able to find a user with invalid token", async () => {
+    const loginStudent = await request(app)
+      .post("/users/login")
+      .send(loginStudentMock);
+    const studentAuth = `Bearer ${loginStudent.body.token}`;
+    const studentProfile = await request(app)
+      .get("/users/profile")
+      .set("Authorization", studentAuth);
+    const { id } = studentProfile.body;
+
+    const response = await request(app)
+      .get(`/users/${id}`)
+      .set("Authorization", "Bearer batata");
+
+    expect(response.status).toBe(401);
+    expect(response.body).toHaveProperty("message");
+  });
+
+  test("should not be able to find a user without adm permission", async () => {
+    const loginStudent = await request(app)
+      .post("/users/login")
+      .send(loginStudentMock);
+    const studentAuth = `Bearer ${loginStudent.body.token}`;
+    const studentProfile = await request(app)
+      .get("/users/profile")
+      .set("Authorization", studentAuth);
+    const { id } = studentProfile.body;
+
+    const response = await request(app)
+      .get(`/users/${id}`)
+      .set("Authorization", studentAuth);
+
+    expect(response.status).toBe(403);
+    expect(response.body).toHaveProperty("message");
+  });
+
+  test("should not be able to find a user with invalid id", async () => {
+    const response = await request(app)
+      .get("/users/batata")
+      .set("Authorization", authorization);
+
+    expect(response.status).toBe(404);
+    expect(response.body).toHaveProperty("message");
   });
 });

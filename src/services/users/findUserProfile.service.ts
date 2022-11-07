@@ -1,6 +1,6 @@
 import { prisma } from "../../prisma";
 
-import { removeObjectProperty } from "../../utils/removeObjectProperty";
+import { removeObjectProperty } from "../../utils";
 
 const findUserProfileService = async (id: string) => {
   const videos = {

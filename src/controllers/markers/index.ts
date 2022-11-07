@@ -1,2 +1,2 @@
 export { createMarkerController } from "./createMarker.controller";
-export { deleteMarkersController } from "./deleteMarker.controller";
+export { deleteMarkerController } from "./deleteMarker.controller";
