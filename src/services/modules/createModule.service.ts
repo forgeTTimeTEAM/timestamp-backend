@@ -51,9 +51,11 @@ const createModuleService = async ({
     },
   });
 
-  module.users.forEach(({ user }) => {
-    removeObjectProperty(user, "password");
-  });
+  if (module.users.length) {
+    module.users.forEach(({ user }) => {
+      removeObjectProperty(user, "password");
+    });
+  }
 
   return module;
 };
