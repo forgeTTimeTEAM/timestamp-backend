@@ -1,10 +1,11 @@
 import { RequestHandler } from "express";
-import { getUserProfileService } from "../../services/users";
 
-const getUserProfileController: RequestHandler = async (req, res) => {
-  const userFound = await getUserProfileService(req.user.id);
+import { findUserProfileService } from "../../services/users";
+
+const findUserProfileController: RequestHandler = async (req, res) => {
+  const userFound = await findUserProfileService(req.user.id);
 
   return res.status(200).json(userFound);
 };
 
-export { getUserProfileController };
+export { findUserProfileController };
