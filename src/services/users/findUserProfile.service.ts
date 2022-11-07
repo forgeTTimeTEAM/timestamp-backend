@@ -1,8 +1,8 @@
 import { prisma } from "../../prisma";
 
-import { removeObjectProperty } from "../../utils/removeObjectProperty";
+import { removeObjectProperty } from "../../utils";
 
-const getUserProfileService = async (id: string) => {
+const findUserProfileService = async (id: string) => {
   const videos = {
     include: {
       video_markers: true,
@@ -36,4 +36,4 @@ const getUserProfileService = async (id: string) => {
   return removeObjectProperty(user!, "password");
 };
 
-export { getUserProfileService };
+export { findUserProfileService };

@@ -1,7 +1,7 @@
 import request from "supertest";
-
 import { prisma } from "../../prisma";
 import { app } from "../../app";
+import { hash } from "bcryptjs";
 import {
   loginAdmMock,
   loginStudentMock,
@@ -9,7 +9,6 @@ import {
   studentUserMock,
   validGroupMock,
 } from "../mocks";
-import { hash } from "bcryptjs";
 
 describe("routes - /groups", () => {
   let authorization: string;
@@ -164,7 +163,7 @@ describe("routes - /groups", () => {
   });
 
   test("should not be able to find a group without token", async () => {
-    const response = await request(app).get("/groups/id");
+    const response = await request(app).get("/groups");
 
     expect(response.status).toBe(401);
     expect(response.body).toHaveProperty("message");
@@ -215,7 +214,7 @@ describe("routes - /groups", () => {
       .send({ email: "giuseppecadurinha@email.com", password: "alves123" });
 
     const response = await request(app)
-      .get("/groups/id")
+      .get("/groups/group")
       .set("Authorization", `Bearer ${loginAdm.body.token}`);
 
     expect(response.status).toBe(404);
@@ -263,12 +262,12 @@ describe("routes - /groups", () => {
       .post("/users/login")
       .send({ email: "giuseppecadurona@email.com", password: "alves123" });
 
-    const res = await request(app)
+    const response = await request(app)
       .get(`/groups/${group.body.id}`)
       .set("Authorization", `Bearer ${loginInstructor.body.token}`);
 
-    expect(res.status).toBe(403);
-    expect(res.body).toHaveProperty("message");
+    expect(response.status).toBe(403);
+    expect(response.body).toHaveProperty("message");
   });
 
   test("should be able to find a group by id", async () => {
@@ -287,13 +286,9 @@ describe("routes - /groups", () => {
 
     const authorization = `Bearer ${loginAdm.body.token}`;
 
-    console.log(authorization);
-
     const group = await request(app)
       .post("/groups")
       .set("Authorization", authorization);
-
-    console.log(group.body);
 
     await request(app)
       .post("/users")
@@ -305,33 +300,31 @@ describe("routes - /groups", () => {
         moduleId: group.body.modules[0].id,
       });
 
-    const res = await request(app)
+    const response = await request(app)
       .get(`/groups/${group.body.id}`)
       .set("Authorization", authorization);
 
-    console.log(res.body);
+    expect(response.status).toBe(200);
+    expect(response.body).toHaveProperty("id");
+    expect(response.body).toHaveProperty("number");
+    expect(response.body).toHaveProperty("modules");
+    expect(response.body).toHaveProperty("users");
 
-    expect(res.status).toBe(200);
-    expect(res.body).toHaveProperty("id");
-    expect(res.body).toHaveProperty("number");
-    expect(res.body).toHaveProperty("modules");
-    expect(res.body).toHaveProperty("users");
+    expect(response.body.modules[0]).toHaveProperty("id");
+    expect(response.body.modules[0]).toHaveProperty("name");
+    expect(response.body.modules[0]).toHaveProperty("createdAt");
+    expect(response.body.modules[0]).toHaveProperty("groupId");
+    expect(response.body.modules[0].groupId).toEqual(group.body.id);
 
-    expect(res.body.modules[0]).toHaveProperty("id");
-    expect(res.body.modules[0]).toHaveProperty("name");
-    expect(res.body.modules[0]).toHaveProperty("createdAt");
-    expect(res.body.modules[0]).toHaveProperty("groupId");
-    expect(res.body.modules[0].groupId).toEqual(group.body.id);
-
-    expect(res.body.users[0]).toHaveProperty("id");
-    expect(res.body.users[0]).toHaveProperty("name");
-    expect(res.body.users[0]).toHaveProperty("email");
-    expect(res.body.users[0]).not.toHaveProperty("password");
-    expect(res.body.users[0]).toHaveProperty("role");
-    expect(res.body.users[0]).toHaveProperty("createdAt");
-    expect(res.body.users[0]).toHaveProperty("updatedAt");
-    expect(res.body.users[0]).toHaveProperty("groupId");
-    expect(res.body.users[0].groupId).toEqual(group.body.id);
-    expect(res.body.users[0].email).toEqual("yuranrocketseat2@email.com");
+    expect(response.body.users[0]).toHaveProperty("id");
+    expect(response.body.users[0]).toHaveProperty("name");
+    expect(response.body.users[0]).toHaveProperty("email");
+    expect(response.body.users[0]).not.toHaveProperty("password");
+    expect(response.body.users[0]).toHaveProperty("role");
+    expect(response.body.users[0]).toHaveProperty("createdAt");
+    expect(response.body.users[0]).toHaveProperty("updatedAt");
+    expect(response.body.users[0]).toHaveProperty("groupId");
+    expect(response.body.users[0].groupId).toEqual(group.body.id);
+    expect(response.body.users[0].email).toEqual("yuranrocketseat2@email.com");
   });
 });

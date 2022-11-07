@@ -1,9 +1,12 @@
 import { Router } from "express";
-import { createGroupController } from "../controllers/groups";
-import { findGroupByIdController } from "../controllers/groups/findGroupById.controller";
-import { listGroupsController } from "../controllers/groups/listGroups.controller";
+
 import {
-  verifyInstructorOrAdmPermissionMiddleware,
+  createGroupController,
+  listGroupsController,
+  findGroupByIdController,
+} from "../controllers/groups";
+
+import {
   verifyPermissionMiddleware,
   verifyTokenMiddleware,
 } from "../middleware";
@@ -27,7 +30,7 @@ groupsRouter.get(
 groupsRouter.get(
   "/:id",
   verifyTokenMiddleware,
-  verifyInstructorOrAdmPermissionMiddleware,
+  verifyPermissionMiddleware("ADM"),
   findGroupByIdController
 );
 

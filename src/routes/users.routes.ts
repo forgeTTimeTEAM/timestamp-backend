@@ -1,12 +1,16 @@
 import { Router } from "express";
+
 import {
   createUserController,
   findUsersByGroupController,
   listUsersController,
-  getUserProfileController,
+  findUserProfileController,
+  findUserController,
+  deleteUserController,
 } from "../controllers/users";
 
 import { loginUserController } from "../controllers/users/loginUser.controller";
+import { updateUserById } from "../controllers/users/updateUserById.controller";
 
 import {
   verifyPermissionMiddleware,
@@ -23,7 +27,25 @@ usersRouter.get(
   verifyPermissionMiddleware("ADM"),
   listUsersController
 );
-usersRouter.get("/profile", verifyTokenMiddleware, getUserProfileController);
+usersRouter.get("/profile", verifyTokenMiddleware, findUserProfileController);
 usersRouter.get("/group/:id", findUsersByGroupController);
+usersRouter.patch(
+  "/:id",
+  verifyTokenMiddleware,
+  verifyPermissionMiddleware("ADM"),
+  updateUserById
+);
+usersRouter.get(
+  "/:id",
+  verifyTokenMiddleware,
+  verifyPermissionMiddleware("ADM"),
+  findUserController
+);
+usersRouter.delete(
+  "/:id",
+  verifyTokenMiddleware,
+  verifyPermissionMiddleware("ADM"),
+  deleteUserController
+);
 
 export { usersRouter };

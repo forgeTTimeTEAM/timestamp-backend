@@ -1,5 +1,6 @@
 import { prisma } from "../../prisma";
-import { removeObjectProperty } from "../../utils/removeObjectProperty";
+
+import { removeObjectProperty } from "../../utils";
 
 const listGroupsService = async () => {
   const groups = await prisma.groups.findMany({
@@ -10,9 +11,11 @@ const listGroupsService = async () => {
   });
 
   groups.forEach((group) => {
-    group.users.forEach((user) => {
-      removeObjectProperty(user, "password");
-    });
+    if (group.users.length) {
+      group.users.forEach((user) => {
+        removeObjectProperty(user, "password");
+      });
+    }
   });
 
   return groups;

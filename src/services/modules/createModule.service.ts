@@ -1,6 +1,9 @@
-import { AppError } from "../../errors/AppError";
-import { IModuleRequest } from "../../interfaces/modules";
 import { prisma } from "../../prisma";
+
+import { AppError } from "../../errors/AppError";
+
+import { IModuleRequest } from "../../interfaces/modules";
+
 import { handleSequencialObject, removeObjectProperty } from "../../utils";
 
 const createModuleService = async ({
@@ -48,9 +51,11 @@ const createModuleService = async ({
     },
   });
 
-  module.users.forEach(({ user }) => {
-    removeObjectProperty(user, "password");
-  });
+  if (module.users.length) {
+    module.users.forEach(({ user }) => {
+      removeObjectProperty(user, "password");
+    });
+  }
 
   return module;
 };
