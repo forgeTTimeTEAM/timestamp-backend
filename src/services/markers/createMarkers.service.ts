@@ -56,7 +56,7 @@ const createMarkers = async ({
     );
   }
 
-  const timeValidate = /(^(0[0-9])|(1[0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$)/;
+  const timeValidate = /((0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9])$/;
 
   marks.map((marker) => {
     if (!timeValidate.test(marker.time)) {
