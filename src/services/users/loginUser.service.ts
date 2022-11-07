@@ -1,8 +1,10 @@
+import { prisma } from "../../prisma";
+
 import jwt from "jsonwebtoken";
 import { compare } from "bcryptjs";
 
-import { prisma } from "../../prisma";
 import { AppError } from "../../errors/AppError";
+
 import { IUserLogin } from "../../interfaces/users";
 
 const loginUserService = async ({ email, password }: IUserLogin) => {

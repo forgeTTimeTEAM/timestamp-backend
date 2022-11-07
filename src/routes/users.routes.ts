@@ -1,9 +1,10 @@
 import { Router } from "express";
+
 import {
   createUserController,
   findUsersByGroupController,
   listUsersController,
-  getUserProfileController,
+  findUserProfileController,
 } from "../controllers/users";
 
 import { loginUserController } from "../controllers/users/loginUser.controller";
@@ -23,7 +24,7 @@ usersRouter.get(
   verifyPermissionMiddleware("ADM"),
   listUsersController
 );
-usersRouter.get("/profile", verifyTokenMiddleware, getUserProfileController);
+usersRouter.get("/profile", verifyTokenMiddleware, findUserProfileController);
 usersRouter.get("/group/:id", findUsersByGroupController);
 
 export { usersRouter };

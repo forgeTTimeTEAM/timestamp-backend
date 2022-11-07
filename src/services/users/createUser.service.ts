@@ -1,8 +1,11 @@
+import { prisma } from "../../prisma";
+
 import { hash } from "bcryptjs";
 
 import { AppError } from "../../errors/AppError";
+
 import { IUsersRequest } from "../../interfaces/users";
-import { prisma } from "../../prisma";
+
 import { removeObjectProperty } from "../../utils/removeObjectProperty";
 
 const createUserService = async ({

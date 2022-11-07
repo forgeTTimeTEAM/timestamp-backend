@@ -1,4 +1,5 @@
 import { RequestHandler } from "express";
+
 import { listGroupsService } from "../../services/groups";
 
 const listGroupsController: RequestHandler = async (req, res) => {

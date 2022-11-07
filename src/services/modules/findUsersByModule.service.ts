@@ -1,6 +1,9 @@
-import { AppError } from "../../errors/AppError";
-import { Role } from "../../interfaces/users";
 import { prisma } from "../../prisma";
+
+import { AppError } from "../../errors/AppError";
+
+import { Role } from "../../interfaces/users";
+
 import { removeObjectProperty } from "../../utils/removeObjectProperty";
 
 const findUsersByModuleService = async (
