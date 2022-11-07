@@ -9,3 +9,11 @@ export interface IVideoMarkerRequest {
   videoId: string;
   groupId: string | undefined;
 }
+
+export interface IVideoMarkerUpdade {
+  id: string;
+  bodyPatch: {
+    time?: string;
+    title?: string
+  }
+}

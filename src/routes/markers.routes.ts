@@ -3,6 +3,7 @@ import { Router } from "express";
 import {
   createMarkerController,
   deleteMarkerController,
+  updateMarkerController,
 } from "../controllers/markers";
 
 import {
@@ -18,12 +19,10 @@ markersRouter.post(
   verifyInstructorOrAdmPermissionMiddleware,
   createMarkerController
 );
-
 markersRouter.delete(
   "/:id",
   verifyTokenMiddleware,
   verifyInstructorOrAdmPermissionMiddleware,
   deleteMarkerController
 );
-
 export { markersRouter };
