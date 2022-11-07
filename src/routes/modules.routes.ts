@@ -9,18 +9,12 @@ import {
   verifyPermissionMiddleware,
   verifyTokenMiddleware,
 } from "../middleware";
+
 import { createModuleSchema } from "../schemas/modules";
 import { createModuleController } from "../controllers/modules/createModule.controller";
 
 const modulesRouter = Router();
 
-modulesRouter.post(
-  "/",
-  verifyTokenMiddleware,
-  verifyPermissionMiddleware("ADM"),
-  validateSchemaMiddleware(createModuleSchema),
-  createModuleController
-);
 modulesRouter.get(
   "/",
   verifyTokenMiddleware,
@@ -32,6 +26,13 @@ modulesRouter.get(
   verifyTokenMiddleware,
   verifyInstructorOrAdmPermissionMiddleware,
   findUsersByModuleController
+);
+modulesRouter.post(
+  "/",
+  verifyTokenMiddleware,
+  verifyPermissionMiddleware("ADM"),
+  validateSchemaMiddleware(createModuleSchema),
+  createModuleController
 );
 
 export { modulesRouter };
