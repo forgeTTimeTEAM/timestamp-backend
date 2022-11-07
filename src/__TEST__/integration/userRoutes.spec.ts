@@ -643,4 +643,83 @@ describe("routes - users/", () => {
     expect(response.status).toBe(404);
     expect(response.body).toHaveProperty("message");
   });
+
+  test("should not be able to delete a user without token", async () => {
+    const loginStudent = await request(app)
+      .post("/users/login")
+      .send(loginStudentMock);
+    const studentAuth = `Bearer ${loginStudent.body.token}`;
+    const studentProfile = await request(app)
+      .get("/users/profile")
+      .set("Authorization", studentAuth);
+    const { id } = studentProfile.body;
+
+    const response = await request(app).delete(`/users/${id}`);
+
+    expect(response.status).toBe(401);
+    expect(response.body).toHaveProperty("message");
+  });
+
+  test("should not be able to delete a user with invalid token", async () => {
+    const loginStudent = await request(app)
+      .post("/users/login")
+      .send(loginStudentMock);
+    const studentAuth = `Bearer ${loginStudent.body.token}`;
+    const studentProfile = await request(app)
+      .get("/users/profile")
+      .set("Authorization", studentAuth);
+    const { id } = studentProfile.body;
+
+    const response = await request(app)
+      .delete(`/users/${id}`)
+      .set("Authorization", "Bearer batata");
+
+    expect(response.status).toBe(401);
+    expect(response.body).toHaveProperty("message");
+  });
+
+  test("should not be able to delete a user without adm permission", async () => {
+    const loginStudent = await request(app)
+      .post("/users/login")
+      .send(loginStudentMock);
+    const studentAuth = `Bearer ${loginStudent.body.token}`;
+    const studentProfile = await request(app)
+      .get("/users/profile")
+      .set("Authorization", studentAuth);
+    const { id } = studentProfile.body;
+
+    const response = await request(app)
+      .delete(`/users/${id}`)
+      .set("Authorization", studentAuth);
+
+    expect(response.status).toBe(403);
+    expect(response.body).toHaveProperty("message");
+  });
+
+  test("should not be able to delete a user with invalid id", async () => {
+    const response = await request(app)
+      .delete("/users/batata")
+      .set("Authorization", authorization);
+
+    expect(response.status).toBe(404);
+    expect(response.body).toHaveProperty("message");
+  });
+
+  test("should be able to delete a user", async () => {
+    const loginStudent = await request(app)
+      .post("/users/login")
+      .send(loginStudentMock);
+    const studentAuth = `Bearer ${loginStudent.body.token}`;
+    const studentProfile = await request(app)
+      .get("/users/profile")
+      .set("Authorization", studentAuth);
+    const { id } = studentProfile.body;
+
+    const response = await request(app)
+      .delete(`/users/${id}`)
+      .set("Authorization", authorization);
+
+    expect(response.status).toBe(204);
+    expect(response.body).toMatchObject({});
+  });
 });

@@ -4,3 +4,4 @@ export { findUserProfileController } from "./getUserProfile.controller";
 export { listUsersController } from "./listUsers.controller";
 export { loginUserController } from "./loginUser.controller";
 export { findUserController } from "./findUser.controller";
+export { deleteUserController } from "./deleteUser.controller";
