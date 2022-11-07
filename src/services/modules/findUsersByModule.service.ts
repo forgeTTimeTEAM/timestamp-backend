@@ -1,14 +1,16 @@
-import { AppError } from "../../errors/AppError";
 import { prisma } from "../../prisma";
+
+import { AppError } from "../../errors/AppError";
+
+import { Role } from "../../interfaces/users";
+
 import { removeObjectProperty } from "../../utils/removeObjectProperty";
 
-const findUsersByModuleService = async (moduleId: string, userId: string) => {
-  const user = await prisma.users.findUnique({
-    where: {
-      id: userId,
-    },
-  });
-
+const findUsersByModuleService = async (
+  moduleId: string,
+  userId: string,
+  userRole: Role
+) => {
   const moduleExists = await prisma.modules.findFirst({
     where: {
       id: moduleId,
@@ -19,7 +21,22 @@ const findUsersByModuleService = async (moduleId: string, userId: string) => {
     throw new AppError("Module not found", 404);
   }
 
-  const users = await prisma.modules.findMany({
+  if (userRole === "INSTRUCTOR") {
+    const user = await prisma.users.findUnique({
+      where: {
+        id: userId,
+      },
+      include: {
+        modules: true,
+      },
+    });
+
+    if (user!.modules[0].moduleId !== moduleId) {
+      throw new AppError("Access denied", 403);
+    }
+  }
+
+  const module = await prisma.modules.findMany({
     where: {
       id: moduleId,
     },
@@ -32,18 +49,13 @@ const findUsersByModuleService = async (moduleId: string, userId: string) => {
     },
   });
 
-  if (
-    users[0].users.every((el) => el.user.id !== user!.id) &&
-    user!.role === "INSTRUCTOR"
-  ) {
-    throw new AppError("You dont have access to this module", 403);
+  if (module[0].users.length > 0) {
+    module.forEach(({ users }, index) => {
+      removeObjectProperty(users[index].user, "password");
+    });
   }
 
-  users.forEach(({ users }, index) => {
-    removeObjectProperty(users[index].user, "password");
-  });
-
-  return users;
+  return module;
 };
 
 export { findUsersByModuleService };

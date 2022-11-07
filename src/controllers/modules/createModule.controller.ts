@@ -1,4 +1,5 @@
 import { RequestHandler } from "express";
+
 import { createModuleService } from "../../services/modules";
 
 const createModuleController: RequestHandler = async (req, res) => {

@@ -151,22 +151,22 @@ describe("routes - /modules", () => {
   });
 
   test("should not be able to return all users by module id without token", async () => {
-    const res = await request(app).get("/modules/id");
+    const response = await request(app).get("/modules/id");
 
-    expect(res.body).toHaveProperty("message");
-    expect(res.status).toBe(401);
+    expect(response.body).toHaveProperty("message");
+    expect(response.status).toBe(401);
   });
 
   test("should not be able to return all users by module id with invalid token", async () => {
-    const res = await request(app)
+    const response = await request(app)
       .get("/modules/id")
       .set(
         "Authorization",
         "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiQURNIiwiZ3JvdXBJZCI6bnVsbCwiaWF0IjoxNjY3NTkzOTUxLCJleHAiOjE2Njc2ODAzNTEsInN1YiI6ImRmNmZmODg3LTBkZGMtNDAyNi05ZTBkLTUyZDQzMDg0MjVlZiJ9.oLO7jp5RyWfQhteGkJ21lYCZ3z2gWhTsUD97nzdafY"
       );
 
-    expect(res.body).toHaveProperty("message");
-    expect(res.status).toBe(401);
+    expect(response.body).toHaveProperty("message");
+    expect(response.status).toBe(401);
   });
 
   test("should not be able to return all users by module id with student token", async () => {
@@ -184,12 +184,12 @@ describe("routes - /modules", () => {
       .post("/users/login")
       .send({ email: "alvteste12@email.com", password: "alves123" });
 
-    const res = await request(app)
+    const response = await request(app)
       .get("/modules/123")
       .set("Authorization", `Bearer ${login.body.token}`);
 
-    expect(res.body).toHaveProperty("message");
-    expect(res.status).toBe(403);
+    expect(response.body).toHaveProperty("message");
+    expect(response.status).toBe(403);
   });
 
   test("should not be able to return all users by module id with invalid module id", async () => {
@@ -208,12 +208,12 @@ describe("routes - /modules", () => {
       .post("/users/login")
       .send({ email: "alvteste13@email.com", password: "alves123" });
 
-    const res = await request(app)
+    const response = await request(app)
       .get("/modules/123")
       .set("Authorization", `Bearer ${login.body.token}`);
 
-    expect(res.body).toHaveProperty("message");
-    expect(res.status).toBe(404);
+    expect(response.body).toHaveProperty("message");
+    expect(response.status).toBe(404);
   });
 
   test("should not be able to return all users by module id with instructor token and different module id", async () => {
@@ -265,12 +265,12 @@ describe("routes - /modules", () => {
       .post("/users/login")
       .send({ email: "alvteste15@email.com", password: "alves123" });
 
-    const res = await request(app)
+    const response = await request(app)
       .get(`/modules/${createGroup2.body.modules[0].id}`)
       .set("Authorization", `Bearer ${loginInstructor.body.token}`);
 
-    expect(res.status).toBe(403);
-    expect(res.body).toHaveProperty("message");
+    expect(response.status).toBe(403);
+    expect(response.body).toHaveProperty("message");
   });
 
   test("should be able to return all users by module id with instructor token", async () => {
@@ -320,18 +320,18 @@ describe("routes - /modules", () => {
       .post("/users/login")
       .send({ email: "alvteste18@email.com", password: "alves123" });
 
-    const res = await request(app)
+    const response = await request(app)
       .get(`/modules/${moduleId}`)
       .set("Authorization", `Bearer ${loginInstructor.body.token}`);
 
-    expect(res.body[0]).toHaveProperty("id");
-    expect(res.body[0]).toHaveProperty("name");
-    expect(res.body[0]).toHaveProperty("createdAt");
-    expect(res.body[0]).toHaveProperty("groupId");
-    expect(res.body[0]).toHaveProperty("users");
-    expect(res.body[0].users.length).toEqual(2);
-    expect(res.body[0].users[0].user).not.toHaveProperty("password");
-    expect(res.status).toBe(200);
+    expect(response.body[0]).toHaveProperty("id");
+    expect(response.body[0]).toHaveProperty("name");
+    expect(response.body[0]).toHaveProperty("createdAt");
+    expect(response.body[0]).toHaveProperty("groupId");
+    expect(response.body[0]).toHaveProperty("users");
+    expect(response.body[0].users.length).toEqual(2);
+    expect(response.body[0].users[0].user).not.toHaveProperty("password");
+    expect(response.status).toBe(200);
   });
 
   test("should be able to return all users by module id with adm token", async () => {
