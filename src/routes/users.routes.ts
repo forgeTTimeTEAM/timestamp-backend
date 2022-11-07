@@ -1,4 +1,5 @@
 import { Router } from "express";
+
 import {
   createUserController,
   findUsersByGroupController,
@@ -7,6 +8,7 @@ import {
 } from "../controllers/users";
 
 import { loginUserController } from "../controllers/users/loginUser.controller";
+import { updateUserById } from "../controllers/users/updateUserById.controller";
 
 import {
   verifyPermissionMiddleware,
@@ -25,5 +27,6 @@ usersRouter.get(
 );
 usersRouter.get("/profile", verifyTokenMiddleware, getUserProfileController);
 usersRouter.get("/group/:id", findUsersByGroupController);
+usersRouter.patch("/:id", updateUserById);
 
 export { usersRouter };

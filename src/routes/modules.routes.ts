@@ -2,27 +2,23 @@ import { Router } from "express";
 
 import { listModulesController } from "../controllers/modules/listModules.controller";
 import { findUsersByModuleController } from "../controllers/modules/findUsersByModule.controller";
+import { createModuleController } from "../controllers/modules/createModule.controller";
+
+import { createModuleSchema } from "../schemas/modules";
 
 import {
-  verifyAdmPermissionMiddleware,
-  verifyTokenMiddleware,
-} from "../middleware";
-import { verifyInstructorOrAdmPermissionMiddleware } from "../middleware/verifyInstructorOrAdmPermission.middleware";
-import { validateSchemaMiddleware,
+  validateSchemaMiddleware,
   verifyInstructorOrAdmPermissionMiddleware,
   verifyPermissionMiddleware,
   verifyTokenMiddleware,
 } from "../middleware";
-
-import { createModuleSchema } from "../schemas/modules";
-import { createModuleController } from "../controllers/modules/createModule.controller";
 
 const modulesRouter = Router();
 
 modulesRouter.get(
   "/",
   verifyTokenMiddleware,
-  verifyAdmPermissionMiddleware,
+  verifyPermissionMiddleware("ADM"),
   listModulesController
 );
 
