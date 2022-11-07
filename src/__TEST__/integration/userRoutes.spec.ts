@@ -604,6 +604,6 @@ describe("routes - users/", () => {
       .set("Authorization", authorization);
 
     expect(response.status).toBe(204);
-    expect(response.body).toBe(undefined);
+    expect(response.body).toMatchObject({});
   });
 });
