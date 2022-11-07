@@ -19,6 +19,8 @@ markersRouter.post(
   createMarkerController
 );
 
+<<<<<<< HEAD
+=======
 markersRouter.delete(
   "/:id",
   verifyTokenMiddleware,
@@ -26,4 +28,5 @@ markersRouter.delete(
   deleteMarkerController
 );
 
+>>>>>>> develop
 export { markersRouter };
