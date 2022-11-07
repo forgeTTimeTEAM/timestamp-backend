@@ -54,14 +54,6 @@ const createVideoService = async (
   }
 
   const createdVideo = await prisma.videos.create({
-    select: {
-      title: true,
-      url: true,
-      releaseDate: true,
-      sprintId: true,
-      createdAt: true,
-      updatedAt: true,
-    },
     data: {
       title,
       releaseDate: new Date(releaseDate),
