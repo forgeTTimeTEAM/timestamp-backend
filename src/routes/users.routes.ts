@@ -5,6 +5,7 @@ import {
   findUsersByGroupController,
   listUsersController,
   findUserProfileController,
+  findUserController,
 } from "../controllers/users";
 
 import { loginUserController } from "../controllers/users/loginUser.controller";
@@ -32,6 +33,12 @@ usersRouter.patch(
   verifyTokenMiddleware,
   verifyPermissionMiddleware("ADM"),
   updateUserById
+);
+usersRouter.get(
+  "/:id",
+  verifyTokenMiddleware,
+  verifyPermissionMiddleware("ADM"),
+  findUserController
 );
 
 export { usersRouter };
