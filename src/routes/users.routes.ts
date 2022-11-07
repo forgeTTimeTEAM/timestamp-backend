@@ -27,6 +27,11 @@ usersRouter.get(
 );
 usersRouter.get("/profile", verifyTokenMiddleware, getUserProfileController);
 usersRouter.get("/group/:id", findUsersByGroupController);
-usersRouter.patch("/:id", updateUserById);
+usersRouter.patch(
+  "/:id",
+  verifyTokenMiddleware,
+  verifyPermissionMiddleware("ADM"),
+  updateUserById
+);
 
 export { usersRouter };
