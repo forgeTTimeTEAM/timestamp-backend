@@ -150,14 +150,14 @@ describe("routes - /modules", () => {
     expect(response.body).toHaveProperty("message");
   });
 
-  test("should not be able to return all users without token", async () => {
+  test("should not be able to return all users by module id without token", async () => {
     const res = await request(app).get("/modules/id");
 
     expect(res.body).toHaveProperty("message");
     expect(res.status).toBe(401);
   });
 
-  test("should not be able to return all users with invalid token", async () => {
+  test("should not be able to return all users by module id with invalid token", async () => {
     const res = await request(app)
       .get("/modules/id")
       .set(
@@ -169,7 +169,7 @@ describe("routes - /modules", () => {
     expect(res.status).toBe(401);
   });
 
-  test("should not be able to return all users with student token", async () => {
+  test("should not be able to return all users by module id with student token", async () => {
     const createUser = await prisma.users.create({
       data: {
         name: "alv",
@@ -192,7 +192,7 @@ describe("routes - /modules", () => {
     expect(res.status).toBe(401);
   });
 
-  test("should not be able to return all users with invalid module id", async () => {
+  test("should not be able to return all users by module id with invalid module id", async () => {
     const createUser = await prisma.users.create({
       data: {
         name: "alv",
@@ -216,7 +216,7 @@ describe("routes - /modules", () => {
     expect(res.status).toBe(404);
   });
 
-  test("should not be able to return all users with instructor token and different module id", async () => {
+  test("should not be able to return all users by module id with instructor token and different module id", async () => {
     await prisma.users.create({
       data: {
         name: "alv",
@@ -273,7 +273,7 @@ describe("routes - /modules", () => {
     expect(res.body).toHaveProperty("message");
   });
 
-  test("should be able to return all users with instructor token", async () => {
+  test("should be able to return all users by module id with instructor token", async () => {
     await prisma.users.create({
       data: {
         name: "alv",
@@ -334,7 +334,7 @@ describe("routes - /modules", () => {
     expect(res.status).toBe(200);
   });
 
-  test("should be able to return all users with adm token", async () => {
+  test("should be able to return all users by module id with adm token", async () => {
     await prisma.users.create({
       data: {
         name: "alv",

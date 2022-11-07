@@ -347,4 +347,78 @@ describe("routes - users/", () => {
     expect(response.body).toHaveProperty("groupId");
     expect(response.body.groupId).toEqual(userGroup.body.id);
   });
+
+  test("should not be able to list all users without token", async () => {
+    const res = await request(app).get("/users");
+
+    expect(res.status).toBe(401);
+    expect(res.body).toHaveProperty("message");
+  });
+
+  test("should not be able to list all users with invalid token", async () => {
+    const res = await request(app)
+      .get("/users")
+      .set("Authorization", "Bearer batata");
+
+    expect(res.status).toBe(401);
+    expect(res.body).toHaveProperty("message");
+  });
+
+  test("should not be able to list all users without adm token", async () => {
+    await prisma.users.create({
+      data: {
+        name: "alves",
+        email: "alv777@email.com",
+        password: "alves123",
+      },
+    });
+
+    const login = await request(app)
+      .post("/users/login")
+      .send({ email: "alv777@email.com", password: "alves123" });
+
+    const res = await request(app)
+      .get("/users")
+      .set("Authorization", `Bearer ${login.body.token}`);
+
+    expect(res.status).toBe(401);
+    expect(res.body).toHaveProperty("message");
+  });
+
+  test("should be able to list all users", async () => {
+    const createdUser = await prisma.users.create({
+      data: {
+        name: "alves",
+        email: "amomacarrao@email.com",
+        password: await hash("alves123", 10),
+        role: "ADM",
+      },
+    });
+
+    await prisma.users.create({
+      data: {
+        name: "alves",
+        email: "amomuitomacarrao@email.com",
+        password: "alves123",
+      },
+    });
+
+    const login = await request(app)
+      .post("/users/login")
+      .send({ email: "amomacarrao@email.com", password: "alves123" });
+
+    const res = await request(app)
+      .get("/users")
+      .set("Authorization", `Bearer ${login.body.token}`);
+
+    expect(res.status).toBe(200);
+    expect(res.body[0]).toHaveProperty("id");
+    expect(res.body[0]).toHaveProperty("name");
+    expect(res.body[0]).toHaveProperty("email");
+    expect(res.body[0]).not.toHaveProperty("password");
+    expect(res.body[0]).toHaveProperty("role");
+    expect(res.body[0]).toHaveProperty("createdAt");
+    expect(res.body[0]).toHaveProperty("updatedAt");
+    expect(res.body[0]).toHaveProperty("groupId");
+  });
 });
