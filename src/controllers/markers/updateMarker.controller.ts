@@ -6,11 +6,14 @@ const  updateMarkerController: RequestHandler = async (req, res) => {
   const {
     params: { id },
     body,
+    user
   } = req;
 
-  await updateMarkerService({ id, bodyPatch: body });
+  const updatemarker = await updateMarkerService({ id, bodyPatch: body }, user.id);
 
-  res.status(201).send();
+  res.send({
+    message: updatemarker
+  });
 };
 
 export { updateMarkerController };
