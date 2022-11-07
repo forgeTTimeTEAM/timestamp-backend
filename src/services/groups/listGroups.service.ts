@@ -1,4 +1,5 @@
 import { prisma } from "../../prisma";
+
 import { removeObjectProperty } from "../../utils/removeObjectProperty";
 
 const listGroupsService = async () => {

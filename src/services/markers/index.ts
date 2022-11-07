@@ -1,2 +1,2 @@
-export { createMarkers } from "./createMarkers.service";
-export { deleteMarkersService } from "./deleteMarkers.service"
+export { createMarker } from "./createMarker.service";
+export { deleteMarkerService } from "./deleteMarker.service";

@@ -1,5 +1,7 @@
-import { IGroupRequest } from "../../interfaces/groups";
 import { prisma } from "../../prisma";
+
+import { IGroupRequest } from "../../interfaces/groups";
+
 import { handleSequencialObject } from "../../utils";
 
 const createGroupService = async ({

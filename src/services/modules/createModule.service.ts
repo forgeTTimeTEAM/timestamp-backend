@@ -1,6 +1,9 @@
-import { AppError } from "../../errors/AppError";
-import { IModuleRequest } from "../../interfaces/modules";
 import { prisma } from "../../prisma";
+
+import { AppError } from "../../errors/AppError";
+
+import { IModuleRequest } from "../../interfaces/modules";
+
 import { handleSequencialObject, removeObjectProperty } from "../../utils";
 
 const createModuleService = async ({

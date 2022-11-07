@@ -1,8 +1,10 @@
-import { AppError } from "../../errors/AppError";
-import { IVideoMarkerRequest } from "../../interfaces/videoMarker";
 import { prisma } from "../../prisma";
 
-const createMarkers = async ({
+import { AppError } from "../../errors/AppError";
+
+import { IVideoMarkerRequest } from "../../interfaces/videoMarker";
+
+const createMarker = async ({
   marks,
   groupId,
   videoId,
@@ -85,4 +87,4 @@ const createMarkers = async ({
   }
 };
 
-export { createMarkers };
+export { createMarker };
