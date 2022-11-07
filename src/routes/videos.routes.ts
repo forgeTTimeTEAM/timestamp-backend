@@ -1,14 +1,27 @@
 import { Router } from "express";
 import {
-  createVideoController,
-  deleteVideoController,
+    createVideoController,
+    deleteVideoController,
 } from "../controllers/videos";
 
-import { verifyTokenMiddleware } from "../middleware";
+import {
+    verifyInstructorOrAdmPermissionMiddleware,
+    verifyTokenMiddleware,
+} from "../middleware";
 
 const videosRouter = Router();
 
-videosRouter.post("/", verifyTokenMiddleware, createVideoController);
-videosRouter.delete("/:id", verifyTokenMiddleware, deleteVideoController);
+videosRouter.post(
+    "/",
+    verifyTokenMiddleware,
+    verifyInstructorOrAdmPermissionMiddleware,
+    createVideoController
+);
+videosRouter.patch(
+    "/:id",
+    verifyTokenMiddleware,
+    verifyInstructorOrAdmPermissionMiddleware,
+    deleteVideoController
+);
 
 export { videosRouter };

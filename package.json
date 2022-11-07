@@ -5,10 +5,10 @@
   "main": "index.js",
   "scripts": {
     "dev": "ts-node-dev ./src/server.ts",
-    "test": "dotenv -e .env.test jest -- --forceExit",
+    "test": "dotenv -e .env jest -- --forceExit",
     "build": "tsc",
     "start": "node ./dist/src/server.js",
-    "migrate:schema.test": "dotenv -e .env.test -- npx prisma migrate dev"
+    "migrate:schema.test": "dotenv -e .env -- npx prisma migrate dev"
   },
   "keywords": [],
   "author": "",
