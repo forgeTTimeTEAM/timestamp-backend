@@ -5,17 +5,17 @@ import { app } from "../../app";
 import {
   loginAdmMock,
   loginStudentMock,
-  userAdmMock,
-  userStudentMock,
+  admUserMock,
+  studentUserMock,
   validGroupMock,
 } from "../mocks";
 
-describe("POST /groups", () => {
+describe("routes - /groups", () => {
   let authorization: string;
 
   beforeAll(async () => {
     await prisma.users.create({
-      data: userAdmMock,
+      data: admUserMock,
     });
 
     const loginAdm = await request(app).post("/users/login").send(loginAdmMock);
@@ -58,36 +58,108 @@ describe("POST /groups", () => {
     expect(sprints[0]).toHaveProperty("name");
     expect(sprints[0]).toHaveProperty("moduleId");
   });
-  describe("should not be able to create group", () => {
-    test("without token", async () => {
-      const response = await request(app).post("/groups").send(validGroupMock);
 
-      expect(response.status).toBe(401);
-      expect(response.body).toHaveProperty("message");
+  test("should not be able to create group without token", async () => {
+    const response = await request(app).post("/groups").send(validGroupMock);
+
+    expect(response.status).toBe(401);
+    expect(response.body).toHaveProperty("message");
+  });
+
+  test("should not be able to create group with invalid token", async () => {
+    const response = await request(app)
+      .post("/groups")
+      .send(validGroupMock)
+      .set("Authorization", "Bearer batata");
+
+    expect(response.status).toBe(401);
+    expect(response.body).toHaveProperty("message");
+  });
+
+  test("should not be able to create group without adm permission", async () => {
+    const group = await prisma.groups.findFirst({
+      include: {
+        modules: true,
+      },
     });
+    studentUserMock.groupId = group!.id;
+    studentUserMock.moduleId = group!.modules[0].id;
 
-    test("without adm permission", async () => {
-      const group = await prisma.groups.findFirst({
-        include: {
-          modules: true,
-        },
-      });
-      userStudentMock.groupId = group!.id;
-      userStudentMock.moduleId = group!.modules[0].id;
+    await request(app).post("/users").send(studentUserMock);
+    const loginStudent = await request(app)
+      .post("/users/login")
+      .send(loginStudentMock);
 
-      await request(app).post("/users").send(userStudentMock);
-      const loginStudent = await request(app)
-        .post("/users/login")
-        .send(loginStudentMock);
+    const authorization = `Bearer ${loginStudent.body.token}`;
+    const response = await request(app)
+      .post("/groups")
+      .send(validGroupMock)
+      .set("Authorization", authorization);
 
-      const authorization = `Bearer ${loginStudent.body.token}`;
-      const response = await request(app)
-        .post("/groups")
-        .send(validGroupMock)
-        .set("Authorization", authorization);
+    expect(response.status).toBe(403);
+    expect(response.body).toHaveProperty("message");
+  });
 
-      expect(response.status).toBe(403);
-      expect(response.body).toHaveProperty("message");
-    });
+  test("should be able to list all groups", async () => {
+    const response = await request(app)
+      .get("/groups")
+      .set("Authorization", authorization);
+
+    expect(response.status).toBe(200);
+    expect(response.body).toHaveLength(1);
+
+    const [group] = response.body;
+    expect(group).toHaveProperty("id");
+    expect(group).toHaveProperty("number");
+
+    expect(group).toHaveProperty("modules");
+    expect(group.modules).toHaveLength(1);
+    const [module] = group.modules;
+    expect(module).toHaveProperty("id");
+    expect(module).toHaveProperty("groupId");
+    expect(module).toHaveProperty("name");
+    expect(module).toHaveProperty("createdAt");
+
+    expect(group).toHaveProperty("users");
+    expect(group.users).toHaveLength(1);
+    const [user] = group.users;
+    expect(user).toHaveProperty("id");
+    expect(user).toHaveProperty("groupId");
+    expect(user).toHaveProperty("name");
+    expect(user).toHaveProperty("email");
+    expect(user).not.toHaveProperty("password");
+    expect(user).toHaveProperty("role");
+    expect(user).toHaveProperty("createdAt");
+    expect(user).toHaveProperty("updatedAt");
+  });
+
+  test("should not be able to list all groups without token", async () => {
+    const response = await request(app).get("/groups");
+
+    expect(response.status).toBe(401);
+    expect(response.body).toHaveProperty("message");
+  });
+
+  test("should not be able to list all groups with invalid token", async () => {
+    const response = await request(app)
+      .get("/groups")
+      .set("Authorization", "Bearer batata");
+
+    expect(response.status).toBe(401);
+    expect(response.body).toHaveProperty("message");
+  });
+
+  test("should not be able to list all groups without adm permission", async () => {
+    const loginStudent = await request(app)
+      .post("/users/login")
+      .send(loginStudentMock);
+
+    const authorization = `Bearer ${loginStudent.body.token}`;
+    const response = await request(app)
+      .get("/groups")
+      .set("Authorization", authorization);
+
+    expect(response.status).toBe(403);
+    expect(response.body).toHaveProperty("message");
   });
 });

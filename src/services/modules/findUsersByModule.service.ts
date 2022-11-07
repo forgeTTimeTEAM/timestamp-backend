@@ -1,11 +1,8 @@
 import { AppError } from "../../errors/AppError";
-import { IModulesRequest } from "../../interfaces/modules";
 import { prisma } from "../../prisma";
+import { removeObjectProperty } from "../../utils/removeObjectProperty";
 
-const findUsersByModuleService = async ({
-  moduleId,
-  userId,
-}: IModulesRequest) => {
+const findUsersByModuleService = async (moduleId: string, userId: string) => {
   const user = await prisma.users.findUnique({
     where: {
       id: userId,
@@ -27,7 +24,7 @@ const findUsersByModuleService = async ({
       id: moduleId,
     },
     include: {
-      users_modules: {
+      users: {
         include: {
           user: true,
         },
@@ -36,11 +33,15 @@ const findUsersByModuleService = async ({
   });
 
   if (
-    users[0].users_modules.every((el) => el.id !== user!.id) &&
+    users[0].users.every((el) => el.user.id !== user!.id) &&
     user!.role === "INSTRUCTOR"
   ) {
-    throw new AppError("You dont have access to this module");
+    throw new AppError("You dont have access to this module", 403);
   }
+
+  users.forEach(({ users }, index) => {
+    removeObjectProperty(users[index].user, "password");
+  });
 
   return users;
 };

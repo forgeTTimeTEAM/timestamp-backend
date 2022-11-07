@@ -1,7 +1,8 @@
 import { Router } from "express";
 import { createGroupController } from "../controllers/groups";
+import { listGroupsController } from "../controllers/groups/listGroups.controller";
 import {
-  verifyAdmPermissionMiddleware,
+  verifyPermissionMiddleware,
   verifyTokenMiddleware,
 } from "../middleware";
 
@@ -10,8 +11,14 @@ const groupsRouter = Router();
 groupsRouter.post(
   "/",
   verifyTokenMiddleware,
-  verifyAdmPermissionMiddleware,
+  verifyPermissionMiddleware("ADM"),
   createGroupController
+);
+groupsRouter.get(
+  "/",
+  verifyTokenMiddleware,
+  verifyPermissionMiddleware("ADM"),
+  listGroupsController
 );
 
 export { groupsRouter };
