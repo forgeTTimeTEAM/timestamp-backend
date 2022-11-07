@@ -189,7 +189,7 @@ describe("routes - /modules", () => {
       .set("Authorization", `Bearer ${login.body.token}`);
 
     expect(res.body).toHaveProperty("message");
-    expect(res.status).toBe(401);
+    expect(res.status).toBe(403);
   });
 
   test("should not be able to return all users by module id with invalid module id", async () => {
