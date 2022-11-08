@@ -43,8 +43,8 @@ const updateMarkerService = async ({ id, bodyPatch }: IVideoMarkerUpdade, idUser
   if (!isInstructor)
     throw new AppError("Instructor does not own this mark", 401);
 
-  if(marker && !marker?.video.video_markers.find((videoMarker => videoMarker.time === marker.time))) {
-    throw new AppError("Time already exists", 400);
+  if(marker && bodyPatch.time && marker?.video.video_markers.find((videoMarker => videoMarker.time.localeCompare(bodyPatch.time!) === 0))) {
+    throw new AppError("Time already exists", 403);
   }
 
   const markerUpdate = await prisma.video_markers.update({

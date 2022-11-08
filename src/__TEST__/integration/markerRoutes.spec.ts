@@ -11,6 +11,7 @@ describe("routes - markers/", () => {
   let userLogin: any;
   let authorization: string;
   let authorizationStudent: string;
+  let authorizationLogin: string;
 
   beforeAll(async () => {
     group = await prisma.groups.create({
@@ -54,6 +55,15 @@ describe("routes - markers/", () => {
       },
     });
 
+    await prisma.users.create({
+      data: {
+        email: "joaoaraujo@email.com",
+        name: "1234",
+        password: await hash("1234", 10),
+        role: "INSTRUCTOR",
+      },
+    });
+
     video = await prisma.videos.findFirst({
       where: {
         sprint: {
@@ -76,9 +86,15 @@ describe("routes - markers/", () => {
       .post("/users/login")
       .send({ email: "alvteste10@email.com", password: "alves123" });
 
+    const instructorLogin = await request(app)
+    .post("/users/login")
+    .send({ email: "joaoaraujo@email.com", password: "1234" });
+
     authorization = `Bearer ${userLogin.body.token}`;
 
     authorizationStudent = `Bearer ${studentUserLogin.body.token}`;
+
+    authorizationLogin = `Bearer ${instructorLogin.body.token}`
   });
 
   afterAll(async () => {
@@ -259,6 +275,8 @@ describe("routes - markers/", () => {
       .set("Authorization", authorization)
       .send(markerPatch);
 
+    console.log(body)
+
     expect(statusCode).toBe(200)
     expect(body).toHaveProperty("id");
     expect(body).toHaveProperty("time");
@@ -295,5 +313,31 @@ describe("routes - markers/", () => {
 
     expect(statusCode).toBe(403);
     expect(body).toHaveProperty("message");
+  })
+
+  it("should be possible to delete a marker", async () => {
+    const { statusCode } = await request(app)
+      .delete(`/markers/${markers[0].id}`)
+      .set("Authorization", authorization)
+    
+    expect(statusCode).toBe(204)
+  });
+
+  it("should not be possible to delete a marker with invalid id", async () => {
+    const { statusCode, body } = await request(app)
+      .delete(`/markers/invalidId`)
+      .set("Authorization", authorization)
+    
+    expect(statusCode).toBe(404)
+    expect(body).toHaveProperty("message"); 
+  });
+
+  it("should not be possible to delete a marker with a different instructor", async () => {
+    const { statusCode, body } = await request(app)
+      .delete(`/markers/${markers[1].id}`)
+      .set("Authorization", authorizationLogin)
+    
+    expect(statusCode).toBe(401)
+    expect(body).toHaveProperty("message"); 
   })
 });
