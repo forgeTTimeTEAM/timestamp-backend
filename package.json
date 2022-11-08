@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "dev": "ts-node-dev ./src/server.ts",
-    "test": "jest --forceExit",
+    "test": "jest --forceExit --verbose",
     "build": "tsc",
     "start": "node ./dist/src/server.js"
   },
