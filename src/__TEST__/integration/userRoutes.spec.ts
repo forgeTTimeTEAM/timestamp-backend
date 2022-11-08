@@ -334,6 +334,36 @@ describe("routes - users/", () => {
       .set("Authorization", userToken)
       .send(createGroupRequest);
 
+    const video = await prisma.videos.create({
+      data: {
+        title: "Bem vindo ao M4",
+        releaseDate: new Date(),
+        url: "youtube.com",
+        sprintId: userGroup.body.modules[0].sprints[0].id,
+      },
+    });
+
+    await prisma.video_markers.createMany({
+      data: {
+        time: "00:30",
+        title: "Introdução ao node",
+        videoId: video.id,
+      },
+    });
+
+    await prisma.sprints.findUnique({
+      where: {
+        id: userGroup.body.modules[0].sprints[0].id,
+      },
+      include: {
+        videos: {
+          include: {
+            video_markers: true,
+          },
+        },
+      },
+    });
+
     const createUserRequest = {
       name: "alves",
       email: "alvesteste12@email.com",
@@ -363,7 +393,93 @@ describe("routes - users/", () => {
     expect(response.body).not.toHaveProperty("password");
     expect(response.body).toHaveProperty("role");
     expect(response.body).toHaveProperty("groupId");
-    expect(response.body.groupId).toEqual(userGroup.body.id);
+    expect(response.body).toHaveProperty("modules");
+
+    expect(response.body.modules[0]).toHaveProperty("createdAt");
+    expect(response.body.modules[0]).toHaveProperty("updatedAt");
+    expect(response.body.modules[0]).toHaveProperty("userId");
+    expect(response.body.modules[0].userId).toEqual(response.body.id);
+    expect(response.body.modules[0]).toHaveProperty("moduleId");
+    expect(response.body.modules[0]).toHaveProperty("module");
+
+    expect(response.body.modules[0].module).toHaveProperty("id");
+    expect(response.body.modules[0].module).toHaveProperty("name");
+    expect(response.body.modules[0].module).toHaveProperty("createdAt");
+    expect(response.body.modules[0].module).toHaveProperty("groupId");
+    expect(response.body.modules[0].module.groupId).toEqual(
+      response.body.groupId
+    );
+    expect(response.body.modules[0].module).toHaveProperty("sprints");
+
+    expect(response.body.modules[0].module.sprints[0]).toHaveProperty("id");
+    expect(response.body.modules[0].module.sprints[0]).toHaveProperty("name");
+    expect(response.body.modules[0].module.sprints[0]).toHaveProperty(
+      "moduleId"
+    );
+    expect(response.body.modules[0].module.sprints[0]).toHaveProperty("videos");
+
+    expect(response.body.modules[0].module.sprints[0].videos.length).toEqual(1);
+    expect(response.body.modules[0].module.sprints[0].videos[0]).toHaveProperty(
+      "id"
+    );
+    expect(response.body.modules[0].module.sprints[0].videos[0]).toHaveProperty(
+      "title"
+    );
+    expect(response.body.modules[0].module.sprints[0].videos[0]).toHaveProperty(
+      "url"
+    );
+    expect(response.body.modules[0].module.sprints[0].videos[0]).toHaveProperty(
+      "releaseDate"
+    );
+    expect(response.body.modules[0].module.sprints[0].videos[0]).toHaveProperty(
+      "createdAt"
+    );
+    expect(response.body.modules[0].module.sprints[0].videos[0]).toHaveProperty(
+      "updatedAt"
+    );
+    expect(response.body.modules[0].module.sprints[0].videos[0]).toHaveProperty(
+      "sprintId"
+    );
+    expect(response.body.modules[0].module.sprints[0].videos[0]).toHaveProperty(
+      "video_markers"
+    );
+
+    expect(
+      response.body.modules[0].module.sprints[0].videos[0].video_markers.length
+    ).toEqual(1);
+
+    expect(
+      response.body.modules[0].module.sprints[0].videos[0].video_markers.length
+    ).toEqual(1);
+    expect(
+      response.body.modules[0].module.sprints[0].videos[0].video_markers[0]
+    ).toHaveProperty("id");
+    expect(
+      response.body.modules[0].module.sprints[0].videos[0].video_markers[0]
+    ).toHaveProperty("time");
+    expect(
+      response.body.modules[0].module.sprints[0].videos[0].video_markers[0]
+    ).toHaveProperty("title");
+    expect(
+      response.body.modules[0].module.sprints[0].videos[0].video_markers[0]
+    ).toHaveProperty("createdAt");
+    expect(
+      response.body.modules[0].module.sprints[0].videos[0].video_markers[0]
+    ).toHaveProperty("updatedAt");
+    expect(
+      response.body.modules[0].module.sprints[0].videos[0].video_markers[0]
+    ).toHaveProperty("videoId");
+    expect(
+      response.body.modules[0].module.sprints[0].videos[0].video_markers[0].time
+    ).toEqual("00:30");
+    expect(
+      response.body.modules[0].module.sprints[0].videos[0].video_markers[0]
+        .title
+    ).toEqual("Introdução ao node");
+    expect(
+      response.body.modules[0].module.sprints[0].videos[0].video_markers[0]
+        .videoId
+    ).toEqual(response.body.modules[0].module.sprints[0].videos[0].id);
   });
 
   test("should not be able to list all users without token", async () => {
