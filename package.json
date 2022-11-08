@@ -7,7 +7,8 @@
     "dev": "ts-node-dev ./src/server.ts",
     "test": "jest --forceExit --verbose",
     "build": "tsc",
-    "start": "node ./dist/src/server.js"
+    "start": "node ./dist/src/server.js",
+    "migrate:dev": "yarn prisma migrate dev"
   },
   "keywords": [],
   "author": "",
