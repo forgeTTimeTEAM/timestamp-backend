@@ -9,6 +9,7 @@ import {
   studentUserMock,
   validGroupMock,
 } from "../mocks";
+import { v4 } from "uuid";
 
 describe("routes - users/", () => {
   let authorization: string;
@@ -721,5 +722,386 @@ describe("routes - users/", () => {
 
     expect(response.status).toBe(204);
     expect(response.body).toMatchObject({});
+  });
+
+  test("should be able to update a user by id", async () => {
+    await prisma.users.create({
+      data: {
+        name: "sara",
+        email: "saraADM@email.com",
+        password: await hash("1234", 10),
+        role: "ADM",
+      },
+    });
+
+    const dataLoginADM = { email: "saraADM@email.com", password: "1234" };
+
+    const login = await request(app).post("/users/login").send(dataLoginADM);
+
+    const token = login.body.token;
+
+    const createGroup1 = await request(app)
+      .post("/groups")
+      .set("Authorization", `Bearer ${token}`);
+
+    const groupId1 = createGroup1.body.id;
+
+    const moduleId1 = createGroup1.body.modules[0].id;
+
+    const name = "sara";
+    const email = "saraSTUDENT@email.com";
+    const password = "1234";
+    const groupId = groupId1;
+    const moduleId = moduleId1;
+
+    const loginStudent = await request(app).post("/users").send({
+      name,
+      email,
+      password,
+      groupId,
+      moduleId,
+    });
+
+    const idStudent = loginStudent.body.id;
+
+    const createGroup2 = await request(app)
+      .post("/groups")
+      .set("Authorization", `Bearer ${token}`);
+
+    const groupId2 = createGroup2.body.id;
+
+    const res = await request(app)
+      .patch(`/users/${idStudent}`)
+      .set("Authorization", `Bearer ${token}`)
+      .send({
+        groupId: groupId2,
+      });
+
+    expect(res.status).toBe(200);
+    expect(res.body).toHaveProperty("id");
+    expect(res.body).toHaveProperty("name");
+    expect(res.body).toHaveProperty("email");
+    expect(res.body).toHaveProperty("password");
+    expect(res.body).toHaveProperty("role");
+    expect(res.body).toHaveProperty("createdAt");
+    expect(res.body).toHaveProperty("updatedAt");
+    expect(res.body).toHaveProperty("groupId");
+  });
+
+  test("should not be able to update a user by id without token", async () => {
+    await prisma.users.create({
+      data: {
+        name: "sara",
+        email: "saraADM2@email.com",
+        password: await hash("1234", 10),
+        role: "ADM",
+      },
+    });
+
+    const dataLoginADM = { email: "saraADM2@email.com", password: "1234" };
+
+    const login = await request(app).post("/users/login").send(dataLoginADM);
+
+    const token = login.body.token;
+
+    const createGroup1 = await request(app)
+      .post("/groups")
+      .set("Authorization", `Bearer ${token}`);
+
+    const moduleId1 = createGroup1.body.modules[0].id;
+
+    const name = "sara";
+    const email = "saraSTUDENT@email.com";
+    const password = "1234";
+    const groupId = createGroup1.body.id;
+    const moduleId = moduleId1;
+
+    const loginStudent = await request(app).post("/users").send({
+      name,
+      email,
+      password,
+      groupId,
+      moduleId,
+    });
+
+    const idStudent = loginStudent.body.id;
+
+    const createGroup2 = await request(app)
+      .post("/groups")
+      .set("Authorization", `Bearer ${token}`);
+
+    const moduleId2 = createGroup2.body.modules[0].id;
+
+    const res = await request(app).patch(`/users/${idStudent}`).send({
+      groupId: moduleId2,
+    });
+
+    expect(res.status).toBe(401);
+    expect(res.body).toHaveProperty("message");
+  });
+
+  test("should not be able to update a user by id with the current groupId group", async () => {
+    await prisma.users.create({
+      data: {
+        name: "sara",
+        email: "saraADM3@email.com",
+        password: await hash("1234", 10),
+        role: "ADM",
+      },
+    });
+
+    const dataLoginADM = { email: "saraADM3@email.com", password: "1234" };
+
+    const login = await request(app).post("/users/login").send(dataLoginADM);
+
+    const token = login.body.token;
+
+    const createGroup1 = await request(app)
+      .post("/groups")
+      .set("Authorization", `Bearer ${token}`);
+
+    const groupId1 = createGroup1.body.id;
+
+    const moduleId1 = createGroup1.body.modules[0].id;
+
+    const name = "sara";
+    const email = "saraSTUDENT@email.com";
+    const password = "1234";
+    const groupId = groupId1;
+    const moduleId = moduleId1;
+
+    const loginStudent = await request(app).post("/users").send({
+      name,
+      email,
+      password,
+      groupId,
+      moduleId,
+    });
+
+    const idStudent = loginStudent.body.id;
+
+    const res = await request(app)
+      .patch(`/users/${idStudent}`)
+      .set("Authorization", `Bearer ${token}`)
+      .send({
+        groupId: groupId1,
+      });
+
+    expect(res.status).toBe(404);
+    expect(res.body).toHaveProperty("message");
+  });
+
+  test("should not be able to update a user by id with groupId that does not exist", async () => {
+    await prisma.users.create({
+      data: {
+        name: "sara",
+        email: "saraADM4@email.com",
+        password: await hash("1234", 10),
+        role: "ADM",
+      },
+    });
+
+    const dataLoginADM = { email: "saraADM4@email.com", password: "1234" };
+
+    const login = await request(app).post("/users/login").send(dataLoginADM);
+
+    const token = login.body.token;
+
+    const createGroup1 = await request(app)
+      .post("/groups")
+      .set("Authorization", `Bearer ${token}`);
+
+    const groupId1 = createGroup1.body.id;
+
+    const moduleId1 = createGroup1.body.modules[0].id;
+
+    const name = "sara";
+    const email = "saraSTUDENT@email.com";
+    const password = "1234";
+    const groupId = groupId1;
+    const moduleId = moduleId1;
+
+    const loginStudent = await request(app).post("/users").send({
+      name,
+      email,
+      password,
+      groupId,
+      moduleId,
+    });
+
+    const idStudent = loginStudent.body.id;
+
+    const res = await request(app)
+      .patch(`/users/${idStudent}`)
+      .set("Authorization", `Bearer ${token}`)
+      .send({
+        groupId: "babsladgadgagdçahdçao",
+      });
+
+    expect(res.status).toBe(404);
+    expect(res.body).toHaveProperty("message");
+  });
+
+  test("should not be able to update a user by id with user id that does not exist", async () => {
+    await prisma.users.create({
+      data: {
+        name: "sara",
+        email: "saraADM5@email.com",
+        password: await hash("1234", 10),
+        role: "ADM",
+      },
+    });
+
+    const dataLoginADM = { email: "saraADM5@email.com", password: "1234" };
+
+    const login = await request(app).post("/users/login").send(dataLoginADM);
+
+    const token = login.body.token;
+
+    const createGroup1 = await request(app)
+      .post("/groups")
+      .set("Authorization", `Bearer ${token}`);
+
+    const groupId1 = createGroup1.body.id;
+
+    const createGroup2 = await request(app)
+      .post("/groups")
+      .set("Authorization", `Bearer ${token}`);
+
+    const groupId2 = createGroup2.body.id;
+
+    const moduleId1 = createGroup1.body.modules[0].id;
+
+    const name = "sara";
+    const email = "saraSTUDENT@email.com";
+    const password = "1234";
+    const groupId = groupId1;
+    const moduleId = moduleId1;
+
+    await request(app).post("/users").send({
+      name,
+      email,
+      password,
+      groupId,
+      moduleId,
+    });
+
+    const res = await request(app)
+      .patch(`/users/çaljdaçjdapjdajd`)
+      .set("Authorization", `Bearer ${token}`)
+      .send({
+        groupId: groupId2,
+      });
+
+    expect(res.status).toBe(404);
+    expect(res.body).toHaveProperty("message");
+  });
+
+  test("should not be able to update a user by id without data in the request body", async () => {
+    await prisma.users.create({
+      data: {
+        name: "sara",
+        email: "saraADM6@email.com",
+        password: await hash("1234", 10),
+        role: "ADM",
+      },
+    });
+
+    const dataLoginADM = { email: "saraADM6@email.com", password: "1234" };
+
+    const login = await request(app).post("/users/login").send(dataLoginADM);
+
+    const token = login.body.token;
+
+    const createGroup1 = await request(app)
+      .post("/groups")
+      .set("Authorization", `Bearer ${token}`);
+
+    const groupId1 = createGroup1.body.id;
+
+    const createGroup2 = await request(app)
+      .post("/groups")
+      .set("Authorization", `Bearer ${token}`);
+
+    const moduleId1 = createGroup1.body.modules[0].id;
+
+    const name = "sara";
+    const email = "saraSTUDENT@email.com";
+    const password = "1234";
+    const groupId = groupId1;
+    const moduleId = moduleId1;
+
+    const loginStudent = await request(app).post("/users").send({
+      name,
+      email,
+      password,
+      groupId,
+      moduleId,
+    });
+
+    const idStudent = loginStudent.body.id;
+
+    const res = await request(app)
+      .patch(`/users/${idStudent}`)
+      .set("Authorization", `Bearer ${token}`)
+      .send({});
+
+    expect(res.status).toBe(400);
+    expect(res.body).toHaveProperty("message");
+  });
+
+  test("should not be able to update a user by id without providing the correct key(groupId) in the request", async () => {
+    await prisma.users.create({
+      data: {
+        name: "sara",
+        email: "saraADM7@email.com",
+        password: await hash("1234", 10),
+        role: "ADM",
+      },
+    });
+
+    const dataLoginADM = { email: "saraADM7@email.com", password: "1234" };
+
+    const login = await request(app).post("/users/login").send(dataLoginADM);
+
+    const token = login.body.token;
+
+    const createGroup1 = await request(app)
+      .post("/groups")
+      .set("Authorization", `Bearer ${token}`);
+
+    const groupId1 = createGroup1.body.id;
+
+    const createGroup2 = await request(app)
+      .post("/groups")
+      .set("Authorization", `Bearer ${token}`);
+
+    const moduleId1 = createGroup1.body.modules[0].id;
+
+    const name = "sara";
+    const email = "saraSTUDENT@email.com";
+    const password = "1234";
+    const groupId = groupId1;
+    const moduleId = moduleId1;
+
+    const loginStudent = await request(app).post("/users").send({
+      name,
+      email,
+      password,
+      groupId,
+      moduleId,
+    });
+
+    const idStudent = loginStudent.body.id;
+
+    const res = await request(app)
+      .patch(`/users/${idStudent}`)
+      .set("Authorization", `Bearer ${token}`)
+      .send({
+        banana: "banana",
+      });
+
+    expect(res.status).toBe(400);
+    expect(res.body).toHaveProperty("message");
   });
 });
