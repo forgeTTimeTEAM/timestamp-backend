@@ -275,7 +275,7 @@ describe("routes - markers/", () => {
       .set("Authorization", authorization)
       .send(markerPatch);
 
-    console.log(body)
+    (body)
 
     expect(statusCode).toBe(200)
     expect(body).toHaveProperty("id");
