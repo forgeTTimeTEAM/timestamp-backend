@@ -9,6 +9,8 @@
 ## POST - Create user
 ### Endpoint: /users
 
+Rota para criação de usuário (estudante)
+
 Campos obrigatórios:
 | Campo      | Tipo   | Descrição                                       |
 | -----------|--------|-------------------------------------------------|
@@ -61,6 +63,40 @@ Possíveis erros:
 | should not be able to create a user with invalid group id  			| You must provide a module id| 400 |
 | should not be able to create a user with invalid module id  			| Module not found            | 404 |
 | should not be able to create a user with same email  				| Email is already in use     | 409 |
+
+## POST - Login user
+### Endpoint: /users/login
+
+Rota para login de estudantes, administradores e instrutores
+
+Campos obrigatórios:
+| Campo      | Tipo   | Descrição                                       |
+| -----------|--------|-------------------------------------------------|
+| email      | string | O e-mail do usuário.                            |
+| password   | string | A senha de acesso do usuário                    |
+
+Body da requisição:
+```shell
+{  
+	"email": "sara-test@mail.com",
+	"password": "1234"
+}
+```
+Body da resposta:
+```shell
+{
+	{
+	"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiU1RVREVOVCIsImdyb3VwSWQiOiI3ZTQ0ZWM4Yy04NGUyLTQyZDEtYWVmYi0wOTUzMWM1YmE5MzciLCJpYXQiOjE2Njc5MjEwMTEsImV4cCI6MTY2ODAwNzQxMSwic3ViIjoiYTE3Y2I0ZWUtNzUyYS00ODlmLWI1NmMtNGQ0OWQyOWRkYmRjIn0.gUcDapffJXZrmZbYRrcpmAy5zf0zS1AVwkLpiLeT_MI"
+}
+}
+```
+
+Possíveis erros:
+| Error    			| Message                                   					| Status Code |
+| ------------------------------|-----------------------------------------------------------------------------	|--------------|
+| should not be able to login with wrong password       			| Wrong email or password	| 403 |
+| should be able to return error when logging in without email and password 	| Wrong email or password 	| 403 |
+
 
 
 ### All rights reserved.
