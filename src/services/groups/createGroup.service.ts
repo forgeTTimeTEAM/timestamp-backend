@@ -1,34 +1,36 @@
-import { IGroupRequest } from "../../interfaces/groups";
 import { prisma } from "../../prisma";
 
+import { IGroupRequest } from "../../interfaces/groups";
+
+import { handleSequencialObject } from "../../utils";
+
 const createGroupService = async ({
-    moduleName,
-    sprintName,
+  modulePrefixName = "module",
+  sprintPrefixName = "sprint",
 }: IGroupRequest) => {
-    const createSprint = (_: null, index: number) => ({
-        name: `${sprintName} ${index + 1}`,
-    });
-    const sprintsToCreate = new Array(8).fill(null).map(createSprint);
-    const sprints = { create: sprintsToCreate };
+  const sprintsToCreate = handleSequencialObject("name", 8, sprintPrefixName);
+  const sprints = { create: sprintsToCreate };
 
-    const moduleToCreate = {
-        name: `${moduleName} 1`,
-        sprints,
-    };
-    const modules = { create: moduleToCreate };
+  const moduleToCreate = {
+    name: `${modulePrefixName}1`,
+    sprints,
+  };
+  const modules = { create: moduleToCreate };
 
-    const data = { modules };
-    const include = {
-        modules: {
-            include: {
-                sprints: true,
-            },
+  const createdGroup = await prisma.groups.create({
+    data: {
+      modules,
+    },
+    include: {
+      modules: {
+        include: {
+          sprints: true,
         },
-    };
+      },
+    },
+  });
 
-    const createdGroup = await prisma.groups.create({ data, include });
-
-    return createdGroup;
+  return createdGroup;
 };
 
 export { createGroupService };
