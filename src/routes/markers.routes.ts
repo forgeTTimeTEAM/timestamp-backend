@@ -3,6 +3,7 @@ import { Router } from "express";
 import {
   createMarkerController,
   deleteMarkerController,
+  updateMarkerController,
 } from "../controllers/markers";
 
 import {
@@ -24,6 +25,13 @@ markersRouter.delete(
   verifyTokenMiddleware,
   verifyInstructorOrAdmPermissionMiddleware,
   deleteMarkerController
+);
+
+markersRouter.patch(
+  "/:id",
+  verifyTokenMiddleware,
+  verifyInstructorOrAdmPermissionMiddleware,
+  updateMarkerController
 );
 
 export { markersRouter };
