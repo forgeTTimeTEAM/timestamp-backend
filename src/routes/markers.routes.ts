@@ -1,17 +1,37 @@
 import { Router } from "express";
-import { createMarkerController } from "../controllers/markers";
+
 import {
-  verifyAdmPermissionMiddleware,
+  createMarkerController,
+  deleteMarkerController,
+  updateMarkerController,
+} from "../controllers/markers";
+
+import {
+  verifyInstructorOrAdmPermissionMiddleware,
   verifyTokenMiddleware,
 } from "../middleware";
 
-const markers = Router();
+const markersRouter = Router();
 
-markers.post(
+markersRouter.post(
   "/",
   verifyTokenMiddleware,
-  verifyAdmPermissionMiddleware,
+  verifyInstructorOrAdmPermissionMiddleware,
   createMarkerController
 );
 
-export { markers };
+markersRouter.delete(
+  "/:id",
+  verifyTokenMiddleware,
+  verifyInstructorOrAdmPermissionMiddleware,
+  deleteMarkerController
+);
+
+markersRouter.patch(
+  "/:id",
+  verifyTokenMiddleware,
+  verifyInstructorOrAdmPermissionMiddleware,
+  updateMarkerController
+);
+
+export { markersRouter };

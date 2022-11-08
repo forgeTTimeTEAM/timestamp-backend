@@ -1,6 +1,6 @@
 import { PrismaClient } from "@prisma/client";
 import { execSync } from "child_process";
-import { resolve } from "path";
+import { join } from "path";
 import { URL } from "url";
 import { v4 as uuid } from "uuid";
 
@@ -14,7 +14,15 @@ const generateDatabaseURL = (schema: string) => {
 };
 
 const schemaId = `test-${uuid()}`;
-const prismaBinary = resolve("./node_modules", "./.bin", "./prisma");
+const prismaBinary = join(
+  __dirname,
+  "..",
+  "..",
+  "..",
+  "node_modules",
+  ".bin",
+  "prisma"
+);
 
 const url = generateDatabaseURL(schemaId);
 process.env.DATABASE_URL = url;

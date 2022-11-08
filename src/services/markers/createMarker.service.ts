@@ -1,8 +1,10 @@
-import { AppError } from "../../errors/AppError";
-import { IVideoMarkerRequest } from "../../interfaces/videoMarker";
 import { prisma } from "../../prisma";
 
-const createMarkers = async ({
+import { AppError } from "../../errors/AppError";
+
+import { IVideoMarkerRequest } from "../../interfaces/videoMarker";
+
+const createMarker = async ({
   marks,
   groupId,
   videoId,
@@ -56,10 +58,10 @@ const createMarkers = async ({
     );
   }
 
-  const timeValidate = /(^(0\d)|(1\d|2[0-3]):[0-5]\d:[0-5]\d$)/;
+  const timeValidate = /((0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9])$/;
 
   marks.map((marker) => {
-    if (timeValidate.test(marker.time)) {
+    if (!timeValidate.test(marker.time)) {
       throw new AppError("time not validate");
     }
   });
@@ -85,4 +87,4 @@ const createMarkers = async ({
   }
 };
 
-export { createMarkers };
+export { createMarker };

@@ -5,7 +5,7 @@ const verifyAdmPermissionMiddleware: RequestHandler = (req, res, next) => {
   const { role } = req.user;
 
   if (role !== "ADM") {
-    throw new AppError("Unauthorized", 403);
+    throw new AppError("Access denied", 403);
   }
 
   return next();
