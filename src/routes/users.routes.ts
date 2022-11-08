@@ -1,19 +1,51 @@
 import { Router } from "express";
+
 import {
   createUserController,
   findUsersByGroupController,
-  getUserProfileController,
+  listUsersController,
+  findUserProfileController,
+  findUserController,
+  deleteUserController,
 } from "../controllers/users";
 
 import { loginUserController } from "../controllers/users/loginUser.controller";
+import { updateUserById } from "../controllers/users/updateUserById.controller";
 
-import { verifyTokenMiddleware } from "../middleware";
+import {
+  verifyAdmPermissionMiddleware,
+  verifyTokenMiddleware,
+} from "../middleware";
 
 const usersRouter = Router();
 
 usersRouter.post("/", createUserController);
 usersRouter.post("/login", loginUserController);
-usersRouter.get("/profile", verifyTokenMiddleware, getUserProfileController);
+usersRouter.get(
+  "",
+  verifyTokenMiddleware,
+  verifyAdmPermissionMiddleware,
+  listUsersController
+);
+usersRouter.get("/profile", verifyTokenMiddleware, findUserProfileController);
 usersRouter.get("/group/:id", findUsersByGroupController);
+usersRouter.patch(
+  "/:id",
+  verifyTokenMiddleware,
+  verifyAdmPermissionMiddleware,
+  updateUserById
+);
+usersRouter.get(
+  "/:id",
+  verifyTokenMiddleware,
+  verifyAdmPermissionMiddleware,
+  findUserController
+);
+usersRouter.delete(
+  "/:id",
+  verifyTokenMiddleware,
+  verifyAdmPermissionMiddleware,
+  deleteUserController
+);
 
 export { usersRouter };

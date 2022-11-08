@@ -1,5 +1,11 @@
 import { Router } from "express";
-import { createGroupController } from "../controllers/groups";
+
+import {
+  createGroupController,
+  listGroupsController,
+  findGroupByIdController,
+} from "../controllers/groups";
+
 import {
   verifyAdmPermissionMiddleware,
   verifyTokenMiddleware,
@@ -12,6 +18,20 @@ groupsRouter.post(
   verifyTokenMiddleware,
   verifyAdmPermissionMiddleware,
   createGroupController
+);
+
+groupsRouter.get(
+  "/",
+  verifyTokenMiddleware,
+  verifyAdmPermissionMiddleware,
+  listGroupsController
+);
+
+groupsRouter.get(
+  "/:id",
+  verifyTokenMiddleware,
+  verifyAdmPermissionMiddleware,
+  findGroupByIdController
 );
 
 export { groupsRouter };

@@ -1,13 +1,23 @@
+import { Role } from "@prisma/client";
 import { AppError } from "../../errors/AppError";
 import { IVideoRequest } from "../../interfaces/videos";
 import { prisma } from "../../prisma";
 
 const createVideoService = async (
   groupId: string,
+  userRole: Role,
   { title, url = null, releaseDate, sprintId }: IVideoRequest
 ) => {
+  if (!title) {
+    throw new AppError("Title is required");
+  }
+
+  if (!releaseDate) {
+    throw new AppError("Release date is required");
+  }
+
   if (!sprintId) {
-    throw new AppError("Sprint id needed", 400);
+    throw new AppError("Sprint id is required");
   }
 
   const sprintExists = await prisma.sprints.findFirst({
@@ -20,25 +30,31 @@ const createVideoService = async (
     throw new AppError("Sprint not found", 404);
   }
 
-  const findInstructor = prisma.groups.findUnique({
-    where: {
-      id: groupId,
-    },
-    include: {
-      modules: {
-        include: {
-          sprints: {
-            where: {
-              id: sprintId,
+  if (userRole === "INSTRUCTOR" && !groupId) {
+    throw new AppError("Instructor not allowed", 401);
+  }
+
+  if (userRole === "INSTRUCTOR" && groupId) {
+    const findInstructor = await prisma.groups.findUnique({
+      where: {
+        id: groupId,
+      },
+      include: {
+        modules: {
+          include: {
+            sprints: {
+              where: {
+                id: sprintId,
+              },
             },
           },
         },
       },
-    },
-  });
+    });
 
-  if (!findInstructor) {
-    throw new AppError("Instructor not allowed", 401);
+    if (!findInstructor) {
+      throw new AppError("Instructor not allowed", 401);
+    }
   }
 
   if (url) {
@@ -54,17 +70,9 @@ const createVideoService = async (
   }
 
   const createdVideo = await prisma.videos.create({
-    select: {
-      title: true,
-      url: true,
-      releaseDate: true,
-      sprintId: true,
-      createdAt: true,
-      updatedAt: true,
-    },
     data: {
       title,
-      releaseDate,
+      releaseDate: new Date(releaseDate),
       url: url || null,
       sprintId,
     },

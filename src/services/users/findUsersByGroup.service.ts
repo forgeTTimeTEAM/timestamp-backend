@@ -1,6 +1,6 @@
-import { AppError } from "../../errors/AppError";
 import { prisma } from "../../prisma";
-import { removeObjectProperty } from "../../utils/removeObjectProperty";
+
+import { AppError } from "../../errors/AppError";
 
 const findUsersByGroupService = async (groupId: string) => {
   const groupExists = await prisma.groups.findFirst({

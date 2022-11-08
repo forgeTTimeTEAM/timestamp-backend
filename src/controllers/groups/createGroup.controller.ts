@@ -1,4 +1,5 @@
 import { RequestHandler } from "express";
+
 import { createGroupService } from "../../services/groups";
 
 const createGroupController: RequestHandler = async (req, res) => {
