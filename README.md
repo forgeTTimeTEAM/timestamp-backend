@@ -53,7 +53,7 @@ Body da resposta:
 Possíveis erros:
 | Error    			| Message                                   					|
 | ------------------------------|-----------------------------------------------------------------------------|
-| You must provide a name       						| should not be able to create a user without name 			|
+| should not be able to create a user without name       			| You must provide a name	|
 | Should not be able to create a user without password      			| You must provide a password |
 | should not be able to create a user without email  				| You must provide a email    |
 | Should not be able to create a user without group id    			| You must provide a group id |
