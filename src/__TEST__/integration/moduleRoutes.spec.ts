@@ -375,4 +375,44 @@ describe("routes - /modules", () => {
     expect(res.body[0].users[0].user).not.toHaveProperty("password");
     expect(res.status).toBe(200);
   });
+
+  test("should be able to return all users with adm token", async () => {
+    await prisma.users.create({
+      data: {
+        name: "sara",
+        email: "saraADM@email.com",
+        password: await hash("1234", 10),
+        role: "ADM",
+      },
+    });
+
+    const dataLoginADM = { email: "saraADM@email.com", password: "1234" };
+
+    const login = await request(app).post("/users/login").send(dataLoginADM);
+
+    const token = login.body.token;
+
+    const createGroup = await request(app)
+      .post("/groups")
+      .set("Authorization", `Bearer ${token}`);
+
+    const moduleId = createGroup.body.modules[0].id;
+
+    const newStudent = {
+      name: "sara",
+      email: "saraSTUDENT@email.com",
+      password: "1234",
+      groupId: createGroup.body.id,
+      moduleId,
+    };
+
+    await request(app).post("/users").send(newStudent);
+
+    const res = await request(app)
+      .get(`/modules`)
+      .set("Authorization", `Bearer ${token}`);
+
+    expect(res.status).toBe(200);
+    expect(res.body).toHaveProperty("map");
+  });
 });
