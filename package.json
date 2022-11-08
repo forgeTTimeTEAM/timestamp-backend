@@ -1,11 +1,11 @@
 {
   "name": "sprint-8",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "",
   "main": "index.js",
   "scripts": {
     "dev": "ts-node-dev ./src/server.ts",
-    "test": "jest --forceExit",
+    "test": "jest --forceExit --verbose",
     "build": "tsc",
     "start": "node ./dist/src/server.js"
   },
