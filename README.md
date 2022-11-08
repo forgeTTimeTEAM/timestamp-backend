@@ -6,14 +6,50 @@
 
 ## Rota de Users
 
-# POST /users
+# POST - Create user
+Endpoint: /users
 
-Rota responsável por criar um usuário, deve ser enviado no corpo da requisição os seguintes campos: {
-  name,
-  email,
-  password,
-  groupId (propriedade opcional, caso não seja passada, será automaticamente enviada com valor null)
+Campos obrigatórios:
+| Campo      | Tipo   | Descrição                                       |
+| -----------|--------|-------------------------------------------------|
+| name       | string | O nome do usuário.                              |
+| email      | string | O e-mail do usuário.                            |
+| password   | string | A senha de acesso do usuário                    |
+| groupId    | string | Define o grupo do usuário.                      |
+| moduleId   | string | Define o módulo do usuário.                     |
+
+Body da requisição:
+```shell
+ //Student
+{  
+	"name": "sara test",
+	"email": "sara-teste@mail.com",
+	"password": "1234",
+	"groupId": "5bd3b8cc-c522-406f-8218-b06fb2af4bca",
+	"moduleId": "430ec768-812c-4241-adb5-1c1129bb60d7"
 }
+```
+Body da resposta:
+```shell
+{
+	"id": "22322984-3ebc-460d-8321-4ded36eeafa6",
+	"name": "sara test",
+	"email": "sara-test2@mail.com",
+	"role": "STUDENT",
+	"createdAt": "2022-11-08T15:23:59.091Z",
+	"updatedAt": "2022-11-08T15:23:59.091Z",
+	"groupId": "5bd3b8cc-c522-406f-8218-b06fb2af4bca",
+	"modules": [
+		{
+			"id": "21d5d36e-ee74-4514-a0f8-591fc7f5d37e",
+			"createdAt": "2022-11-08T15:23:59.091Z",
+			"updatedAt": "2022-11-08T15:23:59.091Z",
+			"userId": "22322984-3ebc-460d-8321-4ded36eeafa6",
+			"moduleId": "430ec768-812c-4241-adb5-1c1129bb60d7"
+		}
+	]
+}
+```
 
 
 ### All rights reserved.
