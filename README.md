@@ -4,10 +4,10 @@
 
 `yarn prisma migrate dev` este comando irá rodar as migrations do banco de dados, para que você possa utilizá-lo
 
-## Rota de Users
+# Rota de Users
 
-# POST - Create user
-Endpoint: /users
+## POST - Create user
+### Endpoint: /users
 
 Campos obrigatórios:
 | Campo      | Tipo   | Descrição                                       |
@@ -20,7 +20,6 @@ Campos obrigatórios:
 
 Body da requisição:
 ```shell
- //Student
 {  
 	"name": "sara test",
 	"email": "sara-teste@mail.com",
@@ -50,6 +49,18 @@ Body da resposta:
 	]
 }
 ```
+
+Possíveis erros:
+| Error    			| Message                                   					|
+| ------------------------------|-----------------------------------------------------------------------------|
+| You must provide a name       						| should not be able to create a user without name 			|
+| Should not be able to create a user without password      			| You must provide a password |
+| should not be able to create a user without email  				| You must provide a email    |
+| Should not be able to create a user without group id    			| You must provide a group id |
+| should not be able to create a user with invalid group id  			| You must provide a module id|
+| should not be able to create a user without module id  			| Group not found             |
+| should not be able to create a user with invalid module id  			| Module not found            |
+| should not be able to create a user with same email  				| Email is already in use     |
 
 
 ### All rights reserved.
