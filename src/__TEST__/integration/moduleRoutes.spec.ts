@@ -375,4 +375,171 @@ describe("routes - /modules", () => {
     expect(res.body[0].users[0].user).not.toHaveProperty("password");
     expect(res.status).toBe(200);
   });
+
+  test("should be able to return all users", async () => {
+    await prisma.users.create({
+      data: {
+        name: "sara",
+        email: "saraADM@email.com",
+        password: await hash("1234", 10),
+        role: "ADM",
+      },
+    });
+
+    const dataLoginADM = { email: "saraADM@email.com", password: "1234" };
+
+    const login = await request(app).post("/users/login").send(dataLoginADM);
+
+    const token = login.body.token;
+
+    const createGroup = await request(app)
+      .post("/groups")
+      .set("Authorization", `Bearer ${token}`);
+
+    const moduleId = createGroup.body.modules[0].id;
+
+    const newStudent = {
+      name: "sara",
+      email: "saraSTUDENT@email.com",
+      password: "1234",
+      groupId: createGroup.body.id,
+      moduleId,
+    };
+
+    await request(app).post("/users").send(newStudent);
+
+    const res = await request(app)
+      .get(`/modules`)
+      .set("Authorization", `Bearer ${token}`);
+
+    expect(res.status).toBe(200);
+    expect(res.body).toHaveProperty("map");
+  });
+
+  test("should not be able to return all users without adm permission", async () => {
+    await prisma.users.create({
+      data: {
+        name: "sara",
+        email: "saraADM1@email.com",
+        password: await hash("1234", 10),
+        role: "ADM",
+      },
+    });
+
+    const dataLoginADM = { email: "saraADM1@email.com", password: "1234" };
+
+    const login = await request(app).post("/users/login").send(dataLoginADM);
+
+    const token = login.body.token;
+
+    const createGroup = await request(app)
+      .post("/groups")
+      .set("Authorization", `Bearer ${token}`);
+
+    const moduleId = createGroup.body.modules[0].id;
+
+    const newStudent = {
+      name: "sara",
+      email: "saraSTUDENT@email.com",
+      password: "1234",
+      groupId: createGroup.body.id,
+      moduleId,
+    };
+
+    await request(app).post("/users").send(newStudent);
+
+    const dataLoginSTUDENT = {
+      email: "saraSTUDENT@email.com",
+      password: "1234",
+    };
+
+    const loginStudent = await request(app)
+      .post("/users/login")
+      .send(dataLoginSTUDENT);
+
+    const res = await request(app)
+      .get(`/modules`)
+      .set("Authorization", `Bearer ${loginStudent.body.token}`);
+
+    expect(res.status).toBe(403);
+    expect(res.body).toHaveProperty("message");
+  });
+
+  test("should not be able to return all users with invalid token", async () => {
+    await prisma.users.create({
+      data: {
+        name: "sara",
+        email: "saraADM2@email.com",
+        password: await hash("1234", 10),
+        role: "ADM",
+      },
+    });
+
+    const dataLoginADM = { email: "saraADM2@email.com", password: "1234" };
+
+    const login = await request(app).post("/users/login").send(dataLoginADM);
+
+    const token = login.body.token;
+
+    const createGroup = await request(app)
+      .post("/groups")
+      .set("Authorization", `Bearer ${token}`);
+
+    const moduleId = createGroup.body.modules[0].id;
+
+    const newStudent = {
+      name: "sara",
+      email: "saraSTUDENT@email.com",
+      password: "1234",
+      groupId: createGroup.body.id,
+      moduleId,
+    };
+
+    await request(app).post("/users").send(newStudent);
+
+    const res = await request(app)
+      .get(`/modules`)
+      .set("Authorization", `Bearer banana`);
+
+    expect(res.status).toBe(401);
+    expect(res.body).toHaveProperty("message");
+  });
+
+  test("should not be able to return all users without token", async () => {
+    await prisma.users.create({
+      data: {
+        name: "sara",
+        email: "saraADM3@email.com",
+        password: await hash("1234", 10),
+        role: "ADM",
+      },
+    });
+
+    const dataLoginADM = { email: "saraADM3@email.com", password: "1234" };
+
+    const login = await request(app).post("/users/login").send(dataLoginADM);
+
+    const token = login.body.token;
+
+    const createGroup = await request(app)
+      .post("/groups")
+      .set("Authorization", `Bearer ${token}`);
+
+    const moduleId = createGroup.body.modules[0].id;
+
+    const newStudent = {
+      name: "sara",
+      email: "saraSTUDENT@email.com",
+      password: "1234",
+      groupId: createGroup.body.id,
+      moduleId,
+    };
+
+    await request(app).post("/users").send(newStudent);
+
+    const res = await request(app).get(`/modules`);
+
+    expect(res.status).toBe(401);
+    expect(res.body).toHaveProperty("message");
+  });
 });
