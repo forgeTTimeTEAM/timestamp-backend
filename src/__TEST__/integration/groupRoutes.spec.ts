@@ -3,7 +3,7 @@ import { prisma } from "../../prisma";
 import { app } from "../../app";
 import { hash } from "bcryptjs";
 import {
-  loginAdmMock,
+  admLoginMock,
   loginStudentMock,
   admUserMock,
   studentUserMock,
@@ -11,15 +11,17 @@ import {
 } from "../mocks";
 
 describe("routes - /groups", () => {
-  let authorization: string;
+  let admAuth: string;
+  let studentAuth: string;
+  let groupTest: any;
 
   beforeAll(async () => {
     await prisma.users.create({
       data: admUserMock,
     });
 
-    const loginAdm = await request(app).post("/users/login").send(loginAdmMock);
-    authorization = `Bearer ${loginAdm.body.token}`;
+    const admLogin = await request(app).post("/users/login").send(admLoginMock);
+    admAuth = `Bearer ${admLogin.body.token}`;
   });
 
   afterAll(async () => {
@@ -36,7 +38,8 @@ describe("routes - /groups", () => {
     const response = await request(app)
       .post("/groups")
       .send(validGroupMock)
-      .set("Authorization", authorization);
+      .set("Authorization", admAuth);
+    groupTest = response.body;
 
     const group = response.body;
     expect(response.status).toBe(201);
@@ -77,24 +80,19 @@ describe("routes - /groups", () => {
   });
 
   test("should not be able to create group without adm permission", async () => {
-    const group = await prisma.groups.findFirst({
-      include: {
-        modules: true,
-      },
-    });
-    studentUserMock.groupId = group!.id;
-    studentUserMock.moduleId = group!.modules[0].id;
-
+    studentUserMock.groupId = groupTest!.id;
+    studentUserMock.moduleId = groupTest!.modules[0].id;
     await request(app).post("/users").send(studentUserMock);
+
     const loginStudent = await request(app)
       .post("/users/login")
       .send(loginStudentMock);
+    studentAuth = `Bearer ${loginStudent.body.token}`;
 
-    const authorization = `Bearer ${loginStudent.body.token}`;
     const response = await request(app)
       .post("/groups")
       .send(validGroupMock)
-      .set("Authorization", authorization);
+      .set("Authorization", studentAuth);
 
     expect(response.status).toBe(403);
     expect(response.body).toHaveProperty("message");
@@ -103,7 +101,7 @@ describe("routes - /groups", () => {
   test("should be able to list all groups", async () => {
     const response = await request(app)
       .get("/groups")
-      .set("Authorization", authorization);
+      .set("Authorization", admAuth);
 
     expect(response.status).toBe(200);
 
@@ -149,17 +147,38 @@ describe("routes - /groups", () => {
   });
 
   test("should not be able to list all groups without adm permission", async () => {
-    const loginStudent = await request(app)
-      .post("/users/login")
-      .send(loginStudentMock);
-
-    const authorization = `Bearer ${loginStudent.body.token}`;
     const response = await request(app)
       .get("/groups")
-      .set("Authorization", authorization);
+      .set("Authorization", studentAuth);
 
     expect(response.status).toBe(403);
     expect(response.body).toHaveProperty("message");
+  });
+
+  test("should be able to find a group by id", async () => {
+    const response = await request(app)
+      .get(`/groups/${groupTest.id}`)
+      .set("Authorization", admAuth);
+
+    expect(response.status).toBe(200);
+    expect(response.body).toHaveProperty("id");
+    expect(response.body).toHaveProperty("number");
+    expect(response.body).toHaveProperty("modules");
+    expect(response.body).toHaveProperty("users");
+
+    expect(response.body.modules[0]).toHaveProperty("id");
+    expect(response.body.modules[0]).toHaveProperty("name");
+    expect(response.body.modules[0]).toHaveProperty("createdAt");
+    expect(response.body.modules[0]).toHaveProperty("groupId");
+
+    expect(response.body.users[0]).toHaveProperty("id");
+    expect(response.body.users[0]).toHaveProperty("name");
+    expect(response.body.users[0]).toHaveProperty("email");
+    expect(response.body.users[0]).not.toHaveProperty("password");
+    expect(response.body.users[0]).toHaveProperty("role");
+    expect(response.body.users[0]).toHaveProperty("createdAt");
+    expect(response.body.users[0]).toHaveProperty("updatedAt");
+    expect(response.body.users[0]).toHaveProperty("groupId");
   });
 
   test("should not be able to find a group without token", async () => {
@@ -178,153 +197,21 @@ describe("routes - /groups", () => {
     expect(response.body).toHaveProperty("message");
   });
 
-  test("should not be able to find a group with student permission", async () => {
-    await prisma.users.create({
-      data: {
-        name: "Giuseppe Cadura",
-        email: "giuseppecadura2@email.com",
-        password: await hash("alves123", 10),
-      },
-    });
-
-    const loginStudent = await request(app)
-      .post("/users/login")
-      .send({ email: "giuseppecadura2@email.com", password: "alves123" });
-
+  test("should not be able to find a group without adm permission", async () => {
     const response = await request(app)
       .get("/groups")
-      .set("Authorization", `Bearer ${loginStudent.body.token}`);
+      .set("Authorization", studentAuth);
 
     expect(response.status).toBe(403);
     expect(response.body).toHaveProperty("message");
   });
 
   test("should not be able to find a group with invalid group id", async () => {
-    await prisma.users.create({
-      data: {
-        name: "Giuseppe Cadura",
-        email: "giuseppecadurinha@email.com",
-        password: await hash("alves123", 10),
-        role: "ADM",
-      },
-    });
-
-    const loginAdm = await request(app)
-      .post("/users/login")
-      .send({ email: "giuseppecadurinha@email.com", password: "alves123" });
-
     const response = await request(app)
-      .get("/groups/group")
-      .set("Authorization", `Bearer ${loginAdm.body.token}`);
+      .get("/groups/batata")
+      .set("Authorization", admAuth);
 
     expect(response.status).toBe(404);
     expect(response.body).toHaveProperty("message");
-  });
-
-  test("should not be able to find a group you don't have access", async () => {
-    await prisma.users.create({
-      data: {
-        name: "Giuseppe Cadura",
-        email: "giuseppecadura@email.com",
-        password: await hash("alves123", 10),
-        role: "ADM",
-      },
-    });
-
-    const loginAdm = await request(app)
-      .post("/users/login")
-      .send({ email: "giuseppecadura@email.com", password: "alves123" });
-
-    const group = await request(app)
-      .post("/groups")
-      .set("Authorization", `Bearer ${loginAdm.body.token}`);
-
-    await request(app)
-      .post("/users")
-      .send({
-        name: "Giuseppe Cadurassa",
-        email: "giuseppecadurassa@email.com",
-        password: await hash("alves123", 10),
-        groupId: group.body.id,
-        moduleId: group.body.modules[0].id,
-      });
-
-    await prisma.users.create({
-      data: {
-        name: "Giuseppe Cadura",
-        email: "giuseppecadurona@email.com",
-        password: await hash("alves123", 10),
-        role: "INSTRUCTOR",
-      },
-    });
-
-    const loginInstructor = await request(app)
-      .post("/users/login")
-      .send({ email: "giuseppecadurona@email.com", password: "alves123" });
-
-    const response = await request(app)
-      .get(`/groups/${group.body.id}`)
-      .set("Authorization", `Bearer ${loginInstructor.body.token}`);
-
-    expect(response.status).toBe(403);
-    expect(response.body).toHaveProperty("message");
-  });
-
-  test("should be able to find a group by id", async () => {
-    await prisma.users.create({
-      data: {
-        name: "yurandamdamdam",
-        email: "yuranrocketseat@email.com",
-        password: await hash("alves123", 10),
-        role: "ADM",
-      },
-    });
-
-    const loginAdm = await request(app)
-      .post("/users/login")
-      .send({ email: "yuranrocketseat@email.com", password: "alves123" });
-
-    const authorization = `Bearer ${loginAdm.body.token}`;
-
-    const group = await request(app)
-      .post("/groups")
-      .set("Authorization", authorization);
-
-    await request(app)
-      .post("/users")
-      .send({
-        name: "yurandamdamdam",
-        email: "yuranrocketseat2@email.com",
-        password: await hash("alves123", 10),
-        groupId: group.body.id,
-        moduleId: group.body.modules[0].id,
-      });
-
-    const response = await request(app)
-      .get(`/groups/${group.body.id}`)
-      .set("Authorization", authorization);
-
-    expect(response.status).toBe(200);
-    expect(response.body).toHaveProperty("id");
-    expect(response.body).toHaveProperty("number");
-    expect(response.body).toHaveProperty("modules");
-    expect(response.body).toHaveProperty("users");
-
-    expect(response.body.modules[0]).toHaveProperty("id");
-    expect(response.body.modules[0]).toHaveProperty("name");
-    expect(response.body.modules[0]).toHaveProperty("createdAt");
-    expect(response.body.modules[0]).toHaveProperty("groupId");
-    expect(response.body.modules[0].groupId).toEqual(group.body.id);
-
-    expect(response.body.users[0]).toHaveProperty("id");
-    expect(response.body.users[0]).toHaveProperty("name");
-    expect(response.body.users[0]).toHaveProperty("email");
-    expect(response.body.users[0]).not.toHaveProperty("password");
-    expect(response.body.users[0]).toHaveProperty("role");
-    expect(response.body.users[0]).toHaveProperty("createdAt");
-    expect(response.body.users[0]).toHaveProperty("updatedAt");
-    expect(response.body.users[0]).toHaveProperty("groupId");
-    expect(response.body.users[0].groupId).toEqual(group.body.id);
-    expect(response.body.users[0].email).toEqual("yuranrocketseat2@email.com");
   });
 });

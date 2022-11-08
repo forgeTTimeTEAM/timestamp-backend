@@ -3,7 +3,7 @@ import { prisma } from "../../prisma";
 import { app } from "../../app";
 import { hash } from "bcryptjs";
 import {
-  loginAdmMock,
+  admLoginMock,
   admUserMock,
   studentUserMock,
   validGroupMock,
@@ -22,7 +22,7 @@ describe("routes - /modules", () => {
       data: admUserMock,
     });
 
-    const loginAdm = await request(app).post("/users/login").send(loginAdmMock);
+    const loginAdm = await request(app).post("/users/login").send(admLoginMock);
     authorization = `Bearer ${loginAdm.body.token}`;
   });
 

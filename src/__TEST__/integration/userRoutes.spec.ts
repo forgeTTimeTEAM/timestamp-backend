@@ -4,7 +4,7 @@ import { app } from "../../app";
 import { hash, hashSync } from "bcryptjs";
 import {
   admUserMock,
-  loginAdmMock,
+  admLoginMock,
   loginStudentMock,
   studentUserMock,
   validGroupMock,
@@ -18,7 +18,7 @@ describe("routes - users/", () => {
       data: admUserMock,
     });
 
-    const loginAdm = await request(app).post("/users/login").send(loginAdmMock);
+    const loginAdm = await request(app).post("/users/login").send(admLoginMock);
     authorization = `Bearer ${loginAdm.body.token}`;
   });
 
