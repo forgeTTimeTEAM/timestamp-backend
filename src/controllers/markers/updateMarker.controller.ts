@@ -11,9 +11,7 @@ const  updateMarkerController: RequestHandler = async (req, res) => {
 
   const updatemarker = await updateMarkerService({ id, bodyPatch: body }, user.id);
 
-  res.send({
-    message: updatemarker
-  });
+  res.send(updatemarker);
 };
 
 export { updateMarkerController };

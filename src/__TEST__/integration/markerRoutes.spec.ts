@@ -2,10 +2,12 @@ import request from "supertest";
 import { prisma } from "../../prisma";
 import { hash } from "bcryptjs";
 import { app } from "../../app";
+import { markerPatch } from "../mocks/markers.mock";
 
-describe("marker test", () => {
+describe("routes - markers/", () => {
   let video: any;
   let group: any;
+  let markers: any;
   let userLogin: any;
   let authorization: string;
   let authorizationStudent: string;
@@ -41,6 +43,7 @@ describe("marker test", () => {
         groupId: group.id,
       },
     });
+
     await prisma.users.create({
       data: {
         email: "alvteste10@email.com",
@@ -247,4 +250,50 @@ describe("marker test", () => {
     expect(res.status).toBe(400);
     expect(res.body).toHaveProperty("message");
   });
+
+  it("should be able possible to update a marked", async () => {
+    markers = await prisma.video_markers.findMany();
+
+    const { body, statusCode } = await request(app)
+      .patch(`/markers/${markers[0].id}`)
+      .set("Authorization", authorization)
+      .send(markerPatch);
+
+    expect(statusCode).toBe(200)
+    expect(body).toHaveProperty("id");
+    expect(body).toHaveProperty("time");
+    expect(body).toHaveProperty("videoId");
+    expect(body).toHaveProperty("createdAt");
+    expect(body).toHaveProperty("updatedAt");
+  });
+
+  it("should be able is not ADM or INSTRUCTOR", async () => {
+    const { body, statusCode } = await request(app)
+      .patch(`/markers/${markers[0].id}`)
+      .set("Authorization", authorizationStudent)
+      .send(markerPatch);
+    
+    expect(statusCode).toBe(403);
+    expect(body).toHaveProperty("message");
+  })
+
+  it("should not be possible to update one marked with invalid id", async () => {
+    const { body, statusCode } = await request(app)
+      .patch(`/markers/idInavlido`)
+      .set("Authorization", authorization)
+      .send(markerPatch);
+    
+    expect(statusCode).toBe(404);
+    expect(body).toHaveProperty("message");
+  });
+
+  it("should not be possible to create a marker with time that already exists", async () => {
+    const { body, statusCode } = await request(app)
+      .patch(`/markers/${markers[1].id}`)
+      .set("Authorization", authorization)
+      .send(markerPatch);
+
+    expect(statusCode).toBe(403);
+    expect(body).toHaveProperty("message");
+  })
 });

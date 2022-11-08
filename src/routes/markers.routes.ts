@@ -19,10 +19,19 @@ markersRouter.post(
   verifyInstructorOrAdmPermissionMiddleware,
   createMarkerController
 );
+
 markersRouter.delete(
   "/:id",
   verifyTokenMiddleware,
   verifyInstructorOrAdmPermissionMiddleware,
   deleteMarkerController
 );
+
+markersRouter.patch(
+  "/:id",
+  verifyTokenMiddleware,
+  verifyInstructorOrAdmPermissionMiddleware,
+  updateMarkerController
+);
+
 export { markersRouter };

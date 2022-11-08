@@ -47,14 +47,14 @@ const updateMarkerService = async ({ id, bodyPatch }: IVideoMarkerUpdade, idUser
     throw new AppError("Time already exists", 400);
   }
 
-  await prisma.video_markers.update({
+  const markerUpdate = await prisma.video_markers.update({
     where: {
       id
     },
     data: { ...bodyPatch }
   });
 
-  return "Patch success"
+  return markerUpdate
 }
 
 export { updateMarkerService }
