@@ -51,16 +51,16 @@ Body da resposta:
 ```
 
 Possíveis erros:
-| Error    			| Message                                   					|
-| ------------------------------|-----------------------------------------------------------------------------|
-| should not be able to create a user without name       			| You must provide a name	|
-| Should not be able to create a user without password      			| You must provide a password |
-| should not be able to create a user without email  				| You must provide a email    |
-| Should not be able to create a user without group id    			| You must provide a group id |
-| should not be able to create a user with invalid group id  			| You must provide a module id|
-| should not be able to create a user without module id  			| Group not found             |
-| should not be able to create a user with invalid module id  			| Module not found            |
-| should not be able to create a user with same email  				| Email is already in use     |
+| Error    			| Message                                   					| Status Code |
+| ------------------------------|-----------------------------------------------------------------------------|---------------|
+| should not be able to create a user without name       			| You must provide a name	| 400 |
+| Should not be able to create a user without password      			| You must provide a password | 400 |
+| should not be able to create a user without email  				| You must provide a email    | 400 |
+| Should not be able to create a user without group id    			| You must provide a group id | 400 |
+| should not be able to create a user without module id  			| Group not found             | 404 |
+| should not be able to create a user with invalid group id  			| You must provide a module id| 400 |
+| should not be able to create a user with invalid module id  			| Module not found            | 404 |
+| should not be able to create a user with same email  				| Email is already in use     | 409 |
 
 
 ### All rights reserved.
