@@ -9,7 +9,7 @@ import {
 import {
   validateSchemaMiddleware,
   verifyInstructorOrAdmPermissionMiddleware,
-  verifyPermissionMiddleware,
+  verifyAdmPermissionMiddleware,
   verifyTokenMiddleware,
 } from "../middleware";
 
@@ -20,7 +20,7 @@ const modulesRouter = Router();
 modulesRouter.get(
   "/",
   verifyTokenMiddleware,
-  verifyPermissionMiddleware("ADM"),
+  verifyAdmPermissionMiddleware,
   listModulesController
 );
 
@@ -34,7 +34,7 @@ modulesRouter.get(
 modulesRouter.post(
   "/",
   verifyTokenMiddleware,
-  verifyPermissionMiddleware("ADM"),
+  verifyAdmPermissionMiddleware,
   validateSchemaMiddleware(createModuleSchema),
   createModuleController
 );

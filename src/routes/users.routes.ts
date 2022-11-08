@@ -13,7 +13,7 @@ import { loginUserController } from "../controllers/users/loginUser.controller";
 import { updateUserById } from "../controllers/users/updateUserById.controller";
 
 import {
-  verifyPermissionMiddleware,
+  verifyAdmPermissionMiddleware,
   verifyTokenMiddleware,
 } from "../middleware";
 
@@ -24,7 +24,7 @@ usersRouter.post("/login", loginUserController);
 usersRouter.get(
   "",
   verifyTokenMiddleware,
-  verifyPermissionMiddleware("ADM"),
+  verifyAdmPermissionMiddleware,
   listUsersController
 );
 usersRouter.get("/profile", verifyTokenMiddleware, findUserProfileController);
@@ -32,19 +32,19 @@ usersRouter.get("/group/:id", findUsersByGroupController);
 usersRouter.patch(
   "/:id",
   verifyTokenMiddleware,
-  verifyPermissionMiddleware("ADM"),
+  verifyAdmPermissionMiddleware,
   updateUserById
 );
 usersRouter.get(
   "/:id",
   verifyTokenMiddleware,
-  verifyPermissionMiddleware("ADM"),
+  verifyAdmPermissionMiddleware,
   findUserController
 );
 usersRouter.delete(
   "/:id",
   verifyTokenMiddleware,
-  verifyPermissionMiddleware("ADM"),
+  verifyAdmPermissionMiddleware,
   deleteUserController
 );
 

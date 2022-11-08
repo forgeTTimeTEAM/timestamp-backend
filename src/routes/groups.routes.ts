@@ -7,7 +7,7 @@ import {
 } from "../controllers/groups";
 
 import {
-  verifyPermissionMiddleware,
+  verifyAdmPermissionMiddleware,
   verifyTokenMiddleware,
 } from "../middleware";
 
@@ -16,21 +16,21 @@ const groupsRouter = Router();
 groupsRouter.post(
   "/",
   verifyTokenMiddleware,
-  verifyPermissionMiddleware("ADM"),
+  verifyAdmPermissionMiddleware,
   createGroupController
 );
 
 groupsRouter.get(
   "/",
   verifyTokenMiddleware,
-  verifyPermissionMiddleware("ADM"),
+  verifyAdmPermissionMiddleware,
   listGroupsController
 );
 
 groupsRouter.get(
   "/:id",
   verifyTokenMiddleware,
-  verifyPermissionMiddleware("ADM"),
+  verifyAdmPermissionMiddleware,
   findGroupByIdController
 );
 
