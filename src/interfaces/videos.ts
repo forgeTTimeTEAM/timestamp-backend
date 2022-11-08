@@ -4,3 +4,10 @@ export interface IVideoRequest {
   releaseDate: Date;
   sprintId: string;
 }
+
+export interface IVideoMock {
+  title: string;
+  url: string | null;
+  releaseDate: string;
+  sprintId: string;
+}

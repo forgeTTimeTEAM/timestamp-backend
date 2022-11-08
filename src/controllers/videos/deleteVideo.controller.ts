@@ -3,7 +3,8 @@ import { RequestHandler } from "express";
 import { deleteVideoService } from "../../services/videos/deleteVideo.service";
 
 const deleteVideoController: RequestHandler = async (req, res) => {
-  await deleteVideoService(req.params.id);
+    const id = req.params.id
+    await deleteVideoService(id)
 
   return res.status(204).send();
 };
