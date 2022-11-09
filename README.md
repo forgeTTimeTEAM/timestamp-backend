@@ -72,10 +72,10 @@ yarn prisma migrate dev --name init
 - [POST - create user](#1-POST)
 - [POST - Login user](#2-POST)
 - [GET - Profile user](#3-GET)
+- [GET - List users](#5-GET)
 - [GET - List users by id](#4-GET)
-- [GET - List users](#5-ET)
-- [DELETE - Login user](#6DELETE)
-- [PATCH - Login user](#7PATCH)
+- [DELETE - Login user](#6-DELETE)
+- [PATCH - Login user](#7-PATCH)
 
 ---
 
