@@ -4,8 +4,65 @@
 
 `yarn prisma migrate dev` este comando irá rodar as migrations do banco de dados, para que você possa utilizá-lo
 
+## 1. Visão Geral
+
+Visão geral do projeto, um pouco das tecnologias usadas.
+
+- [NodeJS](https://nodejs.org/en/)
+- [Express](https://expressjs.com/pt-br/)
+- [TypeScript](https://www.typescriptlang.org/)
+- [PostgreSQL](https://www.postgresql.org/)
+- [Prisma](https://www.prisma.io/)
+- [Jest](https://jestjs.io/pt-BR/)
+
+A URL base da aplicação:
+http://suaapi.com/v1
+
+---
+
+## 2. Diagrama ER
+[ Voltar para o topo ](#tabela-de-conteúdos)
+
+Diagrama ER da API definindo bem as relações entre as tabelas do banco de dados.
+
+![DER](DER_SP7_01.drawio.png)
+
+---
+
+## 3. Início Rápido
+[ Voltar para o topo ](#tabela-de-conteúdos)
+
+
+### 3.1. Instalando Dependências
+
+Clone o projeto em sua máquina e instale as dependências com o comando:
+
+```shell
+yarn
+```
+
+### 3.2. Variáveis de Ambiente
+
+Em seguida, crie um arquivo **.env**, copiando o formato do arquivo **.env.example**:
+```
+env.example .env
+```
+
+Configure suas variáveis de ambiente com suas credenciais do Postgres e uma nova database da sua escolha.
+
+### 3.3. Migrations
+
+Execute as migrations com o comando:
+
+```
+yarn prisma migrate dev --name init
+```
+
+---
+
+
 ## Indice de Rotas
-- [Rota User](#1-POST - Create user)
+- [Rota User](#1-POST)
 
 
 ---
@@ -15,7 +72,7 @@
 
 ---
 
-## 1. **POST - Create user**
+## 1. **POST**
 ### Endpoint: /users
 
 Rota para criação de usuário (estudante)
