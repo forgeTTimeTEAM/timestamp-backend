@@ -62,17 +62,19 @@ yarn prisma migrate dev --name init
 
 
 ## Indice de Rotas
-- [Rota User](#1-POST)
+- [Rota de User](#1)
 
 
 ---
 
-# Rota de Users
+## 1. **Rota de Users**
 
+- [POST](#1-POST)
 
 ---
 
 ## 1. **POST**
+### Create user
 ### Endpoint: /users
 
 Rota para criação de usuário (estudante)
