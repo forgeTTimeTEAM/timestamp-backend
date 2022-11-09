@@ -62,11 +62,11 @@ yarn prisma migrate dev --name init
 
 
 ## Indice de Rotas
-- [Rota de Users](#1)
-- [Rota de Groups](#2)
-- [Rota de Modules](#3)
-- [Rota de Markers](#4)
-- [Rota de Videos](#5)
+- [Rota de Users](#1.)
+- [Rota de Groups](#2.)
+- [Rota de Modules](#3.)
+- [Rota de Markers](#4.)
+- [Rota de Videos](#5.)
 
 
 ---
