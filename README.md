@@ -74,8 +74,8 @@ yarn prisma migrate dev --name init
 
 ---
 
-## 1. **POST**
-### Create user
+## 1. **POST** Create user
+### 
 ### Endpoint: /users
 
 Rota para criação de usuário (estudante)
