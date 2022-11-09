@@ -2,15 +2,14 @@ import { Router } from "express";
 
 import {
   createUserController,
+  loginUserController,
   findUsersByGroupController,
   listUsersController,
   findUserProfileController,
   findUserController,
   deleteUserController,
+  updateUserByIdController,
 } from "../controllers/users";
-
-import { loginUserController } from "../controllers/users/loginUser.controller";
-import { updateUserById } from "../controllers/users/updateUserById.controller";
 
 import {
   verifyAdmPermissionMiddleware,
@@ -33,7 +32,7 @@ usersRouter.patch(
   "/:id",
   verifyTokenMiddleware,
   verifyAdmPermissionMiddleware,
-  updateUserById
+  updateUserByIdController
 );
 usersRouter.get(
   "/:id",
