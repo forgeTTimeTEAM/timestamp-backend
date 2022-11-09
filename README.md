@@ -4,9 +4,18 @@
 
 `yarn prisma migrate dev` este comando irá rodar as migrations do banco de dados, para que você possa utilizá-lo
 
+## Indice de Rotas
+- [Rota User](#1-POST - Create user)
+
+
+---
+
 # Rota de Users
 
-## POST - Create user
+
+---
+
+## 1. **POST - Create user**
 ### Endpoint: /users
 
 Rota para criação de usuário (estudante)
