@@ -62,7 +62,11 @@ yarn prisma migrate dev --name init
 
 
 ## Indice de Rotas
-- [Rota de User](#1)
+- [Rota de Users](#1)
+- [Rota de Groups](#2)
+- [Rota de Modules](#3)
+- [Rota de Markers](#4)
+- [Rota de Videos](#5)
 
 
 ---
@@ -378,14 +382,14 @@ Possíveis erros:
 
 ---
 
-## 2. **Rota de Videos**
+## 5. **Rota de Videos**
 
-- [POST - create video](#21-POST)
-- [PATCH - delete video url](#22-PATCH)
+- [POST - create video](#51-POST)
+- [PATCH - delete video url](#52-PATCH)
 
 ---
 
-## 2.1 **POST**
+## 5.1 **POST**
 ### Create video
 ### Endpoint: /videos
 
@@ -441,7 +445,7 @@ Possíveis erros:
 
 ---
 
-## 2.2 **PATCH**
+## 5.2 **PATCH**
 ### Delete video url
 ### Endpoint: /videos/:id
 
