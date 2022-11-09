@@ -181,9 +181,35 @@ describe("routes - /videos", () => {
     expect(response.status).toBe(204);
   });
 
+  test("should not be able to create a video without token", async () => {
+    const response = await request(app)
+    .patch(`/videos/${createdVideoId}`);
+
+    expect(response.status).toBe(401);
+    expect(response.body).toHaveProperty("message");
+  });
+
+  test("should no be able to create a video with invalid/expired token", async () => {
+    const response = await request(app)
+      .patch(`/videos/${createdVideoId}`)
+      .set("Authorization", "Bearer batata");
+
+    expect(response.status).toBe(401);
+    expect(response.body).toHaveProperty("message");
+  });
+
   test("should not be able to delete a video url without adm/instructor permission", async () => {
     const response = await request(app)
-      .post("/videos")
+      .patch(`/videos/${createdVideoId}`)
+      .set("Authorization", studentAuthorization);
+
+    expect(response.status).toBe(403);
+    expect(response.body).toHaveProperty("message");
+  });
+
+  test("should not be able to delete a video url with and invalid video id", async () => {
+    const response = await request(app)
+      .patch("/videos/batata")
       .set("Authorization", studentAuthorization);
 
     expect(response.status).toBe(403);
