@@ -182,7 +182,7 @@ Possíveis erros:
 
 ---
 
-## 1.3 **GET**
+## 3 **GET**
 ### Profile user
 ### Endpoint: /users/profile
 
