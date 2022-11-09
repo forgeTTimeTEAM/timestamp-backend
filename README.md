@@ -69,13 +69,13 @@ yarn prisma migrate dev --name init
 
 ## 1. **Rota de Users**
 
-- [POST - create user](#1.1-POST)
-- [POST - Login user](#1.2-POST)
-- [GET - Profile user](#3-GET)
-- [GET - List users](#1.4-GET)
-- [GET - List users by id](#1.5-GET)
-- [DELETE - Login user](#1.6-DELETE)
-- [PATCH - Login user](#1.7-PATCH)
+- [POST - create user](#11-POST)
+- [POST - Login user](#12-POST)
+- [GET - Profile user](#13-GET)
+- [GET - List users](#14-GET)
+- [GET - List users by id](#15-GET)
+- [DELETE - Login user](#16-DELETE)
+- [PATCH - Login user](#17-PATCH)
 
 ---
 
@@ -182,7 +182,7 @@ Possíveis erros:
 
 ---
 
-## 3 **GET**
+## 1.3 **GET**
 ### Profile user
 ### Endpoint: /users/profile
 
