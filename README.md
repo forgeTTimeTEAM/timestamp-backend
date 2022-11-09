@@ -383,6 +383,7 @@ Possíveis erros:
 ---
 
 ## 5. **Rota de Videos**
+[ Voltar para o topo ](#indice-de-rotas)
 
 - [POST - create video](#51-POST)
 - [PATCH - delete video url](#52-PATCH)
