@@ -114,6 +114,8 @@ Possíveis erros:
 | should not be able to login with wrong password       			| Wrong email or password	| 403 |
 | should be able to return error when logging in without email and password 	| Wrong email or password 	| 403 |
 
+---
+
 ## GET - Profile user
 ### Endpoint: /users/profile
 
@@ -146,6 +148,8 @@ Possíveis erros:
 | ------------------------------|-----------------------------------------------------------------------------	|--------------|
 | should not be able to return all user data without token       			| Missing token	| 401 |
 | should not be able to return all user data with invalid token 	| Invalid or expired token	| 401 |
+
+---
 
 ## GET - List users
 ### Endpoint: /users
@@ -190,6 +194,8 @@ Possíveis erros:
 | should not be able to list all users without token       			| Missing token	| 401 |
 | should not be able to list all users with invalid token 	| Invalid or expired token	| 401 |
 | should not be able to list all users without adm token 	| Access denied	| 401 |
+
+---
 
 ## GET - List users by id
 ### Endpoint: /users/:id
@@ -225,6 +231,7 @@ Possíveis erros:
 | should not be able to find a user without adm permission 	| Access denied	| 403 |
 | should not be able to find a user with invalid id 	| User not found	| 404 |
 
+---
 
 ## GET - List users
 ### Endpoint: /users
@@ -270,6 +277,8 @@ Possíveis erros:
 | should not be able to list all users with invalid token 	| Invalid or expired token	| 401 |
 | should not be able to list all users without adm token 	| Access denied	| 401 |
 
+---
+
 ## DELETE - Delete user
 ### Endpoint: /users/:id
 
@@ -293,6 +302,7 @@ Possíveis erros:
 | should not be able to delete a user without adm permission 	| Access denied	| 403 |
 | should not be able to delete a user with invalid id 	| User not found	| 404 |
 
+---
 
 ## PATCH - Update user by id
 ### Endpoint: /users/:id
