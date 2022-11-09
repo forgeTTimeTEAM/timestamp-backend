@@ -1,119 +1,126 @@
-### Leia-me
+<h1> Timestamp API </h1>
 
-## Você precisará criar um banco de dados postgres e colocar no arquivo .env a URL, caso tenha dúvida olhe o arquivo deixado na raiz do projeto chamado .env.test, depois rode o comando a baixo.
+<h2>Olá! Seja bem vindo(a) a documentação da <i>API</i>, esta que tem como objetivo o gerenciamento de uma plataforma em que serão hospedados <b>vídeos</b> e seus respectivos <b>marcadores</b>, a aplicação também conta com sistema de <b>usuários</b>, <b>turmas</b>, <b>módulos</b> e <b>sprints</b>, permissão de <b>aluno</b>, <b>instrutor</b>, e <b>administrador</b>.</h2>
 
-`yarn prisma migrate dev` este comando irá rodar as migrations do banco de dados, para que você possa utilizá-lo
+</br>
 
 ## 1. Visão Geral
 
-Visão geral do projeto, um pouco das tecnologias usadas.
+_Visão geral do projeto, abaixo as principais tecnologias utilizadas e a url base da API_.
 
-- [NodeJS](https://nodejs.org/en/)
-- [Express](https://expressjs.com/pt-br/)
-- [TypeScript](https://www.typescriptlang.org/)
-- [PostgreSQL](https://www.postgresql.org/)
-- [Prisma](https://www.prisma.io/)
-- [Jest](https://jestjs.io/pt-BR/)
+<img src="https://skillicons.dev/icons?i=nodejs,express,typescript,postgres,prisma,jest,heroku" alt="ícones com as tecnologias utilizadas, sendo elas: node, express, typescript, postgresql, prisma, jest, heroku"/>
 
-A URL base da aplicação:
-http://suaapi.com/v1
+</br>
+
+_URL base da API:_ **https://backend-timestamp.herokuapp.com/**
 
 ---
 
-## 2. Diagrama ER
+## **2. _Para dar início ao projeto, siga as instruções abaixo:_**
+
 [ Voltar para o topo ](#tabela-de-conteúdos)
 
-Diagrama ER da API definindo bem as relações entre as tabelas do banco de dados.
+### **2.1 Instalando as dependências do projeto**
 
-![DER](DER_SP7_01.drawio.png)
-
----
-
-## 3. Início Rápido
-[ Voltar para o topo ](#tabela-de-conteúdos)
-
-
-### 3.1. Instalando Dependências
-
-Clone o projeto em sua máquina e instale as dependências com o comando:
+_Clone o projeto em sua máquina e instale as dependências do projeto com o seguinte comando:_
 
 ```shell
 yarn
 ```
 
-### 3.2. Variáveis de Ambiente
+### **2.2 Criando e configurando arquivo com as variáveis de ambiente**
 
-Em seguida, crie um arquivo **.env**, copiando o formato do arquivo **.env.example**:
-```
-env.example .env
-```
-
-Configure suas variáveis de ambiente com suas credenciais do Postgres e uma nova database da sua escolha.
-
-### 3.3. Migrations
-
-Execute as migrations com o comando:
+_Em seguida, crie um arquivo_ **.env**, _copiando o formato do arquivo_ **.env.example**:
 
 ```
-yarn prisma migrate dev --name init
+.env
+```
+
+_Configure suas variáveis de ambiente com suas credenciais do Postgres do seu banco de dados criado anteriormente._
+
+### **2.3 Migrations**
+
+_Execute as migrations com o seguinte comando:_
+
+```
+yarn prisma migrate dev
 ```
 
 ---
 
+## **Índice com todas as rotas do projeto**
 
-## Indice de Rotas
-- [Rota de Users](#1-rota-de-users)
-- [Rota de Groups](#2-rota-de-groups)
-- [Rota de Modules](#3-rota-de-modules)
-- [Rota de Markers](#4-rota-de-markers)
-- [Rota de Videos](#5-rota-de-videos)
-
-
----
-
-## 1. **Rota de Users**
-
-- [POST - create user](#11-POST)
-- [POST - Login user](#12-POST)
-- [GET - Profile user](#13-GET)
-- [GET - List users](#14-GET)
-- [GET - List users by id](#15-GET)
-- [DELETE - Login user](#16-DELETE)
-- [PATCH - Login user](#17-PATCH)
+- [/users](#1-rota-de-users)
+- [/groups](#2-rota-de-groups)
+- [/modules](#3-rota-de-modules)
+- [/videos](#4-rota-de-videos)
+- [/markers](#5-rota-de-markers)
 
 ---
 
-## 1.1 **POST**
-### Create user
-### Endpoint: /users
+## **1 - _Users_**
 
-Rota para criação de usuário (estudante)
+- [POST - Criar usuário](#11-POST)
+- [POST - Fazer login](#12-POST)
+- [GET - Mostrar todos os dados do usuário](#13-GET)
+- [GET - Listar todos os usuários](#14-GET)
+- [GET - Mostrar um usuário a partir do id](#15-GET)
+- [DELETE - Deletar usuário](#16-DELETE)
+- [PATCH - Atualizar usuário](#17-PATCH)
 
-Campos obrigatórios:
-| Campo      | Tipo   | Descrição                                       |
-| -----------|--------|-------------------------------------------------|
-| name       | string | O nome do usuário.                              |
-| email      | string | O e-mail do usuário.                            |
-| password   | string | A senha de acesso do usuário                    |
-| groupId    | string | Define o grupo do usuário.                      |
-| moduleId   | string | Define o módulo do usuário.                     |
+---
 
-Body da requisição:
+## **1.1 - _POST_**
+
+</br>
+
+### **Criação de usuário**
+
+</br>
+
+### **Endpoint: _/users_**
+
+</br>
+
+_Rota responsável por criar um usuário, por padrão, o usuário criado será um estudante_
+
+</br>
+
+**Campos obrigatórios:**
+
+</br>
+
+| Campo    | Tipo   | Descrição                    |
+| -------- | ------ | ---------------------------- |
+| name     | string | O nome do usuário.           |
+| email    | string | O email do usuário.          |
+| password | string | A senha de acesso do usuário |
+| groupId  | string | O grupo do usuário.          |
+| moduleId | string | O módulo do usuário.         |
+
+</br>
+
+**Exemplo de requisição de criação de usuário válida, corpo da requisição:**
+
 ```shell
-{  
-	"name": "sara test",
-	"email": "sara-teste@mail.com",
-	"password": "1234",
+{
+	"name": "Sara Lins",
+	"email": "saralins@email.com",
+	"password": "sara#321",
 	"groupId": "5bd3b8cc-c522-406f-8218-b06fb2af4bca",
 	"moduleId": "430ec768-812c-4241-adb5-1c1129bb60d7"
 }
 ```
-Body da resposta:
+
+</br>
+
+**Retorno da requisição:**
+
 ```shell
 {
 	"id": "22322984-3ebc-460d-8321-4ded36eeafa6",
-	"name": "sara test",
-	"email": "sara-test2@mail.com",
+	"name": "Sara Lins",
+	"email": "saralins@email.com",
 	"role": "STUDENT",
 	"createdAt": "2022-11-08T15:23:59.091Z",
 	"updatedAt": "2022-11-08T15:23:59.091Z",
@@ -129,233 +136,406 @@ Body da resposta:
 	]
 }
 ```
-| Status Code |
-|--------------|
-| 201 |
 
-Possíveis erros:
-| Error    			| Message                                   					| Status Code |
-| ------------------------------|-----------------------------------------------------------------------------|---------------|
-| should not be able to create a user without name       			| You must provide a name	| 400 |
-| Should not be able to create a user without password      			| You must provide a password | 400 |
-| should not be able to create a user without email  				| You must provide a email    | 400 |
-| Should not be able to create a user without group id    			| You must provide a group id | 400 |
-| should not be able to create a user without module id  			| Group not found             | 404 |
-| should not be able to create a user with invalid group id  			| You must provide a module id| 400 |
-| should not be able to create a user with invalid module id  			| Module not found            | 404 |
-| should not be able to create a user with same email  				| Email is already in use     | 409 |
+| **Status Code** |
+| --------------- |
+| _201_           |
 
----
+**Possíveis erros:**
 
-## 1.2 **POST**
-### Login user
-### Endpoint: /users/login
-
-Rota para login de estudantes, administradores e instrutores
-
-Campos obrigatórios:
-| Campo      | Tipo   | Descrição                                       |
-| -----------|--------|-------------------------------------------------|
-| email      | string | O e-mail do usuário.                            |
-| password   | string | A senha de acesso do usuário                    |
-
-Body da requisição:
-```shell
-{  
-	"email": "sara-test@mail.com",
-	"password": "1234"
-}
-```
-Body da resposta:
-```shell
-{
-	{
-	"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiU1RVREVOVCIsImdyb3VwSWQiOiI3ZTQ0ZWM4Yy04NGUyLTQyZDEtYWVmYi0wOTUzMWM1YmE5MzciLCJpYXQiOjE2Njc5MjEwMTEsImV4cCI6MTY2ODAwNzQxMSwic3ViIjoiYTE3Y2I0ZWUtNzUyYS00ODlmLWI1NmMtNGQ0OWQyOWRkYmRjIn0.gUcDapffJXZrmZbYRrcpmAy5zf0zS1AVwkLpiLeT_MI"
-}
-}
-```
-| Status Code |
-|--------------|
-| 200 |
-
-Possíveis erros:
-| Error    			| Message                                   					| Status Code |
-| ------------------------------|-----------------------------------------------------------------------------	|--------------|
-| should not be able to login with wrong password       			| Wrong email or password	| 403 |
-| should be able to return error when logging in without email and password 	| Wrong email or password 	| 403 |
+| _Erro_                                                   | _Mensagem_                   | _Status Code_ |
+| -------------------------------------------------------- | ---------------------------- | ------------- |
+| Tentativa de criar um usuário sem nome                   | You must provide a name      | 400           |
+| Tentativa de criar um usuário sem email                  | You must provide a email     | 400           |
+| Tentativa de criar um usuário sem senha                  | You must provide a password  | 400           |
+| Tentativa de criar um usuário sem groupId                | You must provide a group id  | 400           |
+| Tentativa de criar um usuário sem moduleId               | You must provide a module id | 400           |
+| Tentativa de criar um usuário com um group id inválido   | Group not found              | 404           |
+| Tentativa de criar um usuário com um module id inválido  | Module not found             | 404           |
+| Tentativa de criar um usuário com um email já cadastrado | Email is already in use      | 409           |
 
 ---
 
-## 1.3 **GET**
-### Profile user
-### Endpoint: /users/profile
+## **1.2 - _POST_**
 
-Rota para busca do próprio perfil para proteção de rotas
+</br>
 
-Campos obrigatórios:
-- Sem body na requisição
-- Necessário token de autorização
+### **Login do usuário**
 
-Body da resposta:
+</br>
+
+### **Endpoint: _/users/login_**
+
+</br>
+
+_Rota responsável pelo login do usuário, seja ele estudante, instrutor ou administrador, rota retorna um token de acesso_
+
+</br>
+
+**Campos obrigatórios:**
+
+</br>
+
+| Campo    | Tipo   | Descrição                    |
+| -------- | ------ | ---------------------------- |
+| email    | string | O email do usuário.          |
+| password | string | A senha de acesso do usuário |
+
+</br>
+
+**Exemplo de requisição de login válida, corpo da requisição:**
+
 ```shell
 {
-	"id": "0e1ee1fd-28ee-4389-85b9-77967cb089ef",
-	"name": "sara adm test",
-	"email": "saraAdm-teste@mail.com",
-	"role": "ADM",
-	"createdAt": "2022-11-05T03:10:02.598Z",
-	"updatedAt": "2022-11-05T03:27:16.597Z",
-	"groupId": null,
-	"modules": [],
-	"group": null
+	"email": "saralins@email.com",
+	"password": "sara#321"
 }
 ```
-| Status Code |
-|--------------|
-| 200 |
 
-Possíveis erros:
-| Error    			| Message                                   					| Status Code |
-| ------------------------------|-----------------------------------------------------------------------------	|--------------|
-| should not be able to return all user data without token       			| Missing token	| 401 |
-| should not be able to return all user data with invalid token 	| Invalid or expired token	| 401 |
+</br>
+
+**Retorno da requisição:**
+
+```shell
+{
+	"token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiU1RVREVOVCIsImdyb3VwSWQiOiI3ZTQ0ZWM4..."
+}
+```
+
+| **Status Code** |
+| --------------- |
+| _200_           |
+
+**Possíveis erros:**
+| _Erro_ | _Mensagem_ | _Status Code_ |
+| ------------------------------|----------------------------------------------------------------------------- |--------------|
+| Tentativa de login sem envio de email e/ou senha | Wrong email or password | 403 |
+| Tentativa de login com email não cadastrado | User not registered | 404 |
+| Tentativa de login com senha errada | Wrong email or password | 403 |
 
 ---
 
-## 1.4 **GET**
-### List users
-### Endpoint: /users
+## **1.3 - _GET_**
 
-Rota para busca de todos os usuários
+</br>
 
-Campos obrigatórios:
-- Sem body na requisição
-- Necessário token de autorização
-- Necessário ser administrador
+### **Obter todos os dados do usuário**
 
-Body da resposta:
+</br>
+
+### **Endpoint: _/users/profile_**
+
+</br>
+
+_Rota responsável por retornar todos os dados do usuário a partir do token_
+
+</br>
+
+**Deve ser enviado:**
+
+</br>
+
+- Token de autorização do tipo _`Bearer token`_
+
+</br>
+
+**Exemplo de requisição válida:**
+
+```shell
+	/users/profile, {
+        headers: {
+          "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiU1RVREVOVCIsImdyb3VwSWQiOiI3ZTQ0ZWM4..."
+        	}
+		}
+```
+
+</br>
+
+**Retorno da requisição:**
+
+```shell
+{
+    "id": "22322984-3ebc-460d-8321-4ded36eeafa6",
+    "name": "Sara Lins",
+    "email": "saralins@email.com",
+    "role": "STUDENT",
+    "createdAt": "2022-11-08T15:23:59.091Z",
+    "updatedAt": "2022-11-08T15:23:59.091Z",
+    "groupId": "5bd3b8cc-c522-406f-8218-b06fb2af4bca",
+    "modules": [
+        {
+            "id": "21d5d36e-ee74-4514-a0f8-591fc7f5d37e",
+            "createdAt": "2022-11-08T15:23:59.091Z",
+            "updatedAt": "2022-11-08T15:23:59.091Z",
+            "userId": "22322984-3ebc-460d-8321-4ded36eeafa6",
+            "moduleId": "430ec768-812c-4241-adb5-1c1129bb60d7",
+            "module": {
+                "id": "430ec768-812c-4241-adb5-1c1129bb60d7",
+                "name": "M1",
+                "createdAt": "2022-11-08T15:23:59.091Z",
+                "groupId": "5bd3b8cc-c522-406f-8218-b06fb2af4bca",
+                "sprints": [
+                    {
+                        "id": "1830d0f7-1e17-4e03-b504-925c20dee960",
+                        "name": "S1",
+                        "moduleId": "430ec768-812c-4241-adb5-1c1129bb60d7",
+                        "videos": []
+                    },
+					...
+                ]
+            }
+        }
+    ],
+    "group": {
+        "id": "5bd3b8cc-c522-406f-8218-b06fb2af4bca",
+        "number": 12
+    }
+}
+
+```
+
+| **Status Code** |
+| --------------- |
+| _200_           |
+
+**Possíveis erros:**
+| _Erro_ | _Mensagem_ | _Status Code_ |
+| ------------------------------|----------------------------------------------------------------------------- |--------------|
+| Tentativa sem envio do token | Missing token | 401 |
+| Tentativa com envio de token inválido | Invalid or expired token | 401 |
+
+---
+
+## **1.4 - _GET_**
+
+</br>
+
+### **Listar todos os usuários**
+
+</br>
+
+### **Endpoint: _/users_**
+
+</br>
+
+_Rota responsável por retornar alguns dados de todos os usuários_
+
+</br>
+
+**Deve ser enviado:**
+
+</br>
+
+- Token de autorização do tipo _`Bearer Token`_ com permissão de **administrador**
+
+</br>
+
+**Exemplo de requisição válida:**
+
+```shell
+	/users, {
+        headers: {
+          "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiU1RVREVOVCIsImdyb3VwSWQiOiI3ZTQ0ZWM4..."
+        	}
+		}
+```
+
+</br>
+
+**Retorno da requisição:**
+
 ```shell
 [
 	{
-		"id": "c6f164f0-c4cd-407f-8aba-32208c62cb75",
-		"name": "sara test",
-		"email": "sara-teste@mail.com",
+		"id": "22322984-3ebc-460d-8321-4ded36eeafa6",
+		"name": "Sara Lins",
+		"email": "saralins@email.com",
 		"role": "STUDENT",
-		"createdAt": "2022-11-05T03:16:50.170Z",
-		"updatedAt": "2022-11-05T03:16:50.170Z",
+		"createdAt": "2022-11-08T15:23:59.091Z",
+		"updatedAt": "2022-11-08T15:23:59.091Z",
 		"groupId": "5bd3b8cc-c522-406f-8218-b06fb2af4bca"
 	},
-	{
-		"id": "0e1ee1fd-28ee-4389-85b9-77967cb089ef",
-		"name": "sara adm test",
-		"email": "saraAdm-teste@mail.com",
-		"role": "ADM",
-		"createdAt": "2022-11-05T03:10:02.598Z",
-		"updatedAt": "2022-11-05T03:27:16.597Z",
-		"groupId": null
-	}
+	...
 ]
 ```
-| Status Code |
-|--------------|
-| 200 |
 
-Possíveis erros:
-| Error    			| Message                                   					| Status Code |
-| ------------------------------|-----------------------------------------------------------------------------	|--------------|
-| should not be able to list all users without token       			| Missing token	| 401 |
-| should not be able to list all users with invalid token 	| Invalid or expired token	| 401 |
-| should not be able to list all users without adm token 	| Access denied	| 401 |
+| **Status Code** |
+| --------------- |
+| _200_           |
+
+**Possíveis erros:**
+| _Erro_ | _Mensagem_ | _Status Code_ |
+| ------------------------------|----------------------------------------------------------------------------- |--------------|
+| Tentativa sem envio do token | Missing token | 401 |
+| Tentativa com envio de token inválido | Invalid or expired token | 401 |
+| Tentativa com envio de token de estudante ou instrutor | Access denied | 403 |
 
 ---
 
-## 1.5 **GET**
-### List users by id
-### Endpoint: /users/:id
+## **1.5 - _GET_**
 
-Rota para busca de usuário por id
+</br>
 
-Campos obrigatórios:
-- Sem body na requisição
-- Necessário token de autorização
-- Necessário ser administrador
+### **Retorna um usuário a partir do id**
 
-Body da resposta:
+</br>
+
+### **Endpoint: _/users/:id_**
+
+</br>
+
+_Rota responsável por retornar alguns dados de apenas um usuário a partir do id_
+
+</br>
+
+**Deve ser enviado:**
+
+</br>
+
+- Token de autorização do tipo _`Bearer Token`_ com permissão de **administrador**
+
+</br>
+
+**Exemplo de requisição válida:**
+
 ```shell
-{
-	"id": "e7e415ae-ff5d-4c2c-9cb2-7e19a8eb0f9a",
-	"name": "sara test",
-	"email": "sara-teste3@mail.com",
-	"role": "STUDENT",
-	"createdAt": "2022-11-08T21:36:35.265Z",
-	"updatedAt": "2022-11-08T21:36:35.265Z",
-	"groupId": "5bd3b8cc-c522-406f-8218-b06fb2af4bca"
-}
+	/users/22322984-3ebc-460d-8321-4ded36eeafa6, {
+        headers: {
+          "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiU1RVREVOVCIsImdyb3VwSWQiOiI3ZTQ0ZWM4..."
+        	}
+		}
 ```
-| Status Code |
-|--------------|
-| 200 |
 
-Possíveis erros:
-| Error    			| Message                                   					| Status Code |
-| ------------------------------|-----------------------------------------------------------------------------	|--------------|
-| should not be able to find a user without token       			| Missing token	| 401 |
-| should not be able to find a user with invalid token 	| Invalid or expired token	| 401 |
-| should not be able to find a user without adm permission 	| Access denied	| 403 |
-| should not be able to find a user with invalid id 	| User not found	| 404 |
+</br>
 
----
+**Retorno da requisição:**
 
-## 1.6 **DELETE**
-### Delete user
-### Endpoint: /users/:id
-
-Rota para deleção de usuário por id
-
-Campos obrigatórios:
-- Sem body na requisição
-- Necessário token de autorização
-- Necessário ser administrador
-- Sem body na resposta
-
-| Status Code |
-|--------------|
-| 204 |
-
-Possíveis erros:
-| Error    			| Message                                   					| Status Code |
-| ------------------------------|-----------------------------------------------------------------------------	|--------------|
-| should not be able to delete a user without token       			| Missing token	| 401 |
-| should not be able to delete a user with invalid token 	| Invalid or expired token	| 401 |
-| should not be able to delete a user without adm permission 	| Access denied	| 403 |
-| should not be able to delete a user with invalid id 	| User not found	| 404 |
-
----
-
-## 1.7 **PATCH**
-### Update user by id
-### Endpoint: /users/:id
-
-Rota para atualização da chave groupId de usuário (estudante)
-
-- Necessário token de autorização
-- Necessário ser administrador
-
-Campos obrigatórios:
-| Campo      | Tipo   | Descrição                                       |
-| -----------|--------|-------------------------------------------------|
-| groupId    | string | Define o grupo do usuário                       |
-
-Body da requisição:
 ```shell
-{
-	"groupId": "7e44ec8c-84e2-42d1-aefb-09531c5ba937"
-}
+	{
+		"id": "22322984-3ebc-460d-8321-4ded36eeafa6",
+		"name": "Sara Lins",
+		"email": "saralins@email.com",
+		"role": "STUDENT",
+		"createdAt": "2022-11-08T15:23:59.091Z",
+		"updatedAt": "2022-11-08T15:23:59.091Z",
+		"groupId": "5bd3b8cc-c522-406f-8218-b06fb2af4bca"
+	}
 ```
-Body da resposta:
+
+| **Status Code** |
+| --------------- |
+| _200_           |
+
+**Possíveis erros:**
+| _Erro_ | _Mensagem_ | _Status Code_ |
+| ------------------------------|----------------------------------------------------------------------------- |--------------|
+| Tentativa sem envio do token | Missing token | 401 |
+| Tentativa com envio de token inválido | Invalid or expired token | 401 |
+| Tentativa com envio de token de estudante ou instrutor | Access denied | 403 |
+| Tentativa com envio de id inválido | User not found | 404 |
+
+---
+
+## **1.6 - _DELETE_**
+
+</br>
+
+### **Deleção de usuário**
+
+</br>
+
+### **Endpoint: _/users/:id_**
+
+</br>
+
+_Rota responsável pela deleção de um usuário a partir do id_
+
+</br>
+
+**Deve ser enviado**
+
+</br>
+
+- Token de autorização do tipo _`Bearer token`_ com permissão de **administrador**
+
+</br>
+
+**Exemplo de requisição válida:**
+
+```shell
+	/users/22322984-3ebc-460d-8321-4ded36eeafa6, {
+        headers: {
+          "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiU1RVREVOVCIsImdyb3VwSWQiOiI3ZTQ0ZWM4..."
+        	}
+		}
+```
+
+</br>
+
+| **Status Code** |
+| --------------- |
+| _204_           |
+
+**Possíveis erros:**
+| _Erro_ | _Mensagem_ | _Status Code_ |
+| ------------------------------|----------------------------------------------------------------------------- |--------------|
+| Tentativa sem envio de token | Missing token | 401 |
+| Tentativa com envio de token inválido | Invalid or expired token | 401 |
+| Tentativa com envio de token de estudante ou instrutor | Access denied | 403 |
+| Tentativa com envio de id inválido | User not found | 404 |
+
+---
+
+## **1.7 - _PATCH_**
+
+</br>
+
+### **Atualização de usuário**
+
+</br>
+
+### **Endpoint: _/users/:id_**
+
+</br>
+
+_Rota responsável pela atualização do usuário, apenas a turma(groupId) poderá ser alterada_
+
+</br>
+
+**Deve ser enviado**
+
+</br>
+
+- Token de autorização do tipo _`Bearer Token`_ com permissão de **administrador**
+
+**Campos obrigatórios:**
+
+</br>
+
+| Campo   | Tipo   | Descrição          |
+| ------- | ------ | ------------------ |
+| groupId | string | O grupo do usuário |
+
+</br>
+
+**Exemplo de requisição válida, corpo da requisição:**
+
+```shell
+	/users/22322984-3ebc-460d-8321-4ded36eeafa6, {
+        headers: {
+          "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiU1RVREVOVCIsImdyb3VwSWQiOiI3ZTQ0ZWM4..."
+        	},
+		body: {
+			"groupId": "7e44ec8c-84e2-42d1-aefb-09531c5ba937"
+			  }
+		}
+```
+
+**Retorno da requisição:**
+
 ```shell
 {
-	"id": "a17cb4ee-752a-489f-b56c-4d49d29ddbdc",
+	"id": "22322984-3ebc-460d-8321-4ded36eeafa6",
 	"name": "sara9",
 	"email": "sara-test@mail.com",
 	"role": "STUDENT",
@@ -364,25 +544,30 @@ Body da resposta:
 	"groupId": "7e44ec8c-84e2-42d1-aefb-09531c5ba937"
 }
 ```
-| Status Code |
-|--------------|
-| 200 |
 
-Possíveis erros:
-| Error    						  | Message                 		| Status Code |
+| **Status Code** |
+| --------------- |
+| _200_           |
+
+**Possíveis erros:**
+| _Erro_ | _Mensagem_ | _Status Code_ |
 | --------------------------------------------------------|---------------------------------------------------|---------------|
-| should not be able to update a user by id without token       			| Missing token	| 401 |
-| should not be able to update a user by id with the current groupId      		| Provide a different groupId than the current one  | 404 |
-| should not be able to update a user by id with invalid groupId  			| Group not exists    | 404 |
-| should not be able to update a user by id with invalid id    			| User not exists | 404 |
-| should not be able to update a user by id without data in the request body	| Need to provide the data in the request | 400 |
-| should not be able to update a user by id without providing the correct key(groupId) in the request	| It is only possible to update the groupId | 400 |
-| should not be able to update user by id with invalid token  			| Invalid or expired token | 401 |
-| should not be able to update user by id without adm permission		| Access denied | 403 |
+
+Provide a different groupId than the current one
+
+| Tentativa sem envio de token | Missing token | 401 |
+| Tentativa com envio de token inválido | Invalid or expired token | 401 |
+| Tentativa com envio de token de estudante ou instrutor | Access denied | 403 |
+| should not be able to update a user by id with invalid id | User not exists | 404 |
+| should not be able to update a user by id without data in the request body | Need to provide the data in the request | 400 |
+| should not be able to update a user by id without providing the correct key(groupId) in the request | It is only possible to update the groupId | 400 |
+| should not be able to update user by id with invalid token | Invalid or expired token | 401 |
+| should not be able to update user by id without adm permission | Access denied | 403 |
 
 ---
 
 ## 5. **Rota de Videos**
+
 [ Voltar para o topo ](#indice-de-rotas)
 
 - [POST - create video](#51-POST)
@@ -391,7 +576,9 @@ Possíveis erros:
 ---
 
 ## 5.1 **POST**
+
 ### Create video
+
 ### Endpoint: /videos
 
 Rota para criação de video
@@ -400,14 +587,15 @@ Rota para criação de video
 - Necessário ser administrador ou ser instrutor do módulo
 
 Campos obrigatórios:
-| Campo       | Tipo   | Descrição                                       |
+| Campo | Tipo | Descrição |
 | ------------|--------|-------------------------------------------------|
-| title       | string | Define o título do vídeo                        |
-| url         | string | Define o link do vídeo  (opcional)              |
-| releaseDate |  date  | Define o dia em que o vídeo foi transmitido     |
-| sprintId    | string | Define a sprint do vídeo                        |
+| title | string | Define o título do vídeo |
+| url | string | Define o link do vídeo (opcional) |
+| releaseDate | date | Define o dia em que o vídeo foi transmitido |
+| sprintId | string | Define a sprint do vídeo |
 
 Body da requisição:
+
 ```shell
 {
 	"title": "video teste",
@@ -416,7 +604,9 @@ Body da requisição:
 	"sprintId": "38e0f242-4b31-4366-abc8-71004132c8f4"
 }
 ```
+
 Body da resposta:
+
 ```shell
 {
 	"id": "56f9ed40-35c3-4311-92cd-84967fc8679f",
@@ -428,26 +618,29 @@ Body da resposta:
 	"sprintId": "38e0f242-4b31-4366-abc8-71004132c8f4"
 }
 ```
+
 | Status Code |
-|-------------|
-| 201 |
+| ----------- |
+| 201         |
 
 Possíveis erros:
-| Error    									| Message                       | Status Code |
+| Error | Message | Status Code |
 | ------------------------------------------------------------------------------|-------------------------------|-------------|
-| should not be able to create a video without token      			| Missing token		     	| 401 |
-| should no be able to create a video with invalid/expired token  		| Invalid or expired token   	| 401 |
-| should not be able to create a video without adm/instructor permission    	| Access denied		     	| 403 |
-| should not be able to create a video when instructor don't have this module	| Instructor not allowed     	| 401 |
-| should not be able to create a video without title				| Title is required		| 400 |
-| should not be able to create a video without release date  			| Release date is required 	| 400 |
-| should not be able to create a video without sprintId				| Sprint id is required  	| 400 |
-| should not be able to create a video with an invalid sprintId			| Sprint not found  		| 404 |
+| should not be able to create a video without token | Missing token | 401 |
+| should no be able to create a video with invalid/expired token | Invalid or expired token | 401 |
+| should not be able to create a video without adm/instructor permission | Access denied | 403 |
+| should not be able to create a video when instructor don't have this module | Instructor not allowed | 401 |
+| should not be able to create a video without title | Title is required | 400 |
+| should not be able to create a video without release date | Release date is required | 400 |
+| should not be able to create a video without sprintId | Sprint id is required | 400 |
+| should not be able to create a video with an invalid sprintId | Sprint not found | 404 |
 
 ---
 
 ## 5.2 **PATCH**
+
 ### Delete video url
+
 ### Endpoint: /videos/:id
 
 Rota para deleção de url de video
@@ -458,16 +651,16 @@ Rota para deleção de url de video
 - Necessário ser administrador ou ser instrutor do módulo
 
 | Status Code |
-|-------------|
-| 204 |
+| ----------- |
+| 204         |
 
 Possíveis erros:
-| Error    									| Message                       | Status Code |
+| Error | Message | Status Code |
 | ------------------------------------------------------------------------------|-------------------------------|-------------|
-| should not be able to delete a video url without token      			| Missing token		     	| 401 |
-| should no be able to delete a video url with invalid/expired token  		| Invalid or expired token   	| 401 |
-| should not be able to delete a video url without adm/instructor permission    | Access denied		     	| 403 |
-| should not be able to delete a video with an invalid video id                 | Access denied		     	| 404 |
+| should not be able to delete a video url without token | Missing token | 401 |
+| should no be able to delete a video url with invalid/expired token | Invalid or expired token | 401 |
+| should not be able to delete a video url without adm/instructor permission | Access denied | 403 |
+| should not be able to delete a video with an invalid video id | Access denied | 404 |
 
 ---
 
