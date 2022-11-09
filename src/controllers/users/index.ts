@@ -5,3 +5,4 @@ export { listUsersController } from "./listUsers.controller";
 export { loginUserController } from "./loginUser.controller";
 export { findUserController } from "./findUser.controller";
 export { deleteUserController } from "./deleteUser.controller";
+export { updateUserByIdController } from "./updateUserById.controller";
