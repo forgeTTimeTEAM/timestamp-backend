@@ -4,7 +4,7 @@ import { AppError } from "../../errors/AppError";
 
 import { IVideoMarkerRequest } from "../../interfaces/videoMarker";
 
-const createMarker = async ({
+const createMarkerServices = async ({
   marks,
   groupId,
   videoId,
@@ -87,4 +87,4 @@ const createMarker = async ({
   }
 };
 
-export { createMarker };
+export { createMarkerServices };

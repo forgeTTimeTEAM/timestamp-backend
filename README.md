@@ -1,4 +1,4 @@
-<h1> Timestamp API </h1>
+<h1 id="tabela-de-conteúdos"> Timestamp API </h1>
 
 <h2>Olá! Seja bem vindo(a) a documentação da <i>API</i>, esta que tem como objetivo o gerenciamento de uma plataforma em que serão hospedados <b>vídeos</b> e seus respectivos <b>marcadores</b>, a aplicação também conta com sistema de <b>usuários</b>, <b>turmas</b>, <b>módulos</b> e <b>sprints</b>, permissão de <b>aluno</b>, <b>instrutor</b>, e <b>administrador</b>.</h2>
 
@@ -568,7 +568,7 @@ Provide a different groupId than the current one
 
 ## 5. **Rota de Videos**
 
-[ Voltar para o topo ](#indice-de-rotas)
+[ Voltar para o topo ](#tabela-de-conteúdos)
 
 - [POST - create video](#51-POST)
 - [PATCH - delete video url](#52-PATCH)
@@ -586,7 +586,7 @@ Rota para criação de video
 - Necessário token de autorização
 - Necessário ser administrador ou ser instrutor do módulo
 
-Campos obrigatórios:
+Campos:
 | Campo | Tipo | Descrição |
 | ------------|--------|-------------------------------------------------|
 | title | string | Define o título do vídeo |
@@ -664,4 +664,161 @@ Possíveis erros:
 
 ---
 
+## 6. **Rota de Marcadores de Video**
+
+[ Voltar para o topo ](#indice-de-rotas)
+
+- [POST - create marker](#61-POST)
+- [PATCH - update marker](#62-PATCH)
+- [DELETE - delete marker](#63-DELETE)
+
+---
+<span id="61-POST"></span>
+
+## 6.1 **POST**
+### Create Marker
+
+### Endpoint: /markers
+
+Rota para criação de marcador
+
+- Necessário token de autorização
+- Necessário ser administrador ou ser instrutor do módulo
+
+| Campo | Tipo | Descrição |
+| ------------|--------|-------------------------------------------------|
+| marks | marks[] | Define os marcadores de vídeo |
+| videoId | string | Define o id do vídeo |
+| groupId | string | Define o grupo de alunos (opcional) |
+
+Body da requisição:
+
+```shell
+{
+	"marks": "[
+		{
+			title: 'git hub',
+			time: '00:20:50',
+			videoId: video?.id,
+		},
+		{
+			title: 'user controller',
+			time: '00:25:50',
+			videoId: video?.id,
+		},
+		{
+			title: 'typeorm',
+			time: '19:20:50',
+			videoId: video?.id,
+		},
+	]",
+	"videoId": "video?.id",
+	"groupId": "group.id"
+}
+```
+
+Body da resposta:
+
+```shell
+{ 
+	count: 3
+}
+```
+
+| Status Code |
+| ----------- |
+| 201         |
+
+Possíveis erros:
+| Error | Message | Status Code |
+| ------------------------------------------------------------------------------|-------------------------------|-------------|
+| should not be able create a marker with h:m:s invalid | time not validate | 400 |
+| should no be able to create a video with invalid/expired token | Invalid or expired token | 401 |
+| should not be able create a marker with h:m:s equals | this video needed to equal marks video | 400 |
+| should not be able create a marker without adm access | Instructor not allowed | 403 |
+| should not be able create a marker with invalid ID video | video not found | 400 |
+---
+
+<span id="62-PATCH"></span>
+
+## 6.2 **PATCH**
+### Update Marker
+
+### Endpoint: /markers/:id
+
+Rota para atualização de marcador
+
+- Necessário token de autorização
+- Necessário ser administrador ou ser instrutor do módulo
+
+| Campo | Tipo | Descrição |
+| ------------|--------|-------------------------------------------------|
+| time | string | tempo do vídeo (opcional) |
+| title | string | titulo do vído (opcional) |
+
+Body da requisição:
+
+```shell
+{
+	"title": 'git hub',
+	"time": '00:20:50'
+}
+```
+
+Body da resposta:
+
+```shell
+{
+	"id": '634a0edc-7cde-4b5f-9469-d601759e2fba',
+	"time": '02:04:49',
+	"title": 'Titulo alterado',
+	"createdAt": "2022-11-09T22:03:13.009Z",
+	"updatedAt": "2022-11-09T22:03:13.199Z",
+	"videoId": 'c0fcb84d-1f76-4f92-b690-a6d1f8e51e19'
+}
+```
+
+| Status Code |
+| ----------- |
+| 200        |
+
+Possíveis erros:
+| Error | Message | Status Code |
+| ------------------------------------------------------------------------------|-------------------------------|-------------|
+| should be able possible to update a marked | (not) | 200 |
+| should be able is not ADM or INSTRUCTOR | Unauthorized | 403 |
+| should not be possible to update one marked with invalid id | Marker not found | 404 |
+| should not be possible to create a marker with time that already exists | Time already exists | 403 |
+---
+
+<span id="63-DELETE"></span>
+
+## 6.3 **DELETE**
+### Delete Marker
+
+### Endpoint: /markers/:id
+
+Rota para deletar marcador
+
+- Necessário token de autorização
+- Necessário ser administrador ou ser instrutor do módulo
+
+| Campo | Tipo | Descrição |
+| ------------|--------|-------------------------------------------------|
+| time | string | tempo do vídeo (opcional) |
+| title | string | titulo do vído (opcional) |
+
+
+| Status Code |
+| ----------- |
+| 204        |
+
+Possíveis erros:
+| Error | Message | Status Code |
+| ------------------------------------------------------------------------------|-------------------------------|-------------|
+| should be possible to delete a marker | (not) | 204 |
+| should be able is not ADM or INSTRUCTOR | Unauthorized | 403 |
+| should not be possible to delete a marker with invalid id | Marker not found | 404 |
+| should not be possible to delete a marker with a different instructor | Instructor does not own this mark | 401 |
+---
 ### All rights reserved.
