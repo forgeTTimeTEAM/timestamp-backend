@@ -50,7 +50,7 @@ yarn prisma migrate dev
 
 ## **Índice com todas as rotas do projeto**
 
-- [/users](#1-rota-de-users)
+- [/users](#1-users)
 - [/groups](#2-rota-de-groups)
 - [/modules](#3-rota-de-modules)
 - [/videos](#4-rota-de-videos)
