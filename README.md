@@ -70,7 +70,7 @@ yarn prisma migrate dev --name init
 ## 1. **Rota de Users**
 
 - [POST - create user](#1-POST)
-- [GET]()
+- [POST - Login user](#2- POST)
 
 ---
 
@@ -138,7 +138,8 @@ Possíveis erros:
 
 ---
 
-## POST - Login user
+##2. **POST**
+### Login user
 ### Endpoint: /users/login
 
 Rota para login de estudantes, administradores e instrutores
