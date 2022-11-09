@@ -1,6 +1,7 @@
 import { AppError } from "../../errors/AppError";
 import { IUserUpdateById } from "../../interfaces/users";
 import { prisma } from "../../prisma";
+import { removeObjectProperty } from "../../utils";
 
 const updateUserByIdService = async (
   userRequest: IUserUpdateById,
@@ -48,6 +49,8 @@ const updateUserByIdService = async (
       id: id,
     },
   });
+
+  removeObjectProperty(userUpdated, "password");
 
   return userUpdated;
 };
