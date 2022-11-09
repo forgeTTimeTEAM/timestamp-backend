@@ -138,7 +138,7 @@ Possíveis erros:
 
 ---
 
-##2. **POST**
+## 2. **POST**
 ### Login user
 ### Endpoint: /users/login
 
