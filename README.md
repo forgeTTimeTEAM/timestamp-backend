@@ -109,8 +109,8 @@ Possíveis erros:
 Rota para busca do próprio perfil para proteção de rotas
 
 Campos obrigatórios:
-Sem body na requisição
-Necessário token de autorização
+- Sem body na requisição
+- Necessário token de autorização
 
 Body da resposta:
 ```shell
@@ -142,9 +142,9 @@ Possíveis erros:
 Rota para busca de todos os usuários
 
 Campos obrigatórios:
-Sem body na requisição
-Necessário token de autorização
-Necessário ser administrador
+- Sem body na requisição
+- Necessário token de autorização
+- Necessário ser administrador
 
 Body da resposta:
 ```shell
@@ -186,9 +186,9 @@ Possíveis erros:
 Rota para busca de usuário por id
 
 Campos obrigatórios:
-Sem body na requisição
-Necessário token de autorização
-Necessário ser administrador
+- Sem body na requisição
+- Necessário token de autorização
+- Necessário ser administrador
 
 Body da resposta:
 ```shell
@@ -221,9 +221,9 @@ Possíveis erros:
 Rota para busca de todos os usuários
 
 Campos obrigatórios:
-Sem body na requisição
-Necessário token de autorização
-Necessário ser administrador
+- Sem body na requisição
+- Necessário token de autorização
+- Necessário ser administrador
 
 Body da resposta:
 ```shell
@@ -265,10 +265,10 @@ Possíveis erros:
 Rota para deleção de usuário por id
 
 Campos obrigatórios:
-Sem body na requisição
-Necessário token de autorização
-Necessário ser administrador
-Sem body na resposta
+- Sem body na requisição
+- Necessário token de autorização
+- Necessário ser administrador
+- Sem body na resposta
 
 | Status Code |
 |--------------|
@@ -282,15 +282,14 @@ Possíveis erros:
 | should not be able to delete a user without adm permission 	| Access denied	| 403 |
 | should not be able to delete a user with invalid id 	| User not found	| 404 |
 
-# Rota de Users
 
 ## PATCH - Update user by id
 ### Endpoint: /users/:id
 
 Rota para atualização da chave groupId de usuário (estudante)
 
-Necessário token de autorização
-Necessário ser administrador
+- Necessário token de autorização
+- Necessário ser administrador
 
 Campos obrigatórios:
 | Campo      | Tipo   | Descrição                                       |
