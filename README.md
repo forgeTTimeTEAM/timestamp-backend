@@ -1,4 +1,4 @@
-<h1> Timestamp API </h1>
+<h1 id="tabela-de-conteúdos"> Timestamp API </h1>
 
 <h2>Olá! Seja bem vindo(a) a documentação da <i>API</i>, esta que tem como objetivo o gerenciamento de uma plataforma em que serão hospedados <b>vídeos</b> e seus respectivos <b>marcadores</b>, a aplicação também conta com sistema de <b>usuários</b>, <b>turmas</b>, <b>módulos</b> e <b>sprints</b>, permissão de <b>aluno</b>, <b>instrutor</b>, e <b>administrador</b>.</h2>
 
@@ -568,7 +568,7 @@ Provide a different groupId than the current one
 
 ## 5. **Rota de Videos**
 
-[ Voltar para o topo ](#indice-de-rotas)
+[ Voltar para o topo ](#tabela-de-conteúdos)
 
 - [POST - create video](#51-POST)
 - [PATCH - delete video url](#52-PATCH)
@@ -668,11 +668,12 @@ Possíveis erros:
 
 [ Voltar para o topo ](#indice-de-rotas)
 
-- [POST - create marker](#51-POST)
-- [PATCH - update marker](#52-PATCH)
-- [DELETE - delete marker](#52-PATCH)
+- [POST - create marker](#61-POST)
+- [PATCH - update marker](#62-PATCH)
+- [DELETE - delete marker](#63-DELETE)
 
 ---
+<span id="61-POST"></span>
 
 ## 6.1 **POST**
 ### Create Marker
@@ -738,6 +739,8 @@ Possíveis erros:
 | should not be able create a marker with invalid ID video | video not found | 400 |
 ---
 
+<span id="62-PATCH"></span>
+
 ## 6.2 **PATCH**
 ### Update Marker
 
@@ -787,6 +790,9 @@ Possíveis erros:
 | should not be possible to update one marked with invalid id | Marker not found | 404 |
 | should not be possible to create a marker with time that already exists | Time already exists | 403 |
 ---
+
+<span id="63-DELETE"></span>
+
 ## 6.3 **DELETE**
 ### Delete Marker
 
@@ -802,7 +808,6 @@ Rota para deletar marcador
 | time | string | tempo do vídeo (opcional) |
 | title | string | titulo do vído (opcional) |
 
-```
 
 | Status Code |
 | ----------- |
