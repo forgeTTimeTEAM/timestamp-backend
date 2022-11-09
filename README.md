@@ -70,7 +70,7 @@ yarn prisma migrate dev --name init
 ## 1. **Rota de Users**
 
 - [POST - create user](#1-POST)
-- [POST - Login user](#2- POST)
+- [POST - Login user](#2-POST)
 
 ---
 
