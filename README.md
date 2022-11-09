@@ -71,11 +71,16 @@ yarn prisma migrate dev --name init
 
 - [POST - create user](#1-POST)
 - [POST - Login user](#2-POST)
+- [GET - Profile user](#3-GET)
+- [GET - List users by id](#4-GET)
+- [GET - List users](#5-ET)
+- [DELETE - Login user](#6DELETE)
+- [PATCH - Login user](#7PATCH)
 
 ---
 
-## 1. **POST** Create user
-### 
+## 1. **POST**
+### Create user
 ### Endpoint: /users
 
 Rota para criação de usuário (estudante)
@@ -177,7 +182,8 @@ Possíveis erros:
 
 ---
 
-## GET - Profile user
+## 3. **GET**
+### Profile user
 ### Endpoint: /users/profile
 
 Rota para busca do próprio perfil para proteção de rotas
@@ -212,7 +218,8 @@ Possíveis erros:
 
 ---
 
-## GET - List users
+## 4. **GET**
+### List users
 ### Endpoint: /users
 
 Rota para busca de todos os usuários
@@ -258,7 +265,8 @@ Possíveis erros:
 
 ---
 
-## GET - List users by id
+## 5. **GET**
+### List users by id
 ### Endpoint: /users/:id
 
 Rota para busca de usuário por id
@@ -294,53 +302,8 @@ Possíveis erros:
 
 ---
 
-## GET - List users
-### Endpoint: /users
-
-Rota para busca de todos os usuários
-
-Campos obrigatórios:
-- Sem body na requisição
-- Necessário token de autorização
-- Necessário ser administrador
-
-Body da resposta:
-```shell
-[
-	{
-		"id": "c6f164f0-c4cd-407f-8aba-32208c62cb75",
-		"name": "sara test",
-		"email": "sara-teste@mail.com",
-		"role": "STUDENT",
-		"createdAt": "2022-11-05T03:16:50.170Z",
-		"updatedAt": "2022-11-05T03:16:50.170Z",
-		"groupId": "5bd3b8cc-c522-406f-8218-b06fb2af4bca"
-	},
-	{
-		"id": "0e1ee1fd-28ee-4389-85b9-77967cb089ef",
-		"name": "sara adm test",
-		"email": "saraAdm-teste@mail.com",
-		"role": "ADM",
-		"createdAt": "2022-11-05T03:10:02.598Z",
-		"updatedAt": "2022-11-05T03:27:16.597Z",
-		"groupId": null
-	}
-]
-```
-| Status Code |
-|--------------|
-| 200 |
-
-Possíveis erros:
-| Error    			| Message                                   					| Status Code |
-| ------------------------------|-----------------------------------------------------------------------------	|--------------|
-| should not be able to list all users without token       			| Missing token	| 401 |
-| should not be able to list all users with invalid token 	| Invalid or expired token	| 401 |
-| should not be able to list all users without adm token 	| Access denied	| 401 |
-
----
-
-## DELETE - Delete user
+## 6. **DELETE**
+### Delete user
 ### Endpoint: /users/:id
 
 Rota para deleção de usuário por id
@@ -365,7 +328,8 @@ Possíveis erros:
 
 ---
 
-## PATCH - Update user by id
+## 7. **PATCH**
+### Update user by id
 ### Endpoint: /users/:id
 
 Rota para atualização da chave groupId de usuário (estudante)
