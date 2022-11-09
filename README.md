@@ -76,6 +76,8 @@ Possíveis erros:
 | should not be able to create a user with invalid module id  			| Module not found            | 404 |
 | should not be able to create a user with same email  				| Email is already in use     | 409 |
 
+---
+
 ## POST - Login user
 ### Endpoint: /users/login
 
