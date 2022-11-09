@@ -282,4 +282,53 @@ Possíveis erros:
 | should not be able to delete a user without adm permission 	| Access denied	| 403 |
 | should not be able to delete a user with invalid id 	| User not found	| 404 |
 
+# Rota de Users
+
+## PATCH - Update user by id
+### Endpoint: /users/:id
+
+Rota para atualização da chave groupId de usuário (estudante)
+
+Necessário token de autorização
+Necessário ser administrador
+
+Campos obrigatórios:
+| Campo      | Tipo   | Descrição                                       |
+| -----------|--------|-------------------------------------------------|
+| groupId    | string | Define o grupo do usuário                      |
+
+Body da requisição:
+```shell
+{
+	"groupId": "7e44ec8c-84e2-42d1-aefb-09531c5ba937"
+}
+```
+Body da resposta:
+```shell
+{
+	"id": "a17cb4ee-752a-489f-b56c-4d49d29ddbdc",
+	"name": "sara9",
+	"email": "sara-test@mail.com",
+	"role": "STUDENT",
+	"createdAt": "2022-11-05T00:15:25.632Z",
+	"updatedAt": "2022-11-08T21:42:55.051Z",
+	"groupId": "7e44ec8c-84e2-42d1-aefb-09531c5ba937"
+}
+```
+| Status Code |
+|--------------|
+| 200 |
+
+Possíveis erros:
+| Error    			| Message                                   					| Status Code |
+| ------------------------------|-----------------------------------------------------------------------------|---------------|
+| should not be able to update a user by id without token       			| Missing token	| 401 |
+| should not be able to update a user by id with the current groupId      		| Provide a different groupId than the current one  | 404 |
+| should not be able to update a user by id with invalid groupId  			| Group not exists    | 404 |
+| should not be able to update a user by id with invalid id    			| User not exists | 404 |
+| should not be able to update a user by id without data in the request body	| Need to provide the data in the request | 400 |
+| should not be able to update a user by id without providing the correct key(groupId) in the request	| It is only possible to update the groupId | 400 |
+| should not be able to update user by id with invalid token  			| Invalid or expired token | 401 |
+| should not be able to update user by id without adm permission		| Email is already in use  | 403 |
+
 ### All rights reserved.
