@@ -51,6 +51,9 @@ Body da resposta:
 	]
 }
 ```
+| Status Code |
+|--------------|
+| 201 |
 
 Possíveis erros:
 | Error    			| Message                                   					| Status Code |
@@ -90,6 +93,9 @@ Body da resposta:
 }
 }
 ```
+| Status Code |
+|--------------|
+| 200 |
 
 Possíveis erros:
 | Error    			| Message                                   					| Status Code |
@@ -97,6 +103,183 @@ Possíveis erros:
 | should not be able to login with wrong password       			| Wrong email or password	| 403 |
 | should be able to return error when logging in without email and password 	| Wrong email or password 	| 403 |
 
+## GET - Profile user
+### Endpoint: /users/profile
 
+Rota para busca do próprio perfil para proteção de rotas
+
+Campos obrigatórios:
+Sem body na requisição
+Necessário token de autorização
+
+Body da resposta:
+```shell
+{
+	"id": "0e1ee1fd-28ee-4389-85b9-77967cb089ef",
+	"name": "sara adm test",
+	"email": "saraAdm-teste@mail.com",
+	"role": "ADM",
+	"createdAt": "2022-11-05T03:10:02.598Z",
+	"updatedAt": "2022-11-05T03:27:16.597Z",
+	"groupId": null,
+	"modules": [],
+	"group": null
+}
+```
+| Status Code |
+|--------------|
+| 200 |
+
+Possíveis erros:
+| Error    			| Message                                   					| Status Code |
+| ------------------------------|-----------------------------------------------------------------------------	|--------------|
+| should not be able to return all user data without token       			| Missing token	| 401 |
+| should not be able to return all user data with invalid token 	| Invalid or expired token	| 401 |
+
+## GET - List users
+### Endpoint: /users
+
+Rota para busca de todos os usuários
+
+Campos obrigatórios:
+Sem body na requisição
+Necessário token de autorização
+Necessário ser administrador
+
+Body da resposta:
+```shell
+[
+	{
+		"id": "c6f164f0-c4cd-407f-8aba-32208c62cb75",
+		"name": "sara test",
+		"email": "sara-teste@mail.com",
+		"role": "STUDENT",
+		"createdAt": "2022-11-05T03:16:50.170Z",
+		"updatedAt": "2022-11-05T03:16:50.170Z",
+		"groupId": "5bd3b8cc-c522-406f-8218-b06fb2af4bca"
+	},
+	{
+		"id": "0e1ee1fd-28ee-4389-85b9-77967cb089ef",
+		"name": "sara adm test",
+		"email": "saraAdm-teste@mail.com",
+		"role": "ADM",
+		"createdAt": "2022-11-05T03:10:02.598Z",
+		"updatedAt": "2022-11-05T03:27:16.597Z",
+		"groupId": null
+	}
+]
+```
+| Status Code |
+|--------------|
+| 200 |
+
+Possíveis erros:
+| Error    			| Message                                   					| Status Code |
+| ------------------------------|-----------------------------------------------------------------------------	|--------------|
+| should not be able to list all users without token       			| Missing token	| 401 |
+| should not be able to list all users with invalid token 	| Invalid or expired token	| 401 |
+| should not be able to list all users without adm token 	| Access denied	| 401 |
+
+## GET - List users by id
+### Endpoint: /users/:id
+
+Rota para busca de usuário por id
+
+Campos obrigatórios:
+Sem body na requisição
+Necessário token de autorização
+Necessário ser administrador
+
+Body da resposta:
+```shell
+{
+	"id": "e7e415ae-ff5d-4c2c-9cb2-7e19a8eb0f9a",
+	"name": "sara test",
+	"email": "sara-teste3@mail.com",
+	"role": "STUDENT",
+	"createdAt": "2022-11-08T21:36:35.265Z",
+	"updatedAt": "2022-11-08T21:36:35.265Z",
+	"groupId": "5bd3b8cc-c522-406f-8218-b06fb2af4bca"
+}
+```
+| Status Code |
+|--------------|
+| 200 |
+
+Possíveis erros:
+| Error    			| Message                                   					| Status Code |
+| ------------------------------|-----------------------------------------------------------------------------	|--------------|
+| should not be able to find a user without token       			| Missing token	| 401 |
+| should not be able to find a user with invalid token 	| Invalid or expired token	| 401 |
+| should not be able to find a user without adm permission 	| Access denied	| 403 |
+| should not be able to find a user with invalid id 	| User not found	| 404 |
+
+
+## GET - List users
+### Endpoint: /users
+
+Rota para busca de todos os usuários
+
+Campos obrigatórios:
+Sem body na requisição
+Necessário token de autorização
+Necessário ser administrador
+
+Body da resposta:
+```shell
+[
+	{
+		"id": "c6f164f0-c4cd-407f-8aba-32208c62cb75",
+		"name": "sara test",
+		"email": "sara-teste@mail.com",
+		"role": "STUDENT",
+		"createdAt": "2022-11-05T03:16:50.170Z",
+		"updatedAt": "2022-11-05T03:16:50.170Z",
+		"groupId": "5bd3b8cc-c522-406f-8218-b06fb2af4bca"
+	},
+	{
+		"id": "0e1ee1fd-28ee-4389-85b9-77967cb089ef",
+		"name": "sara adm test",
+		"email": "saraAdm-teste@mail.com",
+		"role": "ADM",
+		"createdAt": "2022-11-05T03:10:02.598Z",
+		"updatedAt": "2022-11-05T03:27:16.597Z",
+		"groupId": null
+	}
+]
+```
+| Status Code |
+|--------------|
+| 200 |
+
+Possíveis erros:
+| Error    			| Message                                   					| Status Code |
+| ------------------------------|-----------------------------------------------------------------------------	|--------------|
+| should not be able to list all users without token       			| Missing token	| 401 |
+| should not be able to list all users with invalid token 	| Invalid or expired token	| 401 |
+| should not be able to list all users without adm token 	| Access denied	| 401 |
+
+## DELETE - Delete user
+### Endpoint: /users/:id
+
+Rota para deleção de usuário por id
+
+Campos obrigatórios:
+Sem body na requisição
+Necessário token de autorização
+Necessário ser administrador
+Sem body na resposta
+
+| Status Code |
+|--------------|
+| 204 |
+
+Possíveis erros:
+| Error    			| Message                                   					| Status Code |
+| ------------------------------|-----------------------------------------------------------------------------	|--------------|
+| should not be able to delete a user without token       			| Missing token	| 401 |
+| should not be able to delete a user with invalid token 	| Invalid or expired token	| 401 |
+| should not be able to delete a user without adm permission 	| Access denied	| 403 |
+| should not be able to delete a user with invalid id 	| User not found	| 404 |
 
 ### All rights reserved.
