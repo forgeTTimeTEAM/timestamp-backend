@@ -69,11 +69,12 @@ yarn prisma migrate dev --name init
 
 ## 1. **Rota de Users**
 
-- [POST](#1-POST)
+- [POST](#1-POST Create user)
+- []()
 
 ---
 
-## 1. **POST**
+## 1. **POST Create user**
 ### Create user
 ### Endpoint: /users
 
