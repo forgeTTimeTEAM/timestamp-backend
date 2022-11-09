@@ -62,24 +62,28 @@ yarn prisma migrate dev --name init
 
 
 ## Indice de Rotas
-- [Rota de User](#1)
+- [Rota de Users](#1-rota-de-users)
+- [Rota de Groups](#2-rota-de-groups)
+- [Rota de Modules](#3-rota-de-modules)
+- [Rota de Markers](#4-rota-de-markers)
+- [Rota de Videos](#5-rota-de-videos)
 
 
 ---
 
 ## 1. **Rota de Users**
 
-- [POST - create user](#1-POST)
-- [POST - Login user](#2-POST)
-- [GET - Profile user](#3-GET)
-- [GET - List users](#4-GET)
-- [GET - List users by id](#5-GET)
-- [DELETE - Login user](#6-DELETE)
-- [PATCH - Login user](#7-PATCH)
+- [POST - create user](#11-POST)
+- [POST - Login user](#12-POST)
+- [GET - Profile user](#13-GET)
+- [GET - List users](#14-GET)
+- [GET - List users by id](#15-GET)
+- [DELETE - Login user](#16-DELETE)
+- [PATCH - Login user](#17-PATCH)
 
 ---
 
-## 1. **POST**
+## 1.1 **POST**
 ### Create user
 ### Endpoint: /users
 
@@ -143,7 +147,7 @@ Possíveis erros:
 
 ---
 
-## 2. **POST**
+## 1.2 **POST**
 ### Login user
 ### Endpoint: /users/login
 
@@ -182,7 +186,7 @@ Possíveis erros:
 
 ---
 
-## 3. **GET**
+## 1.3 **GET**
 ### Profile user
 ### Endpoint: /users/profile
 
@@ -218,7 +222,7 @@ Possíveis erros:
 
 ---
 
-## 4. **GET**
+## 1.4 **GET**
 ### List users
 ### Endpoint: /users
 
@@ -265,7 +269,7 @@ Possíveis erros:
 
 ---
 
-## 5. **GET**
+## 1.5 **GET**
 ### List users by id
 ### Endpoint: /users/:id
 
@@ -302,7 +306,7 @@ Possíveis erros:
 
 ---
 
-## 6. **DELETE**
+## 1.6 **DELETE**
 ### Delete user
 ### Endpoint: /users/:id
 
@@ -328,7 +332,7 @@ Possíveis erros:
 
 ---
 
-## 7. **PATCH**
+## 1.7 **PATCH**
 ### Update user by id
 ### Endpoint: /users/:id
 
@@ -340,7 +344,7 @@ Rota para atualização da chave groupId de usuário (estudante)
 Campos obrigatórios:
 | Campo      | Tipo   | Descrição                                       |
 | -----------|--------|-------------------------------------------------|
-| groupId    | string | Define o grupo do usuário                      |
+| groupId    | string | Define o grupo do usuário                       |
 
 Body da requisição:
 ```shell
@@ -365,8 +369,8 @@ Body da resposta:
 | 200 |
 
 Possíveis erros:
-| Error    			| Message                                   					| Status Code |
-| ------------------------------|-----------------------------------------------------------------------------|---------------|
+| Error    						  | Message                 		| Status Code |
+| --------------------------------------------------------|---------------------------------------------------|---------------|
 | should not be able to update a user by id without token       			| Missing token	| 401 |
 | should not be able to update a user by id with the current groupId      		| Provide a different groupId than the current one  | 404 |
 | should not be able to update a user by id with invalid groupId  			| Group not exists    | 404 |
@@ -374,6 +378,97 @@ Possíveis erros:
 | should not be able to update a user by id without data in the request body	| Need to provide the data in the request | 400 |
 | should not be able to update a user by id without providing the correct key(groupId) in the request	| It is only possible to update the groupId | 400 |
 | should not be able to update user by id with invalid token  			| Invalid or expired token | 401 |
-| should not be able to update user by id without adm permission		| Email is already in use  | 403 |
+| should not be able to update user by id without adm permission		| Access denied | 403 |
+
+---
+
+## 5. **Rota de Videos**
+[ Voltar para o topo ](#indice-de-rotas)
+
+- [POST - create video](#51-POST)
+- [PATCH - delete video url](#52-PATCH)
+
+---
+
+## 5.1 **POST**
+### Create video
+### Endpoint: /videos
+
+Rota para criação de video
+
+- Necessário token de autorização
+- Necessário ser administrador ou ser instrutor do módulo
+
+Campos obrigatórios:
+| Campo       | Tipo   | Descrição                                       |
+| ------------|--------|-------------------------------------------------|
+| title       | string | Define o título do vídeo                        |
+| url         | string | Define o link do vídeo  (opcional)              |
+| releaseDate |  date  | Define o dia em que o vídeo foi transmitido     |
+| sprintId    | string | Define a sprint do vídeo                        |
+
+Body da requisição:
+```shell
+{
+	"title": "video teste",
+	"url": "urldovideo.com",
+	"releaseDate": "11/04/2022",
+	"sprintId": "38e0f242-4b31-4366-abc8-71004132c8f4"
+}
+```
+Body da resposta:
+```shell
+{
+	"id": "56f9ed40-35c3-4311-92cd-84967fc8679f",
+	"title": "video teste",
+	"url": "urldovideo.com",
+	"releaseDate": "2022-11-04T04:00:00.000Z",
+	"createdAt": "2022-11-07T23:07:51.097Z",
+	"updatedAt": "2022-11-07T23:07:51.097Z",
+	"sprintId": "38e0f242-4b31-4366-abc8-71004132c8f4"
+}
+```
+| Status Code |
+|-------------|
+| 201 |
+
+Possíveis erros:
+| Error    									| Message                       | Status Code |
+| ------------------------------------------------------------------------------|-------------------------------|-------------|
+| should not be able to create a video without token      			| Missing token		     	| 401 |
+| should no be able to create a video with invalid/expired token  		| Invalid or expired token   	| 401 |
+| should not be able to create a video without adm/instructor permission    	| Access denied		     	| 403 |
+| should not be able to create a video when instructor don't have this module	| Instructor not allowed     	| 401 |
+| should not be able to create a video without title				| Title is required		| 400 |
+| should not be able to create a video without release date  			| Release date is required 	| 400 |
+| should not be able to create a video without sprintId				| Sprint id is required  	| 400 |
+| should not be able to create a video with an invalid sprintId			| Sprint not found  		| 404 |
+
+---
+
+## 5.2 **PATCH**
+### Delete video url
+### Endpoint: /videos/:id
+
+Rota para deleção de url de video
+
+- Sem body na requisição
+- Sem body na resposta
+- Necessário token de autorização
+- Necessário ser administrador ou ser instrutor do módulo
+
+| Status Code |
+|-------------|
+| 204 |
+
+Possíveis erros:
+| Error    									| Message                       | Status Code |
+| ------------------------------------------------------------------------------|-------------------------------|-------------|
+| should not be able to delete a video url without token      			| Missing token		     	| 401 |
+| should no be able to delete a video url with invalid/expired token  		| Invalid or expired token   	| 401 |
+| should not be able to delete a video url without adm/instructor permission    | Access denied		     	| 403 |
+| should not be able to delete a video with an invalid video id                 | Access denied		     	| 404 |
+
+---
 
 ### All rights reserved.
