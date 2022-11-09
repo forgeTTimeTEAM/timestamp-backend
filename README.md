@@ -69,17 +69,17 @@ yarn prisma migrate dev --name init
 
 ## 1. **Rota de Users**
 
-- [POST - create user](#1-POST)
-- [POST - Login user](#2-POST)
-- [GET - Profile user](#3-GET)
-- [GET - List users](#4-GET)
-- [GET - List users by id](#5-GET)
-- [DELETE - Login user](#6-DELETE)
-- [PATCH - Login user](#7-PATCH)
+- [POST - create user](#1.1-POST)
+- [POST - Login user](#1.2-POST)
+- [GET - Profile user](#1.3-GET)
+- [GET - List users](#1.4-GET)
+- [GET - List users by id](#1.5-GET)
+- [DELETE - Login user](#1.6-DELETE)
+- [PATCH - Login user](#1.7-PATCH)
 
 ---
 
-## 1. **POST**
+## 1.1 **POST**
 ### Create user
 ### Endpoint: /users
 
@@ -143,7 +143,7 @@ Possíveis erros:
 
 ---
 
-## 2. **POST**
+## 1.2 **POST**
 ### Login user
 ### Endpoint: /users/login
 
@@ -182,7 +182,7 @@ Possíveis erros:
 
 ---
 
-## 3. **GET**
+## 1.3 **GET**
 ### Profile user
 ### Endpoint: /users/profile
 
@@ -218,7 +218,7 @@ Possíveis erros:
 
 ---
 
-## 4. **GET**
+## 1.4 **GET**
 ### List users
 ### Endpoint: /users
 
@@ -265,7 +265,7 @@ Possíveis erros:
 
 ---
 
-## 5. **GET**
+## 1.5 **GET**
 ### List users by id
 ### Endpoint: /users/:id
 
@@ -302,7 +302,7 @@ Possíveis erros:
 
 ---
 
-## 6. **DELETE**
+## 1.6 **DELETE**
 ### Delete user
 ### Endpoint: /users/:id
 
@@ -328,7 +328,7 @@ Possíveis erros:
 
 ---
 
-## 7. **PATCH**
+## 1.7 **PATCH**
 ### Update user by id
 ### Endpoint: /users/:id
 
