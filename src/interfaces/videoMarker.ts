@@ -17,3 +17,9 @@ export interface IVideoMarkerUpdade {
     title?: string
   }
 }
+
+export interface IUserService {
+  id: string;
+  role: "STUDENT" | "ADM" | "INSTRUCTOR";
+  groupId?: string;
+}

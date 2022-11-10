@@ -2,20 +2,31 @@ import { AppError } from "../../errors/AppError";
 import { IVideoUpdateParams } from "../../interfaces/videos";
 import { prisma } from "../../prisma";
 
-const deleteVideoService = async ({
+const updateVideoService = async ({
     groupId,
     userRole,
     video,
     videoId,
 }: IVideoUpdateParams) => {
-    const videoExists = await prisma.videos.findFirst({
+    const { title, sprintId, url } = video;
+    const videoExists = await prisma.videos.findUnique({
         where: {
             id: videoId,
         },
     });
 
-    if (!videoExists) {
-        throw new AppError("Video not found", 404);
+    if (!sprintId) {
+        throw new AppError("Sprint id is required");
+    }
+
+    const sprintExists = await prisma.sprints.findUnique({
+        where: {
+            id: sprintId,
+        },
+    });
+
+    if (!sprintExists) {
+        throw new AppError("Sprint not found", 404);
     }
 
     if (userRole === "INSTRUCTOR" && !groupId) {
@@ -32,7 +43,7 @@ const deleteVideoService = async ({
                     include: {
                         sprints: {
                             where: {
-                                id: video.sprintId,
+                                id: sprintId,
                             },
                         },
                     },
@@ -45,14 +56,20 @@ const deleteVideoService = async ({
         }
     }
 
-    await prisma.videos.update({
+    if (!videoExists) {
+        throw new AppError("Video not found", 404);
+    }
+
+    const updatedUser = await prisma.videos.update({
         where: {
             id: videoId,
         },
         data: {
-            url: null,
+            title: title || videoExists.title,
+            url: url || videoExists.url,
         },
     });
+    return updatedUser
 };
 
-export { deleteVideoService };
+export { updateVideoService };

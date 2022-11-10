@@ -1,4 +1,4 @@
-<h1> Timestamp API </h1>
+<h1 id="tabela-de-conteúdos"> Timestamp API </h1>
 
 <h2>Olá! Seja bem vindo(a) a documentação da <i>API</i>, esta que tem como objetivo o gerenciamento de uma plataforma em que serão hospedados <b>vídeos</b> e seus respectivos <b>marcadores</b>, a aplicação também conta com sistema de <b>usuários</b>, <b>turmas</b>, <b>módulos</b> e <b>sprints</b>, permissão de <b>aluno</b>, <b>instrutor</b>, e <b>administrador</b>.</h2>
 
@@ -50,23 +50,23 @@ yarn prisma migrate dev
 
 ## **Índice com todas as rotas do projeto**
 
-- [/users](#1-rota-de-users)
-- [/groups](#2-rota-de-groups)
-- [/modules](#3-rota-de-modules)
-- [/videos](#4-rota-de-videos)
-- [/markers](#5-rota-de-markers)
+-   [/users](#1---users)
+-   [/groups](#2---groups)
+-   [/modules](#3---modules)
+-   [/videos](#4---videos)
+-   [/markers](#5---markers)
 
 ---
 
 ## **1 - _Users_**
 
-- [POST - Criar usuário](#11-POST)
-- [POST - Fazer login](#12-POST)
-- [GET - Mostrar todos os dados do usuário](#13-GET)
-- [GET - Listar todos os usuários](#14-GET)
-- [GET - Mostrar um usuário a partir do id](#15-GET)
-- [DELETE - Deletar usuário](#16-DELETE)
-- [PATCH - Atualizar usuário](#17-PATCH)
+-   [POST - Criar usuário](#11-POST)
+-   [POST - Fazer login](#12-POST)
+-   [GET - Mostrar todos os dados do usuário](#13-GET)
+-   [GET - Listar todos os usuários](#14-GET)
+-   [GET - Mostrar um usuário a partir do id](#15-GET)
+-   [DELETE - Deletar usuário](#16-DELETE)
+-   [PATCH - Atualizar usuário](#17-PATCH)
 
 ---
 
@@ -158,7 +158,7 @@ _Rota responsável por criar um usuário, por padrão, o usuário criado será u
 
 ## **1.2 - _POST_**
 
-</br>
+[ Voltar para o topo ](#indice-de-rotas)
 
 ### **Login do usuário**
 
@@ -217,6 +217,8 @@ _Rota responsável pelo login do usuário, seja ele estudante, instrutor ou admi
 
 ## **1.3 - _GET_**
 
+[ Voltar para o topo ](#indice-de-rotas)
+
 </br>
 
 ### **Obter todos os dados do usuário**
@@ -235,7 +237,7 @@ _Rota responsável por retornar todos os dados do usuário a partir do token_
 
 </br>
 
-- Token de autorização do tipo _`Bearer token`_
+-   Token de autorização do tipo _`Bearer token`_
 
 </br>
 
@@ -308,7 +310,7 @@ _Rota responsável por retornar todos os dados do usuário a partir do token_
 
 ## **1.4 - _GET_**
 
-</br>
+[ Voltar para o topo ](#indice-de-rotas)
 
 ### **Listar todos os usuários**
 
@@ -326,7 +328,7 @@ _Rota responsável por retornar alguns dados de todos os usuários_
 
 </br>
 
-- Token de autorização do tipo _`Bearer Token`_ com permissão de **administrador**
+-   Token de autorização do tipo _`Bearer Token`_ com permissão de **administrador**
 
 </br>
 
@@ -374,7 +376,7 @@ _Rota responsável por retornar alguns dados de todos os usuários_
 
 ## **1.5 - _GET_**
 
-</br>
+[ Voltar para o topo ](#indice-de-rotas)
 
 ### **Retorna um usuário a partir do id**
 
@@ -392,7 +394,7 @@ _Rota responsável por retornar alguns dados de apenas um usuário a partir do i
 
 </br>
 
-- Token de autorização do tipo _`Bearer Token`_ com permissão de **administrador**
+-   Token de autorização do tipo _`Bearer Token`_ com permissão de **administrador**
 
 </br>
 
@@ -438,7 +440,7 @@ _Rota responsável por retornar alguns dados de apenas um usuário a partir do i
 
 ## **1.6 - _DELETE_**
 
-</br>
+[ Voltar para o topo ](#indice-de-rotas)
 
 ### **Deleção de usuário**
 
@@ -456,7 +458,7 @@ _Rota responsável pela deleção de um usuário a partir do id_
 
 </br>
 
-- Token de autorização do tipo _`Bearer token`_ com permissão de **administrador**
+-   Token de autorização do tipo _`Bearer token`_ com permissão de **administrador**
 
 </br>
 
@@ -488,6 +490,8 @@ _Rota responsável pela deleção de um usuário a partir do id_
 
 ## **1.7 - _PATCH_**
 
+[ Voltar para o topo ](#indice-de-rotas)
+
 </br>
 
 ### **Atualização de usuário**
@@ -506,7 +510,7 @@ _Rota responsável pela atualização do usuário, apenas a turma(groupId) poder
 
 </br>
 
-- Token de autorização do tipo _`Bearer Token`_ com permissão de **administrador**
+-   Token de autorização do tipo _`Bearer Token`_ com permissão de **administrador**
 
 **Campos obrigatórios:**
 
@@ -566,16 +570,45 @@ Provide a different groupId than the current one
 
 ---
 
-## 5. **Rota de Videos**
+## **2 - _Groups_**
 
-[ Voltar para o topo ](#indice-de-rotas)
+[ Voltar para o topo ](#tabela-de-conteúdos)
 
-- [POST - create video](#51-POST)
-- [PATCH - delete video url](#52-PATCH)
+-   [POST - create group](#21-POST)
+-   [GET - get groups](#22-GET)
+-   [GET - update group by id](#23-GET)
 
 ---
 
-## 5.1 **POST**
+## 2.1 **POST**
+
+### Create group
+
+### Endpoint: /groups
+
+Rota para criação
+
+---
+
+## **3 - _Modules_**
+
+[ Voltar para o topo ](#tabela-de-conteúdos)
+
+-   [POST - create video](#51-POST)
+-   [DELETE - delete video url](#52-PATCH)
+
+---
+
+## **4 - _Videos_**
+
+[ Voltar para o topo ](#tabela-de-conteúdos)
+
+-   [POST - create video](#51-POST)
+-   [PATCH - delete video url](#52-PATCH)
+
+---
+
+## 4.1 **POST**
 
 ### Create video
 
@@ -583,10 +616,10 @@ Provide a different groupId than the current one
 
 Rota para criação de video
 
-- Necessário token de autorização
-- Necessário ser administrador ou ser instrutor do módulo
+-   Necessário token de autorização
+-   Necessário ser administrador ou ser instrutor do módulo
 
-Campos obrigatórios:
+Campos:
 | Campo | Tipo | Descrição |
 | ------------|--------|-------------------------------------------------|
 | title | string | Define o título do vídeo |
@@ -637,7 +670,9 @@ Possíveis erros:
 
 ---
 
-## 5.2 **PATCH**
+## 4.2 **PATCH**
+
+[ Voltar para o topo ](#indice-de-rotas)
 
 ### Delete video url
 
@@ -645,10 +680,10 @@ Possíveis erros:
 
 Rota para deleção de url de video
 
-- Sem body na requisição
-- Sem body na resposta
-- Necessário token de autorização
-- Necessário ser administrador ou ser instrutor do módulo
+-   Sem body na requisição
+-   Sem body na resposta
+-   Necessário token de autorização
+-   Necessário ser administrador ou ser instrutor do módulo
 
 | Status Code |
 | ----------- |
@@ -661,6 +696,164 @@ Possíveis erros:
 | should no be able to delete a video url with invalid/expired token | Invalid or expired token | 401 |
 | should not be able to delete a video url without adm/instructor permission | Access denied | 403 |
 | should not be able to delete a video with an invalid video id | Access denied | 404 |
+
+---
+
+## 5. **Rota de Marcadores de Video**
+
+[ Voltar para o topo ](#indice-de-rotas)
+
+-   [POST - create marker](#61-POST)
+-   [PATCH - update marker](#62-PATCH)
+-   [DELETE - delete marker](#63-DELETE)
+
+---
+
+## 5.1 **POST**
+
+### Create Marker
+
+### Endpoint: /markers
+
+Rota para criação de marcador
+
+-   Necessário token de autorização
+-   Necessário ser administrador ou ser instrutor do módulo
+
+| Campo   | Tipo    | Descrição                           |
+| ------- | ------- | ----------------------------------- |
+| marks   | marks[] | Define os marcadores de vídeo       |
+| videoId | string  | Define o id do vídeo                |
+| groupId | string  | Define o grupo de alunos (opcional) |
+
+Body da requisição:
+
+```shell
+{
+	"marks": "[
+		{
+			title: 'git hub',
+			time: '00:20:50',
+			videoId: video?.id,
+		},
+		{
+			title: 'user controller',
+			time: '00:25:50',
+			videoId: video?.id,
+		},
+		{
+			title: 'typeorm',
+			time: '19:20:50',
+			videoId: video?.id,
+		},
+	]",
+	"videoId": "video?.id",
+	"groupId": "group.id"
+}
+```
+
+Body da resposta:
+
+```shell
+{
+	count: 3
+}
+```
+
+| Status Code |
+| ----------- |
+| 201         |
+
+Possíveis erros:
+| Error | Message | Status Code |
+| ------------------------------------------------------------------------------|-------------------------------|-------------|
+| should not be able create a marker with h:m:s invalid | time not validate | 400 |
+| should no be able to create a video with invalid/expired token | Invalid or expired token | 401 |
+| should not be able create a marker with h:m:s equals | this video needed to equal marks video | 400 |
+| should not be able create a marker without adm access | Instructor not allowed | 403 |
+| should not be able create a marker with invalid ID video | video not found | 400 |
+
+---
+
+## 5.2 **PATCH**
+
+### Update Marker
+
+### Endpoint: /markers/:id
+
+Rota para atualização de marcador
+
+-   Necessário token de autorização
+-   Necessário ser administrador ou ser instrutor do módulo
+
+| Campo | Tipo   | Descrição                 |
+| ----- | ------ | ------------------------- |
+| time  | string | tempo do vídeo (opcional) |
+| title | string | titulo do vído (opcional) |
+
+Body da requisição:
+
+```shell
+{
+	"title": 'git hub',
+	"time": '00:20:50'
+}
+```
+
+Body da resposta:
+
+```shell
+{
+	"id": '634a0edc-7cde-4b5f-9469-d601759e2fba',
+	"time": '02:04:49',
+	"title": 'Titulo alterado',
+	"createdAt": "2022-11-09T22:03:13.009Z",
+	"updatedAt": "2022-11-09T22:03:13.199Z",
+	"videoId": 'c0fcb84d-1f76-4f92-b690-a6d1f8e51e19'
+}
+```
+
+| Status Code |
+| ----------- |
+| 200         |
+
+Possíveis erros:
+| Error | Message | Status Code |
+| ------------------------------------------------------------------------------|-------------------------------|-------------|
+| should be able possible to update a marked | (not) | 200 |
+| should be able is not ADM or INSTRUCTOR | Unauthorized | 403 |
+| should not be possible to update one marked with invalid id | Marker not found | 404 |
+| should not be possible to create a marker with time that already exists | Time already exists | 403 |
+
+---
+
+## 6.3 **DELETE**
+
+### Delete Marker
+
+### Endpoint: /markers/:id
+
+Rota para deletar marcador
+
+-   Necessário token de autorização
+-   Necessário ser administrador ou ser instrutor do módulo
+
+| Campo | Tipo   | Descrição                  |
+| ----- | ------ | -------------------------- |
+| time  | string | tempo do vídeo (opcional)  |
+| title | string | titulo do vídeo (opcional) |
+
+| Status Code |
+| ----------- |
+| 204         |
+
+Possíveis erros:
+| Error | Message | Status Code |
+| ------------------------------------------------------------------------------|-------------------------------|-------------|
+| should be possible to delete a marker | (not) | 204 |
+| should be able is not ADM or INSTRUCTOR | Unauthorized | 403 |
+| should not be possible to delete a marker with invalid id | Marker not found | 404 |
+| should not be possible to delete a marker with a different instructor | Instructor does not own this mark | 401 |
 
 ---
 
