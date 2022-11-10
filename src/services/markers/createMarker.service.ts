@@ -9,8 +9,6 @@ const createMarkerServices = async ({
   groupId,
   videoId,
 }: IVideoMarkerRequest) => {
-
-  console.log(marks)
   
   if (!marks[0].videoId) {
     throw new AppError("video should be send");
