@@ -559,11 +559,10 @@ _Rota responsável pela atualização do usuário, apenas a turma(groupId) poder
 | Tentativa sem envio de token | Missing token | 401 |
 | Tentativa com envio de token inválido | Invalid or expired token | 401 |
 | Tentativa com envio de token de estudante ou instrutor | Access denied | 403 |
-| should not be able to update a user by id with invalid id | User not exists | 404 |
-| should not be able to update a user by id without data in the request body | Need to provide the data in the request | 400 |
-| should not be able to update a user by id without providing the correct key(groupId) in the request | It is only possible to update the groupId | 400 |
-| should not be able to update user by id with invalid token | Invalid or expired token | 401 |
-| should not be able to update user by id without adm permission | Access denied | 403 |
+| Tentativa com envio de id do usuário inválido | User not found | 404 |
+| Tentativa sem enviar o campo groupId | Need to provide the data in the request | 400 |
+| Tentativa com envios de campos além do groupId | It is only possible to update the groupId | 400 |
+| Tentativa com envios de group id igual | Provide a different groupId than the current one | 404 |
 
 ---
 
@@ -767,7 +766,7 @@ _Rota responsável por criar um módulo, por padrão, o módulo será criado com
 ```shell
 	/modules, {
       headers: {
-        Authorization: "Bearer 	 eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiU1RVREVOVCIsImdyb3VwSWQiOiI3ZTQ0ZWM4..."
+        Authorization: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiU1RVREVOVCIsImdyb3VwSWQiOiI3ZTQ0ZWM4..."
         },
 	  body: {
   			  groupId: "5bd3b8cc-c522-406f-8218-b06fb2af4bca",
@@ -811,6 +810,156 @@ _Rota responsável por criar um módulo, por padrão, o módulo será criado com
 | Tentativa com envio de token inválido | Invalid or expired token | 401 |
 | Tentativa com envio de token de estudante ou instrutor | Access denied | 403 |
 | Tentativa com envio de groupId inválido | Group not found | 404 |
+
+---
+
+## **3.2 - _GET_**
+
+[ Voltar para o topo ](#índice-com-todas-as-rotas-do-projeto)
+
+### **Listar todos os módulos**
+
+</br>
+
+### **Endpoint: _/modules_**
+
+</br>
+
+_Rota responsável por listar todos os módulos_
+
+</br>
+
+**Deve ser enviado:**
+
+</br>
+
+- Token de autorização do tipo _`Bearer Token`_ com permissão de **administrador**
+
+</br>
+
+**Exemplo de requisição válida:**
+
+```shell
+	/modules, {
+      headers: {
+        Authorization: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiU1RVREVOVCIsImdyb3VwSWQiOiI3ZTQ0ZWM4..."
+        }
+}
+```
+
+</br>
+
+**Retorno da requisição:**
+
+```shell
+{
+
+	[
+      {
+        id: '368007a8-84ee-4263-807b-5c8ae2a82d05',
+        name: 'M4',
+        createdAt: '2022-11-10T03:31:22.201Z',
+        groupId: '5bd3b8cc-c522-406f-8218-b06fb2af4bca'
+      },
+	  ...
+	]
+
+}
+```
+
+| **Status Code** |
+| --------------- |
+| _200_           |
+
+**Possíveis erros:**
+| _Erro_ | _Mensagem_ | _Status Code_ |
+| ------------------------------|----------------------------------------------------------------------------- |--------------|
+| Tentativa sem envio do token | Missing token | 401 |
+| Tentativa com envio de token inválido | Invalid or expired token | 401 |
+| Tentativa com envio de token de estudante ou instrutor | Access denied | 403 |
+
+---
+
+## **3.3 - _GET_**
+
+[ Voltar para o topo ](#índice-com-todas-as-rotas-do-projeto)
+
+### **Listar todos os usuários de um módulo**
+
+</br>
+
+### **Endpoint: _/modules/:id_**
+
+</br>
+
+_Rota responsável por listar todos os usuário de um módulo a partir do id_
+
+</br>
+
+**Deve ser enviado:**
+
+</br>
+
+- Token de autorização do tipo _`Bearer Token`_ com permissão de **administrador**
+
+</br>
+
+**Exemplo de requisição válida:**
+
+```shell
+	/modules/368007a8-84ee-4263-807b-5c8ae2a82d05, {
+      headers: {
+        Authorization: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiU1RVREVOVCIsImdyb3VwSWQiOiI3ZTQ0ZWM4..."
+        }
+}
+```
+
+</br>
+
+**Retorno da requisição:**
+
+```shell
+      {
+        id: '368007a8-84ee-4263-807b-5c8ae2a82d05',
+        name: 'M1',
+        createdAt: '2022-11-10T03:53:25.712Z',
+        groupId: '5bd3b8cc-c522-406f-8218-b06fb2af4bca',
+        users: [
+      	{
+          id: '752df371-47e8-4c62-bc8c-ea72ac78f111',
+          createdAt: '2022-11-08T15:23:59.091Z',
+          updatedAt: '2022-11-08T15:23:59.091Z',
+		  userId: '22322984-3ebc-460d-8321-4ded36eeafa6',
+		  moduleId: '368007a8-84ee-4263-807b-5c8ae2a82d05',
+			user: {
+			  id: '22322984-3ebc-460d-8321-4ded36eeafa6',
+			  name: 'Sara Lins',
+			  email: 'saralins@email.com',
+			  role: 'STUDENT',
+			  createdAt: '2022-11-08T15:23:59.091Z',
+			  updatedAt: '2022-11-08T15:23:59.091Z',
+			  groupId: '5bd3b8cc-c522-406f-8218-b06fb2af4bca'
+			}
+      },
+	  ...
+    ]
+}
+
+
+```
+
+| **Status Code** |
+| --------------- |
+| _200_           |
+
+**Possíveis erros:**
+| _Erro_ | _Mensagem_ | _Status Code_ |
+| ------------------------------|----------------------------------------------------------------------------- |--------------|
+| Tentativa sem envio do token | Missing token | 401 |
+| Tentativa com envio de token inválido | Invalid or expired token | 401 |
+| Tentativa com envio de token de estudante | Access denied | 403 |
+| Tentativa com envio de id do módulo inválido | Module not found | 403 |
+| Tentativa com envio de token de instrutor e id do módulo que não possui acesso | Access denied | 403 |
 
 ---
 
