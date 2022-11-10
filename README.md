@@ -575,8 +575,8 @@ Provide a different groupId than the current one
 [ Voltar para o topo ](#tabela-de-conteúdos)
 
 -   [POST - create group](#21-POST)
--   [GET - get groups](#22-GET)
--   [GET - update group by id](#23-GET)
+-   [GET - list groups](#22-GET)
+-   [GET - find group](#23-GET)
 
 ---
 
@@ -586,7 +586,138 @@ Provide a different groupId than the current one
 
 ### Endpoint: /groups
 
-Rota para criação
+Rota para criação de turmas
+
+-   Necessário token de autorização
+-   Necessário ser administrador
+-   Não possui body na requisição
+
+Body da resposta:
+
+```shell
+{
+      id: 'e7cdc0d9-d9ab-4fb3-b997-7e12954f83af',
+      number: 1,
+      modules: [
+        {
+          id: '68d0c629-448d-4a02-b28f-75b45a703bf9',
+          name: 'M1',
+          createdAt: '2022-11-10T02:30:26.065Z',
+          groupId: 'e7cdc0d9-d9ab-4fb3-b997-7e12954f83af',
+          sprints: [
+            ...
+          ]
+        }
+      ]
+    }
+```
+
+| Status Code |
+| ----------- |
+| 201         |
+
+Possíveis erros:
+| Error | Message | Status Code |
+| ------------------------------------------------------------------------------|-------------------------------|-------------|
+| should not be able to create a group without token | Missing token | 401 |
+| should not be able to create a group with invalid/expired token | Invalid or expired token | 401 |
+| should not be able to create a group without adm permission | Access denied | 403 |
+
+---
+
+## 2.2 **GET**
+
+### List groups
+
+### Endpoint: /groups
+
+Rota para listar turmas
+
+-   Necessário token de autorização
+-   Necessário ser administrador
+-   Não possui body na requisição
+
+Body da resposta:
+
+```shell
+[
+      {
+        id: '43dde98f-5419-42ed-b7a1-603f49eb9852',
+        number: 1,
+        modules: [
+            {
+                ...
+            }
+        ] ,
+        users: [
+            {
+                ...
+            }
+        ]
+      },
+      ...
+]
+```
+
+| Status Code |
+| ----------- |
+| 200         |
+
+Possíveis erros:
+| Error | Message | Status Code |
+| ------------------------------------------------------------------------------|-------------------------------|-------------|
+| should not be able to list groups without token | Missing token | 401 |
+| should not be able to list groups with invalid/expired token | Invalid or expired token | 401 |
+| should not be able to list groups without adm permission | Access denied | 403 |
+| should not be able to create a video with an invalid groupId | groupId not found | 404 |
+
+---
+
+## 2.3 **GET**
+
+### Find group
+
+### Endpoint: /groups/:id
+
+Rota para encontrar turma através do ID
+
+-   Necessário token de autorização
+-   Necessário ser administrador
+-   Não possui body na requisição
+
+Body da resposta:
+
+```shell
+[
+      {
+        id: '43dde98f-5419-42ed-b7a1-603f49eb9852',
+        number: 1,
+        modules: [
+            {
+                ...
+            }
+        ] ,
+        users: [
+            {
+                ...
+            }
+        ]
+      },
+      ...
+]
+```
+
+| Status Code |
+| ----------- |
+| 200         |
+
+Possíveis erros:
+| Error | Message | Status Code |
+| ------------------------------------------------------------------------------|-------------------------------|-------------|
+| should not be able to find a group without token | Missing token | 401 |
+| should not be able to find a group with invalid/expired token | Invalid or expired token | 401 |
+| should not be able to find a group without adm permission | Access denied | 403 |
+| should not be able to create a video with an invalid groupId | groupId not found | 404 |
 
 ---
 
@@ -604,7 +735,8 @@ Rota para criação
 [ Voltar para o topo ](#tabela-de-conteúdos)
 
 -   [POST - create video](#51-POST)
--   [PATCH - delete video url](#52-PATCH)
+-   [PATCH - update video](#51-PATCH)
+-   [DELETE - delete video url](#52-DELETE)
 
 ---
 
@@ -660,7 +792,7 @@ Possíveis erros:
 | Error | Message | Status Code |
 | ------------------------------------------------------------------------------|-------------------------------|-------------|
 | should not be able to create a video without token | Missing token | 401 |
-| should no be able to create a video with invalid/expired token | Invalid or expired token | 401 |
+| should not be able to create a video with invalid/expired token | Invalid or expired token | 401 |
 | should not be able to create a video without adm/instructor permission | Access denied | 403 |
 | should not be able to create a video when instructor don't have this module | Instructor not allowed | 401 |
 | should not be able to create a video without title | Title is required | 400 |
@@ -670,7 +802,65 @@ Possíveis erros:
 
 ---
 
-## 4.2 **PATCH**
+## 4.2 **UPDATE**
+
+[ Voltar para o topo ](#indice-de-rotas)
+
+### Update video
+
+### Endpoint: /videos/:id
+
+Rota para update de video
+
+-   Necessário token de autorização
+-   Necessário ser administrador ou ser instrutor do módulo
+
+Campos:
+| Campo | Tipo | Descrição |
+| ------------|--------|-------------------------------------------------|
+| title | string | título do vídeo (opcional) |
+| url | string | link do vídeo (opcional) |
+| sprintId | string | sprint id do vídeo |
+
+Body da requisição:
+
+```shell
+{
+	"title": "video teste",
+	"url": "urldovideo.com",
+	"sprintId": "38e0f242-4b31-4366-abc8-71004132c8f4"
+}
+```
+
+Body da resposta:
+
+```shell
+{
+      id: 'c4f61f22-d127-4b10-a2b6-ef715f2be988',
+      title: 'video update',
+      url: 'test update',
+      releaseDate: '2022-11-04T04:00:00.000Z',
+      createdAt: '2022-11-10T02:10:34.761Z',
+      updatedAt: '2022-11-10T02:10:34.958Z',
+      sprintId: '3c4ee486-f932-4f45-a3ea-f07aa424fe18'
+    }
+```
+
+| Status Code |
+| ----------- |
+| 200         |
+
+Possíveis erros:
+| Error | Message | Status Code |
+| ------------------------------------------------------------------------------|-------------------------------|-------------|
+| should not be able to update a video with invalid/expired token | Invalid or expired token | 401 |
+| should not be able to update a video without adm/instructor permission | Access denied | 403 |
+| should not be able to update a video when instructor don't have this module | Instructor not allowed | 401 |
+| should not be able to update a video with an invalid videoId | Sprint not found | 404 |
+
+---
+
+## 4.3 **DELETE**
 
 [ Voltar para o topo ](#indice-de-rotas)
 
@@ -693,8 +883,9 @@ Possíveis erros:
 | Error | Message | Status Code |
 | ------------------------------------------------------------------------------|-------------------------------|-------------|
 | should not be able to delete a video url without token | Missing token | 401 |
-| should no be able to delete a video url with invalid/expired token | Invalid or expired token | 401 |
+| should not be able to delete a video url with invalid/expired token | Invalid or expired token | 401 |
 | should not be able to delete a video url without adm/instructor permission | Access denied | 403 |
+| should not be able to update a video when instructor don't have this module | Instructor not allowed | 401 |
 | should not be able to delete a video with an invalid video id | Access denied | 404 |
 
 ---
@@ -768,7 +959,7 @@ Possíveis erros:
 | Error | Message | Status Code |
 | ------------------------------------------------------------------------------|-------------------------------|-------------|
 | should not be able create a marker with h:m:s invalid | time not validate | 400 |
-| should no be able to create a video with invalid/expired token | Invalid or expired token | 401 |
+| should not be able to create a video with invalid/expired token | Invalid or expired token | 401 |
 | should not be able create a marker with h:m:s equals | this video needed to equal marks video | 400 |
 | should not be able create a marker without adm access | Instructor not allowed | 403 |
 | should not be able create a marker with invalid ID video | video not found | 400 |
@@ -827,7 +1018,7 @@ Possíveis erros:
 
 ---
 
-## 6.3 **DELETE**
+## 5.3 **DELETE**
 
 ### Delete Marker
 
