@@ -18,7 +18,7 @@ _URL base da API:_ **https://backend-timestamp.herokuapp.com/**
 
 ## **2. _Para dar início ao projeto, siga as instruções abaixo:_**
 
-[ Voltar para o topo ](#tabela-de-conteúdos)
+[ Voltar para o topo ](#índice-com-todas-as-rotas-do-projeto)
 
 ### **2.1 Instalando as dependências do projeto**
 
@@ -50,23 +50,23 @@ yarn prisma migrate dev
 
 ## **Índice com todas as rotas do projeto**
 
--   [/users](#1---users)
--   [/groups](#2---groups)
--   [/modules](#3---modules)
--   [/videos](#4---videos)
--   [/markers](#5---markers)
+- [/users](#1---users)
+- [/groups](#2---groups)
+- [/modules](#3---modules)
+- [/videos](#4---videos)
+- [/markers](#5---markers)
 
 ---
 
 ## **1 - _Users_**
 
--   [POST - Criar usuário](#11-POST)
--   [POST - Fazer login](#12-POST)
--   [GET - Mostrar todos os dados do usuário](#13-GET)
--   [GET - Listar todos os usuários](#14-GET)
--   [GET - Mostrar um usuário a partir do id](#15-GET)
--   [DELETE - Deletar usuário](#16-DELETE)
--   [PATCH - Atualizar usuário](#17-PATCH)
+- [POST - Criar usuário](#11-POST)
+- [POST - Fazer login](#12-POST)
+- [GET - Mostrar todos os dados do usuário](#13-GET)
+- [GET - Listar todos os usuários](#14-GET)
+- [GET - Mostrar um usuário a partir do id](#15-GET)
+- [DELETE - Deletar usuário](#16-DELETE)
+- [PATCH - Atualizar usuário](#17-PATCH)
 
 ---
 
@@ -158,7 +158,7 @@ _Rota responsável por criar um usuário, por padrão, o usuário criado será u
 
 ## **1.2 - _POST_**
 
-[ Voltar para o topo ](#indice-de-rotas)
+[ Voltar para o topo ](#índice-com-todas-as-rotas-do-projeto)
 
 ### **Login do usuário**
 
@@ -217,7 +217,7 @@ _Rota responsável pelo login do usuário, seja ele estudante, instrutor ou admi
 
 ## **1.3 - _GET_**
 
-[ Voltar para o topo ](#indice-de-rotas)
+[ Voltar para o topo ](#índice-com-todas-as-rotas-do-projeto)
 
 </br>
 
@@ -237,7 +237,7 @@ _Rota responsável por retornar todos os dados do usuário a partir do token_
 
 </br>
 
--   Token de autorização do tipo _`Bearer token`_
+- Token de autorização do tipo _`Bearer token`_
 
 </br>
 
@@ -246,7 +246,7 @@ _Rota responsável por retornar todos os dados do usuário a partir do token_
 ```shell
 	/users/profile, {
         headers: {
-          "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiU1RVREVOVCIsImdyb3VwSWQiOiI3ZTQ0ZWM4..."
+          Authorization: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiU1RVREVOVCIsImdyb3VwSWQiOiI3ZTQ0ZWM4..."
         	}
 		}
 ```
@@ -310,7 +310,7 @@ _Rota responsável por retornar todos os dados do usuário a partir do token_
 
 ## **1.4 - _GET_**
 
-[ Voltar para o topo ](#indice-de-rotas)
+[ Voltar para o topo ](#índice-com-todas-as-rotas-do-projeto)
 
 ### **Listar todos os usuários**
 
@@ -328,7 +328,7 @@ _Rota responsável por retornar alguns dados de todos os usuários_
 
 </br>
 
--   Token de autorização do tipo _`Bearer Token`_ com permissão de **administrador**
+- Token de autorização do tipo _`Bearer Token`_ com permissão de **administrador**
 
 </br>
 
@@ -337,7 +337,7 @@ _Rota responsável por retornar alguns dados de todos os usuários_
 ```shell
 	/users, {
         headers: {
-          "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiU1RVREVOVCIsImdyb3VwSWQiOiI3ZTQ0ZWM4..."
+          Authorization: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiU1RVREVOVCIsImdyb3VwSWQiOiI3ZTQ0ZWM4..."
         	}
 		}
 ```
@@ -376,7 +376,7 @@ _Rota responsável por retornar alguns dados de todos os usuários_
 
 ## **1.5 - _GET_**
 
-[ Voltar para o topo ](#indice-de-rotas)
+[ Voltar para o topo ](#índice-com-todas-as-rotas-do-projeto)
 
 ### **Retorna um usuário a partir do id**
 
@@ -394,7 +394,7 @@ _Rota responsável por retornar alguns dados de apenas um usuário a partir do i
 
 </br>
 
--   Token de autorização do tipo _`Bearer Token`_ com permissão de **administrador**
+- Token de autorização do tipo _`Bearer Token`_ com permissão de **administrador**
 
 </br>
 
@@ -403,7 +403,7 @@ _Rota responsável por retornar alguns dados de apenas um usuário a partir do i
 ```shell
 	/users/22322984-3ebc-460d-8321-4ded36eeafa6, {
         headers: {
-          "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiU1RVREVOVCIsImdyb3VwSWQiOiI3ZTQ0ZWM4..."
+          Authorization: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiU1RVREVOVCIsImdyb3VwSWQiOiI3ZTQ0ZWM4..."
         	}
 		}
 ```
@@ -440,7 +440,7 @@ _Rota responsável por retornar alguns dados de apenas um usuário a partir do i
 
 ## **1.6 - _DELETE_**
 
-[ Voltar para o topo ](#indice-de-rotas)
+[ Voltar para o topo ](#índice-com-todas-as-rotas-do-projeto)
 
 ### **Deleção de usuário**
 
@@ -458,7 +458,7 @@ _Rota responsável pela deleção de um usuário a partir do id_
 
 </br>
 
--   Token de autorização do tipo _`Bearer token`_ com permissão de **administrador**
+- Token de autorização do tipo _`Bearer token`_ com permissão de **administrador**
 
 </br>
 
@@ -467,7 +467,7 @@ _Rota responsável pela deleção de um usuário a partir do id_
 ```shell
 	/users/22322984-3ebc-460d-8321-4ded36eeafa6, {
         headers: {
-          "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiU1RVREVOVCIsImdyb3VwSWQiOiI3ZTQ0ZWM4..."
+          Authorization: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiU1RVREVOVCIsImdyb3VwSWQiOiI3ZTQ0ZWM4..."
         	}
 		}
 ```
@@ -490,7 +490,7 @@ _Rota responsável pela deleção de um usuário a partir do id_
 
 ## **1.7 - _PATCH_**
 
-[ Voltar para o topo ](#indice-de-rotas)
+[ Voltar para o topo ](#índice-com-todas-as-rotas-do-projeto)
 
 </br>
 
@@ -510,7 +510,7 @@ _Rota responsável pela atualização do usuário, apenas a turma(groupId) poder
 
 </br>
 
--   Token de autorização do tipo _`Bearer Token`_ com permissão de **administrador**
+- Token de autorização do tipo _`Bearer Token`_ com permissão de **administrador**
 
 **Campos obrigatórios:**
 
@@ -527,7 +527,7 @@ _Rota responsável pela atualização do usuário, apenas a turma(groupId) poder
 ```shell
 	/users/22322984-3ebc-460d-8321-4ded36eeafa6, {
         headers: {
-          "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiU1RVREVOVCIsImdyb3VwSWQiOiI3ZTQ0ZWM4..."
+          Authorization: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiU1RVREVOVCIsImdyb3VwSWQiOiI3ZTQ0ZWM4..."
         	},
 		body: {
 			"groupId": "7e44ec8c-84e2-42d1-aefb-09531c5ba937"
@@ -556,9 +556,6 @@ _Rota responsável pela atualização do usuário, apenas a turma(groupId) poder
 **Possíveis erros:**
 | _Erro_ | _Mensagem_ | _Status Code_ |
 | --------------------------------------------------------|---------------------------------------------------|---------------|
-
-Provide a different groupId than the current one
-
 | Tentativa sem envio de token | Missing token | 401 |
 | Tentativa com envio de token inválido | Invalid or expired token | 401 |
 | Tentativa com envio de token de estudante ou instrutor | Access denied | 403 |
@@ -574,9 +571,9 @@ Provide a different groupId than the current one
 
 [ Voltar para o topo ](#tabela-de-conteúdos)
 
--   [POST - create group](#21-POST)
--   [GET - get groups](#22-GET)
--   [GET - update group by id](#23-GET)
+- [POST - create group](#21-POST)
+- [GET - get groups](#22-GET)
+- [GET - update group by id](#23-GET)
 
 ---
 
@@ -594,8 +591,95 @@ Rota para criação
 
 [ Voltar para o topo ](#tabela-de-conteúdos)
 
--   [POST - create video](#51-POST)
--   [DELETE - delete video url](#52-PATCH)
+- [POST - Criar módulo](#31-POST)
+- [GET - Listar todos os módulos ](#32-GET)
+- [GET - Mostrar um módulo ](#33-GET)
+
+## **3.1 - _POST_**
+
+[ Voltar para o topo ](#índice-com-todas-as-rotas-do-projeto)
+
+### **Criar um módulo**
+
+</br>
+
+### **Endpoint: _/modules_**
+
+</br>
+
+_Rota responsável por criar um módulo, por padrão, o módulo será criado com 8 sprints, deve ser passado no corpo da requisição o id da turma (groupId), name e sprintPrefixName opcionais_
+
+</br>
+
+**Campos:**
+
+</br>
+
+| Campo            | Tipo   | Descrição                                 |
+| ---------------- | ------ | ----------------------------------------- |
+| groupId          | string | id da turma                               |
+| name             | string | nome do módulo (opcional)                 |
+| sprintPrefixName | string | nome do prefixo de cada sprint (opcional) |
+
+</br>
+
+**Deve ser enviado:**
+
+</br>
+
+- Token de autorização do tipo _`Bearer Token`_ com permissão de **administrador**
+
+</br>
+
+**Exemplo de requisição válida:**
+
+```shell
+	/modules, {
+      headers: {
+        Authorization: "Bearer 	 eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiU1RVREVOVCIsImdyb3VwSWQiOiI3ZTQ0ZWM4..."
+        },
+	  body: {
+  			  groupId: "5bd3b8cc-c522-406f-8218-b06fb2af4bca",
+  			  name: "M4",
+  			  sprintPrefixName: "S",
+		    }
+}
+```
+
+</br>
+
+**Retorno da requisição:**
+
+```shell
+{
+      id: '368007a8-84ee-4263-807b-5c8ae2a82d05',
+      name: 'M4',
+      createdAt: '2022-11-10T02:31:12.123Z',
+      groupId: '5bd3b8cc-c522-406f-8218-b06fb2af4bca',
+      sprints: [
+        {
+          id: '87e25189-5a6d-49da-98b6-2fb272b531ab',
+          name: 'S1',
+          moduleId: '368007a8-84ee-4263-807b-5c8ae2a82d05'
+        },
+		...
+	  ]
+
+
+    }
+```
+
+| **Status Code** |
+| --------------- |
+| _201_           |
+
+**Possíveis erros:**
+| _Erro_ | _Mensagem_ | _Status Code_ |
+| ------------------------------|----------------------------------------------------------------------------- |--------------|
+| Tentativa sem envio do token | Missing token | 401 |
+| Tentativa com envio de token inválido | Invalid or expired token | 401 |
+| Tentativa com envio de token de estudante ou instrutor | Access denied | 403 |
+| Tentativa com envio de groupId inválido | Group not found | 404 |
 
 ---
 
@@ -603,8 +687,8 @@ Rota para criação
 
 [ Voltar para o topo ](#tabela-de-conteúdos)
 
--   [POST - create video](#51-POST)
--   [PATCH - delete video url](#52-PATCH)
+- [POST - create video](#51-POST)
+- [PATCH - delete video url](#52-PATCH)
 
 ---
 
@@ -616,8 +700,8 @@ Rota para criação
 
 Rota para criação de video
 
--   Necessário token de autorização
--   Necessário ser administrador ou ser instrutor do módulo
+- Necessário token de autorização
+- Necessário ser administrador ou ser instrutor do módulo
 
 Campos:
 | Campo | Tipo | Descrição |
@@ -672,7 +756,7 @@ Possíveis erros:
 
 ## 4.2 **PATCH**
 
-[ Voltar para o topo ](#indice-de-rotas)
+[ Voltar para o topo ](#índice-com-todas-as-rotas-do-projeto)
 
 ### Delete video url
 
@@ -680,10 +764,10 @@ Possíveis erros:
 
 Rota para deleção de url de video
 
--   Sem body na requisição
--   Sem body na resposta
--   Necessário token de autorização
--   Necessário ser administrador ou ser instrutor do módulo
+- Sem body na requisição
+- Sem body na resposta
+- Necessário token de autorização
+- Necessário ser administrador ou ser instrutor do módulo
 
 | Status Code |
 | ----------- |
@@ -701,11 +785,11 @@ Possíveis erros:
 
 ## 5. **Rota de Marcadores de Video**
 
-[ Voltar para o topo ](#indice-de-rotas)
+[ Voltar para o topo ](#índice-com-todas-as-rotas-do-projeto)
 
--   [POST - create marker](#61-POST)
--   [PATCH - update marker](#62-PATCH)
--   [DELETE - delete marker](#63-DELETE)
+- [POST - create marker](#61-POST)
+- [PATCH - update marker](#62-PATCH)
+- [DELETE - delete marker](#63-DELETE)
 
 ---
 
@@ -717,8 +801,8 @@ Possíveis erros:
 
 Rota para criação de marcador
 
--   Necessário token de autorização
--   Necessário ser administrador ou ser instrutor do módulo
+- Necessário token de autorização
+- Necessário ser administrador ou ser instrutor do módulo
 
 | Campo   | Tipo    | Descrição                           |
 | ------- | ------- | ----------------------------------- |
@@ -783,8 +867,8 @@ Possíveis erros:
 
 Rota para atualização de marcador
 
--   Necessário token de autorização
--   Necessário ser administrador ou ser instrutor do módulo
+- Necessário token de autorização
+- Necessário ser administrador ou ser instrutor do módulo
 
 | Campo | Tipo   | Descrição                 |
 | ----- | ------ | ------------------------- |
@@ -835,8 +919,8 @@ Possíveis erros:
 
 Rota para deletar marcador
 
--   Necessário token de autorização
--   Necessário ser administrador ou ser instrutor do módulo
+- Necessário token de autorização
+- Necessário ser administrador ou ser instrutor do módulo
 
 | Campo | Tipo   | Descrição                  |
 | ----- | ------ | -------------------------- |
