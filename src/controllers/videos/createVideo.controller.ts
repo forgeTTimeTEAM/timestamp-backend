@@ -1,14 +1,16 @@
 import { RequestHandler } from "express";
-import { IVideoRequest } from "../../interfaces/videos";
+import { IVideoCreateParams } from "../../interfaces/videos";
 
 import { createVideoService } from "../../services/videos";
 
 const createVideoController: RequestHandler = async (req, res) => {
-    const video: IVideoRequest = req.body;
-    const groupId = req.user.groupId;
-    const userRole = req.user.role
+    const createVideoRequest: IVideoCreateParams = {
+        video: req.body,
+        groupId: req.user.groupId!,
+        userRole: req.user.role,
+    };
 
-    const createdVideo = await createVideoService(groupId!, userRole, video);
+    const createdVideo = await createVideoService(createVideoRequest);
 
     return res.status(201).json(createdVideo);
 };

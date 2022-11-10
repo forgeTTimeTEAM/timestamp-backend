@@ -4,7 +4,7 @@ import { app } from "../../app";
 import { hash, hashSync } from "bcryptjs";
 import {
   admUserMock,
-  loginAdmMock,
+  admLoginMock,
   loginStudentMock,
   studentUserMock,
   validGroupMock,
@@ -18,7 +18,7 @@ describe("routes - users/", () => {
       data: admUserMock,
     });
 
-    const loginAdm = await request(app).post("/users/login").send(loginAdmMock);
+    const loginAdm = await request(app).post("/users/login").send(admLoginMock);
     authorization = `Bearer ${loginAdm.body.token}`;
   });
 
@@ -32,694 +32,907 @@ describe("routes - users/", () => {
     await prisma.groups.deleteMany();
   });
 
-  test("should not be able to create a user without name", async () => {
-    const createUser = {
-      email: "alvesteste@email.com",
-      password: "alves123",
-    };
-    const response = await request(app).post("/users").send(createUser);
+  describe("POST / Create User", () => {
+    test("Should not be able to create a user without name", async () => {
+      const createUser = {
+        email: "alvesteste@email.com",
+        password: "alves123",
+      };
+      const response = await request(app).post("/users").send(createUser);
 
-    expect(response.status).toBe(400);
-    expect(response.body).toHaveProperty("message");
-  });
-
-  test("should not be able to create a user without password", async () => {
-    const createUser = {
-      email: "alv7teste@email.com",
-      name: "alves",
-    };
-
-    const response = await request(app).post("/users").send(createUser);
-
-    expect(response.status).toBe(400);
-    expect(response.body).toHaveProperty("message");
-  });
-
-  test("should not be able to create a user without email", async () => {
-    const createUser = {
-      name: "alves",
-      password: "alves123",
-    };
-
-    const response = await request(app).post("/users").send(createUser);
-
-    expect(response.status).toBe(400);
-    expect(response.body).toHaveProperty("message");
-  });
-
-  test("should not be able to create a user without group id", async () => {
-    const createUser = {
-      name: "alves",
-      email: "alv7teste@email.com",
-      password: "alves123",
-      moduleId: "batata",
-    };
-
-    const response = await request(app).post("/users").send(createUser);
-
-    expect(response.status).toBe(400);
-    expect(response.body).toHaveProperty("message");
-  });
-
-  test("should not be able to create a user with invalid group id", async () => {
-    const createUser = {
-      email: "alvteste1@email.com",
-      password: "alves123",
-      name: "alves",
-      groupId: "batata",
-      moduleId: "batata",
-    };
-
-    const response = await request(app).post("/users").send(createUser);
-
-    expect(response.status).toBe(404);
-    expect(response.body).toHaveProperty("message");
-  });
-
-  test("should not be able to create a user without module id", async () => {
-    const createUser = await prisma.users.create({
-      data: {
-        email: "alvteste2@email.com",
-        name: "alves123",
-        password: await hash("alves123", 10),
-      },
+      expect(response.status).toBe(400);
+      expect(response.body).toHaveProperty("message");
     });
 
-    await request(app).post("/users").send(createUser);
+    test("Should not be able to create a user without password", async () => {
+      const createUser = {
+        email: "alv7teste@email.com",
+        name: "alves",
+      };
 
-    const userLogin = await request(app)
-      .post("/users/login")
-      .send({ email: "alvteste2@email.com", password: "alves123" });
-    const userToken = `Bearer ${userLogin.body.token}`;
+      const response = await request(app).post("/users").send(createUser);
 
-    const userGroup = await request(app)
-      .post("/groups")
-      .set("Authorization", userToken)
-      .send({ modulePrefixName: "Módulo", sprintPrefixName: "sprint" });
-
-    const createUserRequest = {
-      name: "alves",
-      email: "alv7teste@email.com",
-      password: "alves123",
-      groupId: userGroup.body.id,
-    };
-
-    const response = await request(app).post("/users").send(createUserRequest);
-
-    expect(response.status).toBe(400);
-    expect(response.body).toHaveProperty("message");
-  });
-
-  test("should not be able to create a user with invalid module id", async () => {
-    await prisma.users.create({
-      data: {
-        email: "alvteste3@email.com",
-        name: "alves123",
-        password: hashSync("alves123", 10),
-        role: "ADM",
-      },
+      expect(response.status).toBe(400);
+      expect(response.body).toHaveProperty("message");
     });
 
-    const userLogin = await request(app)
-      .post("/users/login")
-      .send({ email: "alvteste3@email.com", password: "alves123" });
-    const userToken = `Bearer ${userLogin.body.token}`;
+    test("Should not be able to create a user without email", async () => {
+      const createUser = {
+        name: "alves",
+        password: "alves123",
+      };
 
-    const userGroup = await request(app)
-      .post("/groups")
-      .send({ modulePrefixName: "Módulo", sprintPrefixName: "sprint" })
-      .set("Authorization", userToken);
+      const response = await request(app).post("/users").send(createUser);
 
-    const createUserRequest = {
-      name: "alves",
-      email: "alv7teste@email.com",
-      password: "alves123",
-      groupId: userGroup.body.id,
-      moduleId: "batata",
-    };
-
-    const response = await request(app).post("/users").send(createUserRequest);
-
-    expect(response.status).toBe(404);
-    expect(response.body).toHaveProperty("message");
-  });
-
-  test("should not be able to create a user with same email", async () => {
-    await prisma.users.create({
-      data: {
-        email: "alvteste4@email.com",
-        name: "alves123",
-        password: await hash("alves123", 10),
-        role: "ADM",
-      },
+      expect(response.status).toBe(400);
+      expect(response.body).toHaveProperty("message");
     });
 
-    const userLogin = await request(app)
-      .post("/users/login")
-      .send({ email: "alvteste4@email.com", password: "alves123" });
-    const userToken = `Bearer ${userLogin.body.token}`;
+    test("Should not be able to create a user without group id", async () => {
+      const createUser = {
+        name: "alves",
+        email: "alv7teste@email.com",
+        password: "alves123",
+        moduleId: "batata",
+      };
 
-    const userGroup = await request(app)
-      .post("/groups")
-      .set("Authorization", userToken)
-      .send({ modulePrefixName: "Módulo", sprintPrefixName: "sprint" });
+      const response = await request(app).post("/users").send(createUser);
 
-    const createUserRequest = {
-      name: "alves",
-      email: "alv4teste@email.com",
-      password: "alves123",
-      groupId: userGroup.body.id,
-      moduleId: userGroup.body.modules[0].id,
-    };
-
-    await request(app).post("/users").send(createUserRequest);
-
-    const response = await request(app).post("/users").send(createUserRequest);
-
-    expect(response.status).toBe(409);
-    expect(response.body).toHaveProperty("message");
-  });
-
-  test("should be able to create a user", async () => {
-    await prisma.users.create({
-      data: {
-        email: "alvteste5@email.com",
-        name: "alves123",
-        password: await hash("alves123", 10),
-        role: "ADM",
-      },
+      expect(response.status).toBe(400);
+      expect(response.body).toHaveProperty("message");
     });
 
-    const userLogin = await request(app)
-      .post("/users/login")
-      .send({ email: "alvteste5@email.com", password: "alves123" });
-    const userToken = `Bearer ${userLogin.body.token}`;
+    test("should not be able to create a user with invalid group id", async () => {
+      const createUser = {
+        email: "alvteste1@email.com",
+        password: "alves123",
+        name: "alves",
+        groupId: "batata",
+        moduleId: "batata",
+      };
 
-    const userGroup = await request(app)
-      .post("/groups")
-      .set("Authorization", userToken)
-      .send({ modulePrefixName: "Módulo", sprintPrefixName: "sprint" });
+      const response = await request(app).post("/users").send(createUser);
 
-    const createUserRequest = {
-      name: "alves",
-      email: "alvteste6@email.com",
-      password: "alves123",
-      groupId: userGroup.body.id,
-      moduleId: userGroup.body.modules[0].id,
-    };
-
-    const response = await request(app).post("/users").send(createUserRequest);
-
-    expect(response.status).toBe(201);
-    expect(response.body).toHaveProperty("id");
-    expect(response.body).toHaveProperty("name");
-    expect(response.body).toHaveProperty("email");
-    expect(response.body).not.toHaveProperty("password");
-    expect(response.body).toHaveProperty("role");
-    expect(response.body).toHaveProperty("createdAt");
-    expect(response.body).toHaveProperty("updatedAt");
-    expect(response.body).toHaveProperty("groupId");
-    expect(response.body).toHaveProperty("modules");
-    expect(response.body.modules[0].userId).toEqual(response.body.id);
-  });
-
-  test("should be able to login", async () => {
-    await prisma.users.create({
-      data: {
-        email: "alvteste7@email.com",
-        name: "alves123",
-        password: await hash("alves123", 10),
-      },
+      expect(response.status).toBe(404);
+      expect(response.body).toHaveProperty("message");
     });
 
-    const response = await request(app)
-      .post("/users/login")
-      .send({ email: "alvteste7@email.com", password: "alves123" });
+    test("should not be able to create a user without module id", async () => {
+      const createUser = await prisma.users.create({
+        data: {
+          email: "alvteste2@email.com",
+          name: "alves123",
+          password: await hash("alves123", 10),
+        },
+      });
 
-    expect(response.status).toBe(200);
-    expect(response.body).toHaveProperty("token");
-  });
+      await request(app).post("/users").send(createUser);
 
-  test("should not be able to login with wrong password", async () => {
-    await prisma.users.create({
-      data: {
-        email: "alvteste9@email.com",
-        name: "alves123",
-        password: await hash("alves123", 10),
-      },
+      const userLogin = await request(app)
+        .post("/users/login")
+        .send({ email: "alvteste2@email.com", password: "alves123" });
+
+      const userToken = `Bearer ${userLogin.body.token}`;
+
+      const userGroup = await request(app)
+        .post("/groups")
+        .set("Authorization", userToken)
+        .send({ modulePrefixName: "Módulo", sprintPrefixName: "sprint" });
+
+      const createUserRequest = {
+        name: "alves",
+        email: "alv7teste@email.com",
+        password: "alves123",
+        groupId: userGroup.body.id,
+      };
+
+      const response = await request(app)
+        .post("/users")
+        .send(createUserRequest);
+
+      expect(response.status).toBe(400);
+      expect(response.body).toHaveProperty("message");
     });
 
-    const response = await request(app)
-      .post("/users/login")
-      .send({ email: "alvteste9@email.com", password: "errado" });
+    test("should not be able to create a user with invalid module id", async () => {
+      await prisma.users.create({
+        data: {
+          email: "alvteste3@email.com",
+          name: "alves123",
+          password: hashSync("alves123", 10),
+          role: "ADM",
+        },
+      });
 
-    expect(response.status).toBe(403);
-    expect(response.body).toHaveProperty("message");
-  });
+      const userLogin = await request(app)
+        .post("/users/login")
+        .send({ email: "alvteste3@email.com", password: "alves123" });
 
-  test("should be able to return error when logging in without email and password", async () => {
-    const usernameWithoutPasswordAndEmail = {
-      email: "",
-      password: "",
-    };
+      const userToken = `Bearer ${userLogin.body.token}`;
 
-    const response = await request(app)
-      .post("/users/login")
-      .send(usernameWithoutPasswordAndEmail);
+      const userGroup = await request(app)
+        .post("/groups")
+        .send({ modulePrefixName: "Módulo", sprintPrefixName: "sprint" })
+        .set("Authorization", userToken);
 
-    expect(response.status).toBe(403);
-    expect(response.body).toHaveProperty("message");
-  });
+      const createUserRequest = {
+        name: "alves",
+        email: "alv7teste@email.com",
+        password: "alves123",
+        groupId: userGroup.body.id,
+        moduleId: "batata",
+      };
 
-  test("should not be able to return all user data without token", async () => {
-    const response = await request(app).get("/users/profile");
+      const response = await request(app)
+        .post("/users")
+        .send(createUserRequest);
 
-    expect(response.status).toBe(401);
-    expect(response.body).toHaveProperty("message");
-  });
-
-  test("should not be able to return all user data with invalid token", async () => {
-    const token = "Bearer e7d4hu5sps45ud0uw428is2ujsa";
-
-    const response = await request(app)
-      .get("/users/profile")
-      .set("Authorization", token);
-
-    expect(response.status).toBe(401);
-    expect(response.body).toHaveProperty("message");
-  });
-
-  test("should be able to return all user data", async () => {
-    await prisma.users.create({
-      data: {
-        email: "alvteste11@email.com",
-        name: "alv",
-        password: await hash("alves123", 10),
-        role: "ADM",
-      },
+      expect(response.status).toBe(404);
+      expect(response.body).toHaveProperty("message");
     });
 
-    const userLogin = await request(app)
-      .post("/users/login")
-      .send({ email: "alvteste11@email.com", password: "alves123" });
-    const userToken = `Bearer ${userLogin.body.token}`;
+    test("should not be able to create a user with same email", async () => {
+      await prisma.users.create({
+        data: {
+          email: "alvteste4@email.com",
+          name: "alves123",
+          password: await hash("alves123", 10),
+          role: "ADM",
+        },
+      });
 
-    const createGroupRequest = {
-      modulePrefixName: "Módulo",
-      sprintPrefixName: "sprint",
-    };
+      const userLogin = await request(app)
+        .post("/users/login")
+        .send({ email: "alvteste4@email.com", password: "alves123" });
 
-    const userGroup = await request(app)
-      .post("/groups")
-      .set("Authorization", userToken)
-      .send(createGroupRequest);
+      const userToken = `Bearer ${userLogin.body.token}`;
 
-    const video = await prisma.videos.create({
-      data: {
-        title: "Bem vindo ao M4",
-        releaseDate: new Date(),
-        url: "youtube.com",
-        sprintId: userGroup.body.modules[0].sprints[0].id,
-      },
+      const userGroup = await request(app)
+        .post("/groups")
+        .set("Authorization", userToken)
+        .send({ modulePrefixName: "Módulo", sprintPrefixName: "sprint" });
+
+      const createUserRequest = {
+        name: "alves",
+        email: "alv4teste@email.com",
+        password: "alves123",
+        groupId: userGroup.body.id,
+        moduleId: userGroup.body.modules[0].id,
+      };
+
+      await request(app).post("/users").send(createUserRequest);
+
+      const response = await request(app)
+        .post("/users")
+        .send(createUserRequest);
+
+      expect(response.status).toBe(409);
+      expect(response.body).toHaveProperty("message");
     });
 
-    await prisma.video_markers.createMany({
-      data: {
-        time: "00:30",
-        title: "Introdução ao node",
-        videoId: video.id,
-      },
+    test("should be able to create a user", async () => {
+      await prisma.users.create({
+        data: {
+          email: "alvteste5@email.com",
+          name: "alves123",
+          password: await hash("alves123", 10),
+          role: "ADM",
+        },
+      });
+
+      const userLogin = await request(app)
+        .post("/users/login")
+        .send({ email: "alvteste5@email.com", password: "alves123" });
+
+      const userToken = `Bearer ${userLogin.body.token}`;
+
+      const userGroup = await request(app)
+        .post("/groups")
+        .set("Authorization", userToken)
+        .send({ modulePrefixName: "Módulo", sprintPrefixName: "sprint" });
+
+      const createUserRequest = {
+        name: "alves",
+        email: "alvteste6@email.com",
+        password: "alves123",
+        groupId: userGroup.body.id,
+        moduleId: userGroup.body.modules[0].id,
+      };
+
+      const response = await request(app)
+        .post("/users")
+        .send(createUserRequest);
+
+      expect(response.status).toBe(201);
+      expect(response.body).toHaveProperty("id");
+      expect(response.body).toHaveProperty("name");
+      expect(response.body).toHaveProperty("email");
+      expect(response.body).not.toHaveProperty("password");
+      expect(response.body).toHaveProperty("role");
+      expect(response.body).toHaveProperty("createdAt");
+      expect(response.body).toHaveProperty("updatedAt");
+      expect(response.body).toHaveProperty("groupId");
+      expect(response.body).toHaveProperty("modules");
+      expect(response.body.modules[0].userId).toEqual(response.body.id);
+    });
+  });
+
+  describe("POST / Login User", () => {
+    test("should be able to login", async () => {
+      await prisma.users.create({
+        data: {
+          email: "alvteste7@email.com",
+          name: "alves123",
+          password: await hash("alves123", 10),
+        },
+      });
+
+      const response = await request(app)
+        .post("/users/login")
+        .send({ email: "alvteste7@email.com", password: "alves123" });
+
+      expect(response.status).toBe(200);
+      expect(response.body).toHaveProperty("token");
     });
 
-    await prisma.sprints.findUnique({
-      where: {
-        id: userGroup.body.modules[0].sprints[0].id,
-      },
-      include: {
-        videos: {
-          include: {
-            video_markers: true,
+    test("should not be able to login with wrong password", async () => {
+      await prisma.users.create({
+        data: {
+          email: "alvteste9@email.com",
+          name: "alves123",
+          password: await hash("alves123", 10),
+        },
+      });
+
+      const response = await request(app)
+        .post("/users/login")
+        .send({ email: "alvteste9@email.com", password: "errado" });
+
+      expect(response.status).toBe(403);
+      expect(response.body).toHaveProperty("message");
+    });
+
+    test("should be able to return error when logging in without email and password", async () => {
+      const usernameWithoutPasswordAndEmail = {
+        email: "",
+        password: "",
+      };
+
+      const response = await request(app)
+        .post("/users/login")
+        .send(usernameWithoutPasswordAndEmail);
+
+      expect(response.status).toBe(403);
+      expect(response.body).toHaveProperty("message");
+    });
+  });
+
+  describe("GET / Profile User", () => {
+    test("should not be able to return all user data without token", async () => {
+      const response = await request(app).get("/users/profile");
+
+      expect(response.status).toBe(401);
+      expect(response.body).toHaveProperty("message");
+    });
+
+    test("should not be able to return all user data with invalid token", async () => {
+      const token = "Bearer e7d4hu5sps45ud0uw428is2ujsa";
+
+      const response = await request(app)
+        .get("/users/profile")
+        .set("Authorization", token);
+
+      expect(response.status).toBe(401);
+      expect(response.body).toHaveProperty("message");
+    });
+
+    test("should be able to return all user data", async () => {
+      const createGroupRequest = {
+        modulePrefixName: "Módulo",
+        sprintPrefixName: "sprint",
+      };
+
+      const userGroup = await request(app)
+        .post("/groups")
+        .set("Authorization", authorization)
+        .send(createGroupRequest);
+
+      const video = await prisma.videos.create({
+        data: {
+          title: "Bem vindo ao M4",
+          releaseDate: new Date(),
+          url: "youtube.com",
+          sprintId: userGroup.body.modules[0].sprints[0].id,
+        },
+      });
+
+      await prisma.video_markers.createMany({
+        data: {
+          time: "00:30",
+          title: "Introdução ao node",
+          videoId: video.id,
+        },
+      });
+
+      await prisma.sprints.findUnique({
+        where: {
+          id: userGroup.body.modules[0].sprints[0].id,
+        },
+        include: {
+          videos: {
+            include: {
+              video_markers: true,
+            },
           },
         },
-      },
-    });
+      });
 
-    const createUserRequest = {
-      name: "alves",
-      email: "alvesteste12@email.com",
-      password: "alves123",
-      groupId: userGroup.body.id,
-      moduleId: userGroup.body.modules[0].id,
-    };
-
-    await request(app).post("/users").send(createUserRequest);
-
-    const loginRequest = {
-      email: "alvesteste12@email.com",
-      password: "alves123",
-    };
-
-    const login = await request(app).post("/users/login").send(loginRequest);
-    const token = `Bearer ${login.body.token}`;
-
-    const response = await request(app)
-      .get("/users/profile")
-      .set("Authorization", token);
-
-    expect(response.status).toBe(200);
-    expect(response.body).toHaveProperty("id");
-    expect(response.body).toHaveProperty("name");
-    expect(response.body).toHaveProperty("email");
-    expect(response.body).not.toHaveProperty("password");
-    expect(response.body).toHaveProperty("role");
-    expect(response.body).toHaveProperty("groupId");
-    expect(response.body).toHaveProperty("modules");
-
-    expect(response.body.modules[0]).toHaveProperty("createdAt");
-    expect(response.body.modules[0]).toHaveProperty("updatedAt");
-    expect(response.body.modules[0]).toHaveProperty("userId");
-    expect(response.body.modules[0].userId).toEqual(response.body.id);
-    expect(response.body.modules[0]).toHaveProperty("moduleId");
-    expect(response.body.modules[0]).toHaveProperty("module");
-
-    expect(response.body.modules[0].module).toHaveProperty("id");
-    expect(response.body.modules[0].module).toHaveProperty("name");
-    expect(response.body.modules[0].module).toHaveProperty("createdAt");
-    expect(response.body.modules[0].module).toHaveProperty("groupId");
-    expect(response.body.modules[0].module.groupId).toEqual(
-      response.body.groupId
-    );
-    expect(response.body.modules[0].module).toHaveProperty("sprints");
-
-    expect(response.body.modules[0].module.sprints[0]).toHaveProperty("id");
-    expect(response.body.modules[0].module.sprints[0]).toHaveProperty("name");
-    expect(response.body.modules[0].module.sprints[0]).toHaveProperty(
-      "moduleId"
-    );
-    expect(response.body.modules[0].module.sprints[0]).toHaveProperty("videos");
-
-    expect(response.body.modules[0].module.sprints[0].videos.length).toEqual(1);
-    expect(response.body.modules[0].module.sprints[0].videos[0]).toHaveProperty(
-      "id"
-    );
-    expect(response.body.modules[0].module.sprints[0].videos[0]).toHaveProperty(
-      "title"
-    );
-    expect(response.body.modules[0].module.sprints[0].videos[0]).toHaveProperty(
-      "url"
-    );
-    expect(response.body.modules[0].module.sprints[0].videos[0]).toHaveProperty(
-      "releaseDate"
-    );
-    expect(response.body.modules[0].module.sprints[0].videos[0]).toHaveProperty(
-      "createdAt"
-    );
-    expect(response.body.modules[0].module.sprints[0].videos[0]).toHaveProperty(
-      "updatedAt"
-    );
-    expect(response.body.modules[0].module.sprints[0].videos[0]).toHaveProperty(
-      "sprintId"
-    );
-    expect(response.body.modules[0].module.sprints[0].videos[0]).toHaveProperty(
-      "video_markers"
-    );
-
-    expect(
-      response.body.modules[0].module.sprints[0].videos[0].video_markers.length
-    ).toEqual(1);
-
-    expect(
-      response.body.modules[0].module.sprints[0].videos[0].video_markers.length
-    ).toEqual(1);
-    expect(
-      response.body.modules[0].module.sprints[0].videos[0].video_markers[0]
-    ).toHaveProperty("id");
-    expect(
-      response.body.modules[0].module.sprints[0].videos[0].video_markers[0]
-    ).toHaveProperty("time");
-    expect(
-      response.body.modules[0].module.sprints[0].videos[0].video_markers[0]
-    ).toHaveProperty("title");
-    expect(
-      response.body.modules[0].module.sprints[0].videos[0].video_markers[0]
-    ).toHaveProperty("createdAt");
-    expect(
-      response.body.modules[0].module.sprints[0].videos[0].video_markers[0]
-    ).toHaveProperty("updatedAt");
-    expect(
-      response.body.modules[0].module.sprints[0].videos[0].video_markers[0]
-    ).toHaveProperty("videoId");
-    expect(
-      response.body.modules[0].module.sprints[0].videos[0].video_markers[0].time
-    ).toEqual("00:30");
-    expect(
-      response.body.modules[0].module.sprints[0].videos[0].video_markers[0]
-        .title
-    ).toEqual("Introdução ao node");
-    expect(
-      response.body.modules[0].module.sprints[0].videos[0].video_markers[0]
-        .videoId
-    ).toEqual(response.body.modules[0].module.sprints[0].videos[0].id);
-  });
-
-  test("should not be able to list all users without token", async () => {
-    const response = await request(app).get("/users");
-
-    expect(response.status).toBe(401);
-    expect(response.body).toHaveProperty("message");
-  });
-
-  test("should not be able to list all users with invalid token", async () => {
-    const response = await request(app)
-      .get("/users")
-      .set("Authorization", "Bearer batata");
-
-    expect(response.status).toBe(401);
-    expect(response.body).toHaveProperty("message");
-  });
-
-  test("should not be able to list all users without adm token", async () => {
-    await prisma.users.create({
-      data: {
+      const createUserRequest = {
         name: "alves",
-        email: "alv777@email.com",
+        email: "alvesteste12@email.com",
         password: "alves123",
-      },
-    });
+        groupId: userGroup.body.id,
+        moduleId: userGroup.body.modules[0].id,
+      };
 
-    const login = await request(app)
-      .post("/users/login")
-      .send({ email: "alv777@email.com", password: "alves123" });
+      await request(app).post("/users").send(createUserRequest);
 
-    const response = await request(app)
-      .get("/users")
-      .set("Authorization", `Bearer ${login.body.token}`);
-
-    expect(response.status).toBe(401);
-    expect(response.body).toHaveProperty("message");
-  });
-
-  test("should be able to list all users", async () => {
-    await prisma.users.create({
-      data: {
-        name: "alves",
-        email: "amomacarrao@email.com",
-        password: await hash("alves123", 10),
-        role: "ADM",
-      },
-    });
-
-    await prisma.users.create({
-      data: {
-        name: "alves",
-        email: "amomuitomacarrao@email.com",
+      const loginRequest = {
+        email: "alvesteste12@email.com",
         password: "alves123",
-      },
+      };
+
+      const login = await request(app).post("/users/login").send(loginRequest);
+      const token = `Bearer ${login.body.token}`;
+
+      const response = await request(app)
+        .get("/users/profile")
+        .set("Authorization", token);
+
+      expect(response.status).toBe(200);
+      expect(response.body).toHaveProperty("id");
+      expect(response.body).toHaveProperty("name");
+      expect(response.body).toHaveProperty("email");
+      expect(response.body).not.toHaveProperty("password");
+      expect(response.body).toHaveProperty("role");
+      expect(response.body).toHaveProperty("groupId");
+      expect(response.body).toHaveProperty("modules");
+
+      expect(response.body.modules[0]).toHaveProperty("createdAt");
+      expect(response.body.modules[0]).toHaveProperty("updatedAt");
+      expect(response.body.modules[0]).toHaveProperty("userId");
+      expect(response.body.modules[0].userId).toEqual(response.body.id);
+      expect(response.body.modules[0]).toHaveProperty("moduleId");
+      expect(response.body.modules[0]).toHaveProperty("module");
+
+      expect(response.body.modules[0].module).toHaveProperty("id");
+      expect(response.body.modules[0].module).toHaveProperty("name");
+      expect(response.body.modules[0].module).toHaveProperty("createdAt");
+      expect(response.body.modules[0].module).toHaveProperty("groupId");
+      expect(response.body.modules[0].module.groupId).toEqual(
+        response.body.groupId
+      );
+      expect(response.body.modules[0].module).toHaveProperty("sprints");
+
+      expect(response.body.modules[0].module.sprints[0]).toHaveProperty("id");
+      expect(response.body.modules[0].module.sprints[0]).toHaveProperty("name");
+      expect(response.body.modules[0].module.sprints[0]).toHaveProperty(
+        "moduleId"
+      );
+      expect(response.body.modules[0].module.sprints[0]).toHaveProperty(
+        "videos"
+      );
+
+      expect(response.body.modules[0].module.sprints[0].videos.length).toEqual(
+        1
+      );
+      expect(
+        response.body.modules[0].module.sprints[0].videos[0]
+      ).toHaveProperty("id");
+      expect(
+        response.body.modules[0].module.sprints[0].videos[0]
+      ).toHaveProperty("title");
+      expect(
+        response.body.modules[0].module.sprints[0].videos[0]
+      ).toHaveProperty("url");
+      expect(
+        response.body.modules[0].module.sprints[0].videos[0]
+      ).toHaveProperty("releaseDate");
+      expect(
+        response.body.modules[0].module.sprints[0].videos[0]
+      ).toHaveProperty("createdAt");
+      expect(
+        response.body.modules[0].module.sprints[0].videos[0]
+      ).toHaveProperty("updatedAt");
+      expect(
+        response.body.modules[0].module.sprints[0].videos[0]
+      ).toHaveProperty("sprintId");
+      expect(
+        response.body.modules[0].module.sprints[0].videos[0]
+      ).toHaveProperty("video_markers");
+
+      expect(
+        response.body.modules[0].module.sprints[0].videos[0].video_markers
+          .length
+      ).toEqual(1);
+
+      expect(
+        response.body.modules[0].module.sprints[0].videos[0].video_markers
+          .length
+      ).toEqual(1);
+      expect(
+        response.body.modules[0].module.sprints[0].videos[0].video_markers[0]
+      ).toHaveProperty("id");
+      expect(
+        response.body.modules[0].module.sprints[0].videos[0].video_markers[0]
+      ).toHaveProperty("time");
+      expect(
+        response.body.modules[0].module.sprints[0].videos[0].video_markers[0]
+      ).toHaveProperty("title");
+      expect(
+        response.body.modules[0].module.sprints[0].videos[0].video_markers[0]
+      ).toHaveProperty("createdAt");
+      expect(
+        response.body.modules[0].module.sprints[0].videos[0].video_markers[0]
+      ).toHaveProperty("updatedAt");
+      expect(
+        response.body.modules[0].module.sprints[0].videos[0].video_markers[0]
+      ).toHaveProperty("videoId");
+      expect(
+        response.body.modules[0].module.sprints[0].videos[0].video_markers[0]
+          .time
+      ).toEqual("00:30");
+      expect(
+        response.body.modules[0].module.sprints[0].videos[0].video_markers[0]
+          .title
+      ).toEqual("Introdução ao node");
+      expect(
+        response.body.modules[0].module.sprints[0].videos[0].video_markers[0]
+          .videoId
+      ).toEqual(response.body.modules[0].module.sprints[0].videos[0].id);
+    });
+  });
+
+  describe("GET / List users", () => {
+    test("should not be able to list all users without token", async () => {
+      const response = await request(app).get("/users");
+
+      expect(response.status).toBe(401);
+      expect(response.body).toHaveProperty("message");
     });
 
-    const login = await request(app)
-      .post("/users/login")
-      .send({ email: "amomacarrao@email.com", password: "alves123" });
+    test("should not be able to list all users with invalid token", async () => {
+      const response = await request(app)
+        .get("/users")
+        .set("Authorization", "Bearer batata");
 
-    const response = await request(app)
-      .get("/users")
-      .set("Authorization", `Bearer ${login.body.token}`);
+      expect(response.status).toBe(401);
+      expect(response.body).toHaveProperty("message");
+    });
 
-    expect(response.status).toBe(200);
-    expect(response.body[0]).toHaveProperty("id");
-    expect(response.body[0]).toHaveProperty("name");
-    expect(response.body[0]).toHaveProperty("email");
-    expect(response.body[0]).not.toHaveProperty("password");
-    expect(response.body[0]).toHaveProperty("role");
-    expect(response.body[0]).toHaveProperty("createdAt");
-    expect(response.body[0]).toHaveProperty("updatedAt");
-    expect(response.body[0]).toHaveProperty("groupId");
+    test("should not be able to list all users without adm token", async () => {
+      const login = await request(app)
+        .post("/users/login")
+        .send(studentUserMock);
+
+      const response = await request(app)
+        .get("/users")
+        .set("Authorization", `Bearer ${login.body.token}`);
+
+      expect(response.status).toBe(401);
+      expect(response.body).toHaveProperty("message");
+    });
+
+    test("should be able to list all users", async () => {
+      const response = await request(app)
+        .get("/users")
+        .set("Authorization", authorization);
+
+      expect(response.status).toBe(200);
+      expect(response.body[0]).toHaveProperty("id");
+      expect(response.body[0]).toHaveProperty("name");
+      expect(response.body[0]).toHaveProperty("email");
+      expect(response.body[0]).not.toHaveProperty("password");
+      expect(response.body[0]).toHaveProperty("role");
+      expect(response.body[0]).toHaveProperty("createdAt");
+      expect(response.body[0]).toHaveProperty("updatedAt");
+      expect(response.body[0]).toHaveProperty("groupId");
+    });
   });
 
-  test("should be able to find user", async () => {
-    const group = await request(app)
-      .post("/groups")
-      .send(validGroupMock)
-      .set("Authorization", authorization);
-    studentUserMock.groupId = group.body.id;
-    studentUserMock.moduleId = group.body.modules[0].id;
+  describe("GET / List user by id", () => {
+    test("should be able to find user", async () => {
+      const group = await request(app)
+        .post("/groups")
+        .send(validGroupMock)
+        .set("Authorization", authorization);
 
-    const studentUser = await request(app).post("/users").send(studentUserMock);
-    const { id, groupId, email, name, role, createdAt, updatedAt } =
-      studentUser.body;
+      studentUserMock.groupId = group.body.id;
+      studentUserMock.moduleId = group.body.modules[0].id;
 
-    const response = await request(app)
-      .get(`/users/${id}`)
-      .set("Authorization", authorization);
+      const studentUser = await request(app)
+        .post("/users")
+        .send(studentUserMock);
 
-    expect(response.status).toBe(200);
-    expect(response.body).toHaveProperty("id", id);
-    expect(response.body).toHaveProperty("groupId", groupId);
-    expect(response.body).toHaveProperty("email", email);
-    expect(response.body).toHaveProperty("name", name);
-    expect(response.body).not.toHaveProperty("password");
-    expect(response.body).toHaveProperty("role", role);
-    expect(response.body).toHaveProperty("createdAt", createdAt);
-    expect(response.body).toHaveProperty("updatedAt", updatedAt);
+      const { id, groupId, email, name, role, createdAt, updatedAt } =
+        studentUser.body;
+
+      const response = await request(app)
+        .get(`/users/${id}`)
+        .set("Authorization", authorization);
+
+      expect(response.status).toBe(200);
+      expect(response.body).toHaveProperty("id", id);
+      expect(response.body).toHaveProperty("groupId", groupId);
+      expect(response.body).toHaveProperty("email", email);
+      expect(response.body).toHaveProperty("name", name);
+      expect(response.body).not.toHaveProperty("password");
+      expect(response.body).toHaveProperty("role", role);
+      expect(response.body).toHaveProperty("createdAt", createdAt);
+      expect(response.body).toHaveProperty("updatedAt", updatedAt);
+    });
+
+    test("should not be able to find a user without token", async () => {
+      const loginStudent = await request(app)
+        .post("/users/login")
+        .send(loginStudentMock);
+
+      const studentAuth = `Bearer ${loginStudent.body.token}`;
+
+      const studentProfile = await request(app)
+        .get("/users/profile")
+        .set("Authorization", studentAuth);
+
+      const { id } = studentProfile.body;
+
+      const response = await request(app).get(`/users/${id}`);
+
+      expect(response.status).toBe(401);
+      expect(response.body).toHaveProperty("message");
+    });
+
+    test("should not be able to find a user with invalid token", async () => {
+      const loginStudent = await request(app)
+        .post("/users/login")
+        .send(loginStudentMock);
+
+      const studentAuth = `Bearer ${loginStudent.body.token}`;
+
+      const studentProfile = await request(app)
+        .get("/users/profile")
+        .set("Authorization", studentAuth);
+
+      const { id } = studentProfile.body;
+
+      const response = await request(app)
+        .get(`/users/${id}`)
+        .set("Authorization", "Bearer batata");
+
+      expect(response.status).toBe(401);
+      expect(response.body).toHaveProperty("message");
+    });
+
+    test("should not be able to find a user without adm permission", async () => {
+      const loginStudent = await request(app)
+        .post("/users/login")
+        .send(loginStudentMock);
+
+      const studentAuth = `Bearer ${loginStudent.body.token}`;
+
+      const studentProfile = await request(app)
+        .get("/users/profile")
+        .set("Authorization", studentAuth);
+
+      const { id } = studentProfile.body;
+
+      const response = await request(app)
+        .get(`/users/${id}`)
+        .set("Authorization", studentAuth);
+
+      expect(response.status).toBe(403);
+      expect(response.body).toHaveProperty("message");
+    });
+
+    test("should not be able to find a user with invalid id", async () => {
+      const response = await request(app)
+        .get("/users/batata")
+        .set("Authorization", authorization);
+
+      expect(response.status).toBe(404);
+      expect(response.body).toHaveProperty("message");
+    });
   });
 
-  test("should not be able to find a user without token", async () => {
-    const loginStudent = await request(app)
-      .post("/users/login")
-      .send(loginStudentMock);
-    const studentAuth = `Bearer ${loginStudent.body.token}`;
-    const studentProfile = await request(app)
-      .get("/users/profile")
-      .set("Authorization", studentAuth);
-    const { id } = studentProfile.body;
+  describe("DELETE / Delete User", () => {
+    test("should not be able to delete a user without token", async () => {
+      const loginStudent = await request(app)
+        .post("/users/login")
+        .send(loginStudentMock);
 
-    const response = await request(app).get(`/users/${id}`);
+      const studentAuth = `Bearer ${loginStudent.body.token}`;
 
-    expect(response.status).toBe(401);
-    expect(response.body).toHaveProperty("message");
+      const studentProfile = await request(app)
+        .get("/users/profile")
+        .set("Authorization", studentAuth);
+
+      const { id } = studentProfile.body;
+
+      const response = await request(app).delete(`/users/${id}`);
+
+      expect(response.status).toBe(401);
+      expect(response.body).toHaveProperty("message");
+    });
+
+    test("should not be able to delete a user with invalid token", async () => {
+      const loginStudent = await request(app)
+        .post("/users/login")
+        .send(loginStudentMock);
+
+      const studentAuth = `Bearer ${loginStudent.body.token}`;
+
+      const studentProfile = await request(app)
+        .get("/users/profile")
+        .set("Authorization", studentAuth);
+
+      const { id } = studentProfile.body;
+
+      const response = await request(app)
+        .delete(`/users/${id}`)
+        .set("Authorization", "Bearer batata");
+
+      expect(response.status).toBe(401);
+      expect(response.body).toHaveProperty("message");
+    });
+
+    test("should not be able to delete a user without adm permission", async () => {
+      const loginStudent = await request(app)
+        .post("/users/login")
+        .send(loginStudentMock);
+
+      const studentAuth = `Bearer ${loginStudent.body.token}`;
+
+      const studentProfile = await request(app)
+        .get("/users/profile")
+        .set("Authorization", studentAuth);
+
+      const { id } = studentProfile.body;
+
+      const response = await request(app)
+        .delete(`/users/${id}`)
+        .set("Authorization", studentAuth);
+
+      expect(response.status).toBe(403);
+      expect(response.body).toHaveProperty("message");
+    });
+
+    test("should not be able to delete a user with invalid id", async () => {
+      const response = await request(app)
+        .delete("/users/batata")
+        .set("Authorization", authorization);
+
+      expect(response.status).toBe(404);
+      expect(response.body).toHaveProperty("message");
+    });
+
+    test("should be able to delete a user", async () => {
+      const loginStudent = await request(app)
+        .post("/users/login")
+        .send(loginStudentMock);
+
+      const studentAuth = `Bearer ${loginStudent.body.token}`;
+
+      const studentProfile = await request(app)
+        .get("/users/profile")
+        .set("Authorization", studentAuth);
+
+      const { id } = studentProfile.body;
+
+      const response = await request(app)
+        .delete(`/users/${id}`)
+        .set("Authorization", authorization);
+
+      expect(response.status).toBe(204);
+      expect(response.body).toMatchObject({});
+    });
   });
 
-  test("should not be able to find a user with invalid token", async () => {
-    const loginStudent = await request(app)
-      .post("/users/login")
-      .send(loginStudentMock);
-    const studentAuth = `Bearer ${loginStudent.body.token}`;
-    const studentProfile = await request(app)
-      .get("/users/profile")
-      .set("Authorization", studentAuth);
-    const { id } = studentProfile.body;
+  describe("PATCH / Update User by id", () => {
+    test("should be able to update a user by id", async () => {
+      const loginStudent = await request(app)
+        .post("/users")
+        .send(studentUserMock);
 
-    const response = await request(app)
-      .get(`/users/${id}`)
-      .set("Authorization", "Bearer batata");
+      const idStudent = loginStudent.body.id;
 
-    expect(response.status).toBe(401);
-    expect(response.body).toHaveProperty("message");
-  });
+      const createGroup2 = await request(app)
+        .post("/groups")
+        .set("Authorization", authorization);
 
-  test("should not be able to find a user without adm permission", async () => {
-    const loginStudent = await request(app)
-      .post("/users/login")
-      .send(loginStudentMock);
-    const studentAuth = `Bearer ${loginStudent.body.token}`;
-    const studentProfile = await request(app)
-      .get("/users/profile")
-      .set("Authorization", studentAuth);
-    const { id } = studentProfile.body;
+      const groupId2 = createGroup2.body.id;
 
-    const response = await request(app)
-      .get(`/users/${id}`)
-      .set("Authorization", studentAuth);
+      const res = await request(app)
+        .patch(`/users/${idStudent}`)
+        .set("Authorization", authorization)
+        .send({
+          groupId: groupId2,
+        });
 
-    expect(response.status).toBe(403);
-    expect(response.body).toHaveProperty("message");
-  });
+      expect(res.status).toBe(200);
+      expect(res.body).toHaveProperty("id");
+      expect(res.body).toHaveProperty("name");
+      expect(res.body).toHaveProperty("email");
+      expect(res.body).not.toHaveProperty("password");
+      expect(res.body).toHaveProperty("role");
+      expect(res.body).toHaveProperty("createdAt");
+      expect(res.body).toHaveProperty("updatedAt");
+      expect(res.body).toHaveProperty("groupId");
+    });
 
-  test("should not be able to find a user with invalid id", async () => {
-    const response = await request(app)
-      .get("/users/batata")
-      .set("Authorization", authorization);
+    test("should not be able to update a user by id without token", async () => {
+      const loginStudent = await request(app)
+        .post("/users")
+        .send(studentUserMock);
 
-    expect(response.status).toBe(404);
-    expect(response.body).toHaveProperty("message");
-  });
+      const idStudent = loginStudent.body.id;
 
-  test("should not be able to delete a user without token", async () => {
-    const loginStudent = await request(app)
-      .post("/users/login")
-      .send(loginStudentMock);
-    const studentAuth = `Bearer ${loginStudent.body.token}`;
-    const studentProfile = await request(app)
-      .get("/users/profile")
-      .set("Authorization", studentAuth);
-    const { id } = studentProfile.body;
+      const createGroup2 = await request(app)
+        .post("/groups")
+        .set("Authorization", authorization);
 
-    const response = await request(app).delete(`/users/${id}`);
+      const moduleId2 = createGroup2.body.modules[0].id;
 
-    expect(response.status).toBe(401);
-    expect(response.body).toHaveProperty("message");
-  });
+      const res = await request(app).patch(`/users/${idStudent}`).send({
+        groupId: moduleId2,
+      });
 
-  test("should not be able to delete a user with invalid token", async () => {
-    const loginStudent = await request(app)
-      .post("/users/login")
-      .send(loginStudentMock);
-    const studentAuth = `Bearer ${loginStudent.body.token}`;
-    const studentProfile = await request(app)
-      .get("/users/profile")
-      .set("Authorization", studentAuth);
-    const { id } = studentProfile.body;
+      expect(res.status).toBe(401);
+      expect(res.body).toHaveProperty("message");
+    });
 
-    const response = await request(app)
-      .delete(`/users/${id}`)
-      .set("Authorization", "Bearer batata");
+    test("should not be able to update a user by id with the current groupId", async () => {
+      const createGroup1 = await request(app)
+        .post("/groups")
+        .set("Authorization", authorization);
 
-    expect(response.status).toBe(401);
-    expect(response.body).toHaveProperty("message");
-  });
+      const groupId1 = createGroup1.body.id;
 
-  test("should not be able to delete a user without adm permission", async () => {
-    const loginStudent = await request(app)
-      .post("/users/login")
-      .send(loginStudentMock);
-    const studentAuth = `Bearer ${loginStudent.body.token}`;
-    const studentProfile = await request(app)
-      .get("/users/profile")
-      .set("Authorization", studentAuth);
-    const { id } = studentProfile.body;
+      const loginStudent = await request(app)
+        .post("/users")
+        .send(studentUserMock);
 
-    const response = await request(app)
-      .delete(`/users/${id}`)
-      .set("Authorization", studentAuth);
+      const idStudent = loginStudent.body.id;
 
-    expect(response.status).toBe(403);
-    expect(response.body).toHaveProperty("message");
-  });
+      const res = await request(app)
+        .patch(`/users/${idStudent}`)
+        .set("Authorization", authorization)
+        .send({
+          groupId: groupId1,
+        });
 
-  test("should not be able to delete a user with invalid id", async () => {
-    const response = await request(app)
-      .delete("/users/batata")
-      .set("Authorization", authorization);
+      expect(res.status).toBe(404);
+      expect(res.body).toHaveProperty("message");
+    });
 
-    expect(response.status).toBe(404);
-    expect(response.body).toHaveProperty("message");
-  });
+    test("should not be able to update a user by id with invalid groupId", async () => {
+      const loginStudent = await request(app)
+        .post("/users")
+        .send(studentUserMock);
 
-  test("should be able to delete a user", async () => {
-    const loginStudent = await request(app)
-      .post("/users/login")
-      .send(loginStudentMock);
-    const studentAuth = `Bearer ${loginStudent.body.token}`;
-    const studentProfile = await request(app)
-      .get("/users/profile")
-      .set("Authorization", studentAuth);
-    const { id } = studentProfile.body;
+      const idStudent = loginStudent.body.id;
 
-    const response = await request(app)
-      .delete(`/users/${id}`)
-      .set("Authorization", authorization);
+      const res = await request(app)
+        .patch(`/users/${idStudent}`)
+        .set("Authorization", authorization)
+        .send({
+          groupId: "babsladgadgagdçahdçao",
+        });
 
-    expect(response.status).toBe(204);
-    expect(response.body).toMatchObject({});
+      expect(res.status).toBe(404);
+      expect(res.body).toHaveProperty("message");
+    });
+
+    test("should not be able to update a user by id with invalid id", async () => {
+      const createGroup2 = await request(app)
+        .post("/groups")
+        .set("Authorization", authorization);
+
+      const groupId2 = createGroup2.body.id;
+
+      const res = await request(app)
+        .patch(`/users/çaljdaçjdapjdajd`)
+        .set("Authorization", authorization)
+        .send({
+          groupId: groupId2,
+        });
+
+      expect(res.status).toBe(404);
+      expect(res.body).toHaveProperty("message");
+    });
+
+    test("should not be able to update a user by id without data in the request body", async () => {
+      const createStudent = await request(app)
+        .post("/users")
+        .send(studentUserMock);
+
+      const idStudent = createStudent.body.id;
+
+      const res = await request(app)
+        .patch(`/users/${idStudent}`)
+        .set("Authorization", authorization)
+        .send({});
+
+      expect(res.status).toBe(400);
+      expect(res.body).toHaveProperty("message");
+    });
+
+    test("should not be able to update a user by id without providing the correct key(groupId) in the request", async () => {
+      const createStudent = await request(app)
+        .post("/users")
+        .send(studentUserMock);
+
+      const idStudent = createStudent.body.id;
+
+      const res = await request(app)
+        .patch(`/users/${idStudent}`)
+        .set("Authorization", authorization)
+        .send({
+          banana: "banana",
+        });
+
+      expect(res.status).toBe(400);
+      expect(res.body).toHaveProperty("message");
+    });
+
+    test("should not be able to update user by id with invalid token", async () => {
+      const createStudent = await request(app)
+        .post("/users")
+        .send(studentUserMock);
+
+      const idStudent = createStudent.body.id;
+
+      const createGroup2 = await request(app)
+        .post("/groups")
+        .set("Authorization", authorization);
+
+      const groupId2 = createGroup2.body.id;
+
+      const res = await request(app)
+        .patch(`/users/${idStudent}`)
+        .set("Authorization", `Bearer batata`)
+        .send({
+          groupId: groupId2,
+        });
+
+      expect(res.status).toBe(401);
+      expect(res.body).toHaveProperty("message");
+    });
+
+    test("should not be able to update user by id without adm permission", async () => {
+      const createStudent = await request(app)
+        .post("/users")
+        .send(studentUserMock);
+
+      const idStudent = createStudent.body.id;
+
+      const loginStudent = await request(app)
+        .post("/users/login")
+        .send(studentUserMock);
+
+      const createGroup2 = await request(app)
+        .post("/groups")
+        .set("Authorization", authorization);
+
+      const groupId2 = createGroup2.body.id;
+
+      const res = await request(app)
+        .patch(`/users/${idStudent}`)
+        .set("Authorization", `Bearer ${loginStudent.body.token}`)
+        .send({
+          groupId: groupId2,
+        });
+
+      expect(res.status).toBe(403);
+      expect(res.body).toHaveProperty("message");
+    });
   });
 });

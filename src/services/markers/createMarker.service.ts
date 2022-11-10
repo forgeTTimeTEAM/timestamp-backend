@@ -4,11 +4,14 @@ import { AppError } from "../../errors/AppError";
 
 import { IVideoMarkerRequest } from "../../interfaces/videoMarker";
 
-const createMarker = async ({
+const createMarkerServices = async ({
   marks,
   groupId,
   videoId,
 }: IVideoMarkerRequest) => {
+
+  console.log(marks)
+  
   if (!marks[0].videoId) {
     throw new AppError("video should be send");
   }
@@ -87,4 +90,4 @@ const createMarker = async ({
   }
 };
 
-export { createMarker };
+export { createMarkerServices };

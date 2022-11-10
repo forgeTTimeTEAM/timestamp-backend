@@ -8,11 +8,12 @@ import {
     videoWithInvalidSprintMock,
     videoWithoutSprintMock,
     validVideoMock2,
+    updateVideoMock,
 } from "../mocks/videos.mock";
 import {
     admUserMock,
     instructorUserMock,
-    loginAdmMock,
+    admLoginMock,
     loginInstructorMock,
     loginStudentMock,
     studentUserMock,
@@ -32,7 +33,7 @@ describe("routes - /videos", () => {
 
         const loginAdm = await request(app)
             .post("/users/login")
-            .send(loginAdmMock);
+            .send(admLoginMock);
         authorization = `Bearer ${loginAdm.body.token}`;
 
         await prisma.users.create({
@@ -62,6 +63,7 @@ describe("routes - /videos", () => {
             .set("Authorization", authorization);
 
         validVideoMock.sprintId = group.body.modules[0].sprints[0].id;
+        updateVideoMock.sprintId = group.body.modules[0].sprints[0].id;
 
         const response = await request(app)
             .post("/videos")
@@ -127,13 +129,14 @@ describe("routes - /videos", () => {
             .set("Authorization", authorization);
 
         validVideoMock2.sprintId = group2.body.modules[0].sprints[0].id;
+
         const response = await request(app)
             .post("/videos")
             .send(validVideoMock2)
             .set("Authorization", instructorAuthorization);
 
-            expect(response.status).toBe(401);
-            expect(response.body).toHaveProperty("message");
+        expect(response.status).toBe(401);
+        expect(response.body).toHaveProperty("message");
     });
 
     test("should not be able to create a video without title", async () => {
@@ -177,9 +180,65 @@ describe("routes - /videos", () => {
         expect(response.body).toHaveProperty("message");
     });
 
-    test("should be able to delete a video url", async () => {
+    test("should not be able to create a video without token", async () => {
+        const response = await request(app).delete(`/videos/${createdVideoId}`);
+
+        expect(response.status).toBe(401);
+        expect(response.body).toHaveProperty("message");
+    });
+
+    test("should no be able to create a video with invalid/expired token", async () => {
+        const response = await request(app)
+            .delete(`/videos/${createdVideoId}`)
+            .set("Authorization", "Bearer batata");
+
+        expect(response.status).toBe(401);
+        expect(response.body).toHaveProperty("message");
+    });
+
+    test("should be able to update a video", async () => {
         const response = await request(app)
             .patch(`/videos/${createdVideoId}`)
+            .send(updateVideoMock)
+            .set("Authorization", authorization);
+
+        expect(response.status).toBe(200);
+        expect(response.body).toHaveProperty("id");
+        expect(response.body).toHaveProperty("title", updateVideoMock.title);
+        expect(response.body).toHaveProperty("url");
+    });
+
+    test("should not be able to update a video without adm/instructor permission", async () => {
+        const response = await request(app)
+            .patch(`/videos/${createdVideoId}`)
+            .set("Authorization", studentAuthorization);
+
+        expect(response.status).toBe(403);
+        expect(response.body).toHaveProperty("message");
+    });
+
+    test("should not be able to update a video when instructor don't have this module", async () => {
+        const response = await request(app)
+            .patch(`/videos/${createdVideoId}`)
+            .send(validVideoMock2)
+            .set("Authorization", instructorAuthorization);
+
+        expect(response.status).toBe(401);
+        expect(response.body).toHaveProperty("message");
+    });
+
+    test("should not be able to update a video url with and invalid video id", async () => {
+        const response = await request(app)
+            .patch("/videos/batata")
+            .set("Authorization", studentAuthorization);
+
+        expect(response.status).toBe(403);
+        expect(response.body).toHaveProperty("message");
+    });
+
+    test("should be able to delete a video url", async () => {
+        const response = await request(app)
+            .delete(`/videos/${createdVideoId}`)
             .send(validVideoMock)
             .set("Authorization", authorization);
 
@@ -188,7 +247,25 @@ describe("routes - /videos", () => {
 
     test("should not be able to delete a video url without adm/instructor permission", async () => {
         const response = await request(app)
-            .post("/videos")
+            .delete(`/videos/${createdVideoId}`)
+            .set("Authorization", studentAuthorization);
+
+        expect(response.status).toBe(403);
+        expect(response.body).toHaveProperty("message");
+    });
+
+    test("should not be able to delete a video when instructor don't have this module", async () => {
+        const response = await request(app)
+            .delete(`/videos/${createdVideoId}`)
+            .set("Authorization", instructorAuthorization);
+
+        expect(response.status).toBe(401);
+        expect(response.body).toHaveProperty("message");
+    });
+
+    test("should not be able to delete a video url with and invalid video id", async () => {
+        const response = await request(app)
+            .delete("/videos/batata")
             .set("Authorization", studentAuthorization);
 
         expect(response.status).toBe(403);
