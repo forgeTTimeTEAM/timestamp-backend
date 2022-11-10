@@ -2,7 +2,8 @@ import { Router } from "express";
 
 import {
     createVideoController,
-    deleteVideoController,
+    updateVideoController,
+    deleteVideoController
 } from "../controllers/videos";
 
 import {
@@ -19,6 +20,12 @@ videosRouter.post(
     createVideoController
 );
 videosRouter.patch(
+    "/:id",
+    verifyTokenMiddleware,
+    verifyInstructorOrAdmPermissionMiddleware,
+    updateVideoController
+);
+videosRouter.delete(
     "/:id",
     verifyTokenMiddleware,
     verifyInstructorOrAdmPermissionMiddleware,
