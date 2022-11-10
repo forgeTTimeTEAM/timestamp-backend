@@ -24,7 +24,7 @@ const updateUserByIdService = async (
   });
 
   if (!userExists) {
-    throw new AppError("User not exists", 404);
+    throw new AppError("User not found", 404);
   }
 
   const groupExists = await prisma.groups.findFirst({
@@ -34,7 +34,7 @@ const updateUserByIdService = async (
   });
 
   if (!groupExists) {
-    throw new AppError("Group not exists", 404);
+    throw new AppError("Group not found", 404);
   }
 
   if (userExists.groupId === userRequest.groupId) {

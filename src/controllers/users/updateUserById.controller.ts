@@ -2,7 +2,7 @@ import { RequestHandler } from "express";
 import { IUserUpdateById } from "../../interfaces/users";
 import { updateUserByIdService } from "../../services/users/updateUserById.service";
 
-const updateUserById: RequestHandler = async (req, res) => {
+const updateUserByIdController: RequestHandler = async (req, res) => {
   const userDataUpdate: IUserUpdateById = req.body;
   const id = req.params.id;
 
@@ -11,4 +11,4 @@ const updateUserById: RequestHandler = async (req, res) => {
   return res.status(200).json(userUpdated);
 };
 
-export { updateUserById };
+export { updateUserByIdController };
