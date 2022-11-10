@@ -104,7 +104,7 @@ describe("routes - /groups", () => {
       .set("Authorization", admAuth);
 
     expect(response.status).toBe(200);
-
+    
     const [group] = response.body;
     expect(group).toHaveProperty("id");
     expect(group).toHaveProperty("number");
