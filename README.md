@@ -18,7 +18,7 @@ _URL base da API:_ **https://backend-timestamp.herokuapp.com/**
 
 ## **2. _Para dar início ao projeto, siga as instruções abaixo:_**
 
-[ Voltar para o topo ](#tabela-de-conteúdos)
+[ Voltar para o topo ](#índice-com-todas-as-rotas-do-projeto)
 
 ### **2.1 Instalando as dependências do projeto**
 
@@ -50,23 +50,23 @@ yarn prisma migrate dev
 
 ## **Índice com todas as rotas do projeto**
 
--   [/users](#1---users)
--   [/groups](#2---groups)
--   [/modules](#3---modules)
--   [/videos](#4---videos)
--   [/markers](#5---markers)
+- [/users](#1---users)
+- [/groups](#2---groups)
+- [/modules](#3---modules)
+- [/videos](#4---videos)
+- [/markers](#5---markers)
 
 ---
 
 ## **1 - _Users_**
 
--   [POST - Criar usuário](#11-POST)
--   [POST - Fazer login](#12-POST)
--   [GET - Mostrar todos os dados do usuário](#13-GET)
--   [GET - Listar todos os usuários](#14-GET)
--   [GET - Mostrar um usuário a partir do id](#15-GET)
--   [DELETE - Deletar usuário](#16-DELETE)
--   [PATCH - Atualizar usuário](#17-PATCH)
+- [POST - Criar usuário](#11-POST)
+- [POST - Fazer login](#12-POST)
+- [GET - Mostrar todos os dados do usuário](#13-GET)
+- [GET - Listar todos os usuários](#14-GET)
+- [GET - Mostrar um usuário a partir do id](#15-GET)
+- [DELETE - Deletar usuário](#16-DELETE)
+- [PATCH - Atualizar usuário](#17-PATCH)
 
 ---
 
@@ -158,7 +158,7 @@ _Rota responsável por criar um usuário, por padrão, o usuário criado será u
 
 ## **1.2 - _POST_**
 
-[ Voltar para o topo ](#indice-de-rotas)
+[ Voltar para o topo ](#índice-com-todas-as-rotas-do-projeto)
 
 ### **Login do usuário**
 
@@ -217,7 +217,7 @@ _Rota responsável pelo login do usuário, seja ele estudante, instrutor ou admi
 
 ## **1.3 - _GET_**
 
-[ Voltar para o topo ](#indice-de-rotas)
+[ Voltar para o topo ](#índice-com-todas-as-rotas-do-projeto)
 
 </br>
 
@@ -237,7 +237,7 @@ _Rota responsável por retornar todos os dados do usuário a partir do token_
 
 </br>
 
--   Token de autorização do tipo _`Bearer token`_
+- Token de autorização do tipo _`Bearer token`_
 
 </br>
 
@@ -246,7 +246,7 @@ _Rota responsável por retornar todos os dados do usuário a partir do token_
 ```shell
 	/users/profile, {
         headers: {
-          "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiU1RVREVOVCIsImdyb3VwSWQiOiI3ZTQ0ZWM4..."
+          Authorization: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiU1RVREVOVCIsImdyb3VwSWQiOiI3ZTQ0ZWM4..."
         	}
 		}
 ```
@@ -310,7 +310,7 @@ _Rota responsável por retornar todos os dados do usuário a partir do token_
 
 ## **1.4 - _GET_**
 
-[ Voltar para o topo ](#indice-de-rotas)
+[ Voltar para o topo ](#índice-com-todas-as-rotas-do-projeto)
 
 ### **Listar todos os usuários**
 
@@ -328,7 +328,7 @@ _Rota responsável por retornar alguns dados de todos os usuários_
 
 </br>
 
--   Token de autorização do tipo _`Bearer Token`_ com permissão de **administrador**
+- Token de autorização do tipo _`Bearer Token`_ com permissão de **administrador**
 
 </br>
 
@@ -337,7 +337,7 @@ _Rota responsável por retornar alguns dados de todos os usuários_
 ```shell
 	/users, {
         headers: {
-          "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiU1RVREVOVCIsImdyb3VwSWQiOiI3ZTQ0ZWM4..."
+          Authorization: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiU1RVREVOVCIsImdyb3VwSWQiOiI3ZTQ0ZWM4..."
         	}
 		}
 ```
@@ -376,7 +376,7 @@ _Rota responsável por retornar alguns dados de todos os usuários_
 
 ## **1.5 - _GET_**
 
-[ Voltar para o topo ](#indice-de-rotas)
+[ Voltar para o topo ](#índice-com-todas-as-rotas-do-projeto)
 
 ### **Retorna um usuário a partir do id**
 
@@ -394,7 +394,7 @@ _Rota responsável por retornar alguns dados de apenas um usuário a partir do i
 
 </br>
 
--   Token de autorização do tipo _`Bearer Token`_ com permissão de **administrador**
+- Token de autorização do tipo _`Bearer Token`_ com permissão de **administrador**
 
 </br>
 
@@ -403,7 +403,7 @@ _Rota responsável por retornar alguns dados de apenas um usuário a partir do i
 ```shell
 	/users/22322984-3ebc-460d-8321-4ded36eeafa6, {
         headers: {
-          "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiU1RVREVOVCIsImdyb3VwSWQiOiI3ZTQ0ZWM4..."
+          Authorization: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiU1RVREVOVCIsImdyb3VwSWQiOiI3ZTQ0ZWM4..."
         	}
 		}
 ```
@@ -440,7 +440,7 @@ _Rota responsável por retornar alguns dados de apenas um usuário a partir do i
 
 ## **1.6 - _DELETE_**
 
-[ Voltar para o topo ](#indice-de-rotas)
+[ Voltar para o topo ](#índice-com-todas-as-rotas-do-projeto)
 
 ### **Deleção de usuário**
 
@@ -458,7 +458,7 @@ _Rota responsável pela deleção de um usuário a partir do id_
 
 </br>
 
--   Token de autorização do tipo _`Bearer token`_ com permissão de **administrador**
+- Token de autorização do tipo _`Bearer token`_ com permissão de **administrador**
 
 </br>
 
@@ -467,7 +467,7 @@ _Rota responsável pela deleção de um usuário a partir do id_
 ```shell
 	/users/22322984-3ebc-460d-8321-4ded36eeafa6, {
         headers: {
-          "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiU1RVREVOVCIsImdyb3VwSWQiOiI3ZTQ0ZWM4..."
+          Authorization: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiU1RVREVOVCIsImdyb3VwSWQiOiI3ZTQ0ZWM4..."
         	}
 		}
 ```
@@ -490,7 +490,7 @@ _Rota responsável pela deleção de um usuário a partir do id_
 
 ## **1.7 - _PATCH_**
 
-[ Voltar para o topo ](#indice-de-rotas)
+[ Voltar para o topo ](#índice-com-todas-as-rotas-do-projeto)
 
 </br>
 
@@ -510,7 +510,7 @@ _Rota responsável pela atualização do usuário, apenas a turma(groupId) poder
 
 </br>
 
--   Token de autorização do tipo _`Bearer Token`_ com permissão de **administrador**
+- Token de autorização do tipo _`Bearer Token`_ com permissão de **administrador**
 
 **Campos obrigatórios:**
 
@@ -527,7 +527,7 @@ _Rota responsável pela atualização do usuário, apenas a turma(groupId) poder
 ```shell
 	/users/22322984-3ebc-460d-8321-4ded36eeafa6, {
         headers: {
-          "Authorization": "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiU1RVREVOVCIsImdyb3VwSWQiOiI3ZTQ0ZWM4..."
+          Authorization: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiU1RVREVOVCIsImdyb3VwSWQiOiI3ZTQ0ZWM4..."
         	},
 		body: {
 			"groupId": "7e44ec8c-84e2-42d1-aefb-09531c5ba937"
@@ -556,17 +556,13 @@ _Rota responsável pela atualização do usuário, apenas a turma(groupId) poder
 **Possíveis erros:**
 | _Erro_ | _Mensagem_ | _Status Code_ |
 | --------------------------------------------------------|---------------------------------------------------|---------------|
-
-Provide a different groupId than the current one
-
 | Tentativa sem envio de token | Missing token | 401 |
 | Tentativa com envio de token inválido | Invalid or expired token | 401 |
 | Tentativa com envio de token de estudante ou instrutor | Access denied | 403 |
-| should not be able to update a user by id with invalid id | User not exists | 404 |
-| should not be able to update a user by id without data in the request body | Need to provide the data in the request | 400 |
-| should not be able to update a user by id without providing the correct key(groupId) in the request | It is only possible to update the groupId | 400 |
-| should not be able to update user by id with invalid token | Invalid or expired token | 401 |
-| should not be able to update user by id without adm permission | Access denied | 403 |
+| Tentativa com envio de id do usuário inválido | User not found | 404 |
+| Tentativa sem enviar o campo groupId | Need to provide the data in the request | 400 |
+| Tentativa com envios de campos além do groupId | It is only possible to update the groupId | 400 |
+| Tentativa com envios de group id igual | Provide a different groupId than the current one | 404 |
 
 ---
 
@@ -574,9 +570,9 @@ Provide a different groupId than the current one
 
 [ Voltar para o topo ](#tabela-de-conteúdos)
 
--   [POST - create group](#21-POST)
--   [GET - get groups](#22-GET)
--   [GET - update group by id](#23-GET)
+- [POST - create group](#21-POST)
+- [GET - list groups](#22-GET)
+- [GET - find group](#23-GET)
 
 ---
 
@@ -586,7 +582,138 @@ Provide a different groupId than the current one
 
 ### Endpoint: /groups
 
-Rota para criação
+Rota para criação de turmas
+
+- Necessário token de autorização
+- Necessário ser administrador
+- Não possui body na requisição
+
+Body da resposta:
+
+```shell
+{
+      id: 'e7cdc0d9-d9ab-4fb3-b997-7e12954f83af',
+      number: 1,
+      modules: [
+        {
+          id: '68d0c629-448d-4a02-b28f-75b45a703bf9',
+          name: 'M1',
+          createdAt: '2022-11-10T02:30:26.065Z',
+          groupId: 'e7cdc0d9-d9ab-4fb3-b997-7e12954f83af',
+          sprints: [
+            ...
+          ]
+        }
+      ]
+    }
+```
+
+| Status Code |
+| ----------- |
+| 201         |
+
+Possíveis erros:
+| Error | Message | Status Code |
+| ------------------------------------------------------------------------------|-------------------------------|-------------|
+| should not be able to create a group without token | Missing token | 401 |
+| should not be able to create a group with invalid/expired token | Invalid or expired token | 401 |
+| should not be able to create a group without adm permission | Access denied | 403 |
+
+---
+
+## 2.2 **GET**
+
+### List groups
+
+### Endpoint: /groups
+
+Rota para listar turmas
+
+- Necessário token de autorização
+- Necessário ser administrador
+- Não possui body na requisição
+
+Body da resposta:
+
+```shell
+[
+      {
+        id: '43dde98f-5419-42ed-b7a1-603f49eb9852',
+        number: 1,
+        modules: [
+            {
+                ...
+            }
+        ] ,
+        users: [
+            {
+                ...
+            }
+        ]
+      },
+      ...
+]
+```
+
+| Status Code |
+| ----------- |
+| 200         |
+
+Possíveis erros:
+| Error | Message | Status Code |
+| ------------------------------------------------------------------------------|-------------------------------|-------------|
+| should not be able to list groups without token | Missing token | 401 |
+| should not be able to list groups with invalid/expired token | Invalid or expired token | 401 |
+| should not be able to list groups without adm permission | Access denied | 403 |
+| should not be able to create a video with an invalid groupId | groupId not found | 404 |
+
+---
+
+## 2.3 **GET**
+
+### Find group
+
+### Endpoint: /groups/:id
+
+Rota para encontrar turma através do ID
+
+- Necessário token de autorização
+- Necessário ser administrador
+- Não possui body na requisição
+
+Body da resposta:
+
+```shell
+[
+      {
+        id: '43dde98f-5419-42ed-b7a1-603f49eb9852',
+        number: 1,
+        modules: [
+            {
+                ...
+            }
+        ] ,
+        users: [
+            {
+                ...
+            }
+        ]
+      },
+      ...
+]
+```
+
+| Status Code |
+| ----------- |
+| 200         |
+
+Possíveis erros:
+| Error | Message | Status Code |
+| ------------------------------------------------------------------------------|-------------------------------|-------------|
+| should not be able to find a group without token | Missing token | 401 |
+| should not be able to find a group with invalid/expired token | Invalid or expired token | 401 |
+| should not be able to find a group without adm permission | Access denied | 403 |
+| should not be able to create a video with an invalid groupId | groupId not found | 404 |
 
 ---
 
@@ -594,8 +721,245 @@ Rota para criação
 
 [ Voltar para o topo ](#tabela-de-conteúdos)
 
--   [POST - create video](#51-POST)
--   [DELETE - delete video url](#52-PATCH)
+- [POST - Criar módulo](#31-POST)
+- [GET - Listar todos os módulos ](#32-GET)
+- [GET - Mostrar um módulo ](#33-GET)
+
+## **3.1 - _POST_**
+
+[ Voltar para o topo ](#índice-com-todas-as-rotas-do-projeto)
+
+### **Criar um módulo**
+
+</br>
+
+### **Endpoint: _/modules_**
+
+</br>
+
+_Rota responsável por criar um módulo, por padrão, o módulo será criado com 8 sprints, deve ser passado no corpo da requisição o id da turma (groupId), name e sprintPrefixName opcionais_
+
+</br>
+
+**Campos:**
+
+</br>
+
+| Campo            | Tipo   | Descrição                                 |
+| ---------------- | ------ | ----------------------------------------- |
+| groupId          | string | id da turma                               |
+| name             | string | nome do módulo (opcional)                 |
+| sprintPrefixName | string | nome do prefixo de cada sprint (opcional) |
+
+</br>
+
+**Deve ser enviado:**
+
+</br>
+
+- Token de autorização do tipo _`Bearer Token`_ com permissão de **administrador**
+
+</br>
+
+**Exemplo de requisição válida:**
+
+```shell
+	/modules, {
+      headers: {
+        Authorization: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiU1RVREVOVCIsImdyb3VwSWQiOiI3ZTQ0ZWM4..."
+        },
+	  body: {
+  			  groupId: "5bd3b8cc-c522-406f-8218-b06fb2af4bca",
+  			  name: "M4",
+  			  sprintPrefixName: "S",
+		    }
+}
+```
+
+</br>
+
+**Retorno da requisição:**
+
+```shell
+{
+      id: '368007a8-84ee-4263-807b-5c8ae2a82d05',
+      name: 'M4',
+      createdAt: '2022-11-10T02:31:12.123Z',
+      groupId: '5bd3b8cc-c522-406f-8218-b06fb2af4bca',
+      sprints: [
+        {
+          id: '87e25189-5a6d-49da-98b6-2fb272b531ab',
+          name: 'S1',
+          moduleId: '368007a8-84ee-4263-807b-5c8ae2a82d05'
+        },
+		...
+	  ]
+
+
+    }
+```
+
+| **Status Code** |
+| --------------- |
+| _201_           |
+
+**Possíveis erros:**
+| _Erro_ | _Mensagem_ | _Status Code_ |
+| ------------------------------|----------------------------------------------------------------------------- |--------------|
+| Tentativa sem envio do token | Missing token | 401 |
+| Tentativa com envio de token inválido | Invalid or expired token | 401 |
+| Tentativa com envio de token de estudante ou instrutor | Access denied | 403 |
+| Tentativa com envio de groupId inválido | Group not found | 404 |
+
+---
+
+## **3.2 - _GET_**
+
+[ Voltar para o topo ](#índice-com-todas-as-rotas-do-projeto)
+
+### **Listar todos os módulos**
+
+</br>
+
+### **Endpoint: _/modules_**
+
+</br>
+
+_Rota responsável por listar todos os módulos_
+
+</br>
+
+**Deve ser enviado:**
+
+</br>
+
+- Token de autorização do tipo _`Bearer Token`_ com permissão de **administrador**
+
+</br>
+
+**Exemplo de requisição válida:**
+
+```shell
+	/modules, {
+      headers: {
+        Authorization: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiU1RVREVOVCIsImdyb3VwSWQiOiI3ZTQ0ZWM4..."
+        }
+}
+```
+
+</br>
+
+**Retorno da requisição:**
+
+```shell
+{
+
+	[
+      {
+        id: '368007a8-84ee-4263-807b-5c8ae2a82d05',
+        name: 'M4',
+        createdAt: '2022-11-10T03:31:22.201Z',
+        groupId: '5bd3b8cc-c522-406f-8218-b06fb2af4bca'
+      },
+	  ...
+	]
+
+}
+```
+
+| **Status Code** |
+| --------------- |
+| _200_           |
+
+**Possíveis erros:**
+| _Erro_ | _Mensagem_ | _Status Code_ |
+| ------------------------------|----------------------------------------------------------------------------- |--------------|
+| Tentativa sem envio do token | Missing token | 401 |
+| Tentativa com envio de token inválido | Invalid or expired token | 401 |
+| Tentativa com envio de token de estudante ou instrutor | Access denied | 403 |
+
+---
+
+## **3.3 - _GET_**
+
+[ Voltar para o topo ](#índice-com-todas-as-rotas-do-projeto)
+
+### **Listar todos os usuários de um módulo**
+
+</br>
+
+### **Endpoint: _/modules/:id_**
+
+</br>
+
+_Rota responsável por listar todos os usuário de um módulo a partir do id_
+
+</br>
+
+**Deve ser enviado:**
+
+</br>
+
+- Token de autorização do tipo _`Bearer Token`_ com permissão de **administrador**
+
+</br>
+
+**Exemplo de requisição válida:**
+
+```shell
+	/modules/368007a8-84ee-4263-807b-5c8ae2a82d05, {
+      headers: {
+        Authorization: "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiU1RVREVOVCIsImdyb3VwSWQiOiI3ZTQ0ZWM4..."
+        }
+}
+```
+
+</br>
+
+**Retorno da requisição:**
+
+```shell
+      {
+        id: '368007a8-84ee-4263-807b-5c8ae2a82d05',
+        name: 'M1',
+        createdAt: '2022-11-10T03:53:25.712Z',
+        groupId: '5bd3b8cc-c522-406f-8218-b06fb2af4bca',
+        users: [
+      	{
+          id: '752df371-47e8-4c62-bc8c-ea72ac78f111',
+          createdAt: '2022-11-08T15:23:59.091Z',
+          updatedAt: '2022-11-08T15:23:59.091Z',
+		  userId: '22322984-3ebc-460d-8321-4ded36eeafa6',
+		  moduleId: '368007a8-84ee-4263-807b-5c8ae2a82d05',
+			user: {
+			  id: '22322984-3ebc-460d-8321-4ded36eeafa6',
+			  name: 'Sara Lins',
+			  email: 'saralins@email.com',
+			  role: 'STUDENT',
+			  createdAt: '2022-11-08T15:23:59.091Z',
+			  updatedAt: '2022-11-08T15:23:59.091Z',
+			  groupId: '5bd3b8cc-c522-406f-8218-b06fb2af4bca'
+			}
+      },
+	  ...
+    ]
+}
+
+
+```
+
+| **Status Code** |
+| --------------- |
+| _200_           |
+
+**Possíveis erros:**
+| _Erro_ | _Mensagem_ | _Status Code_ |
+| ------------------------------|----------------------------------------------------------------------------- |--------------|
+| Tentativa sem envio do token | Missing token | 401 |
+| Tentativa com envio de token inválido | Invalid or expired token | 401 |
+| Tentativa com envio de token de estudante | Access denied | 403 |
+| Tentativa com envio de id do módulo inválido | Module not found | 403 |
+| Tentativa com envio de token de instrutor e id do módulo que não possui acesso | Access denied | 403 |
 
 ---
 
@@ -603,8 +967,9 @@ Rota para criação
 
 [ Voltar para o topo ](#tabela-de-conteúdos)
 
--   [POST - create video](#51-POST)
--   [PATCH - delete video url](#52-PATCH)
+- [POST - create video](#51-POST)
+- [PATCH - update video](#51-PATCH)
+- [DELETE - delete video url](#52-DELETE)
 
 ---
 
@@ -616,8 +981,8 @@ Rota para criação
 
 Rota para criação de video
 
--   Necessário token de autorização
--   Necessário ser administrador ou ser instrutor do módulo
+- Necessário token de autorização
+- Necessário ser administrador ou ser instrutor do módulo
 
 Campos:
 | Campo | Tipo | Descrição |
@@ -660,7 +1025,7 @@ Possíveis erros:
 | Error | Message | Status Code |
 | ------------------------------------------------------------------------------|-------------------------------|-------------|
 | should not be able to create a video without token | Missing token | 401 |
-| should no be able to create a video with invalid/expired token | Invalid or expired token | 401 |
+| should not be able to create a video with invalid/expired token | Invalid or expired token | 401 |
 | should not be able to create a video without adm/instructor permission | Access denied | 403 |
 | should not be able to create a video when instructor don't have this module | Instructor not allowed | 401 |
 | should not be able to create a video without title | Title is required | 400 |
@@ -670,7 +1035,65 @@ Possíveis erros:
 
 ---
 
-## 4.2 **PATCH**
+## 4.2 **UPDATE**
+
+[ Voltar para o topo ](#índice-com-todas-as-rotas-do-projeto)
+
+### Update video
+
+### Endpoint: /videos/:id
+
+Rota para update de video
+
+- Necessário token de autorização
+- Necessário ser administrador ou ser instrutor do módulo
+
+Campos:
+| Campo | Tipo | Descrição |
+| ------------|--------|-------------------------------------------------|
+| title | string | título do vídeo (opcional) |
+| url | string | link do vídeo (opcional) |
+| sprintId | string | sprint id do vídeo |
+
+Body da requisição:
+
+```shell
+{
+	"title": "video teste",
+	"url": "urldovideo.com",
+	"sprintId": "38e0f242-4b31-4366-abc8-71004132c8f4"
+}
+```
+
+Body da resposta:
+
+```shell
+{
+      id: 'c4f61f22-d127-4b10-a2b6-ef715f2be988',
+      title: 'video update',
+      url: 'test update',
+      releaseDate: '2022-11-04T04:00:00.000Z',
+      createdAt: '2022-11-10T02:10:34.761Z',
+      updatedAt: '2022-11-10T02:10:34.958Z',
+      sprintId: '3c4ee486-f932-4f45-a3ea-f07aa424fe18'
+    }
+```
+
+| Status Code |
+| ----------- |
+| 200         |
+
+Possíveis erros:
+| Error | Message | Status Code |
+| ------------------------------------------------------------------------------|-------------------------------|-------------|
+| should not be able to update a video with invalid/expired token | Invalid or expired token | 401 |
+| should not be able to update a video without adm/instructor permission | Access denied | 403 |
+| should not be able to update a video when instructor don't have this module | Instructor not allowed | 401 |
+| should not be able to update a video with an invalid videoId | Sprint not found | 404 |
+
+---
+
+## 4.3 **DELETE**
 
 [ Voltar para o topo ](#indice-de-rotas)
 
@@ -680,10 +1103,10 @@ Possíveis erros:
 
 Rota para deleção de url de video
 
--   Sem body na requisição
--   Sem body na resposta
--   Necessário token de autorização
--   Necessário ser administrador ou ser instrutor do módulo
+- Sem body na requisição
+- Sem body na resposta
+- Necessário token de autorização
+- Necessário ser administrador ou ser instrutor do módulo
 
 | Status Code |
 | ----------- |
@@ -693,19 +1116,20 @@ Possíveis erros:
 | Error | Message | Status Code |
 | ------------------------------------------------------------------------------|-------------------------------|-------------|
 | should not be able to delete a video url without token | Missing token | 401 |
-| should no be able to delete a video url with invalid/expired token | Invalid or expired token | 401 |
+| should not be able to delete a video url with invalid/expired token | Invalid or expired token | 401 |
 | should not be able to delete a video url without adm/instructor permission | Access denied | 403 |
+| should not be able to update a video when instructor don't have this module | Instructor not allowed | 401 |
 | should not be able to delete a video with an invalid video id | Access denied | 404 |
 
 ---
 
 ## 5. **Rota de Marcadores de Video**
 
-[ Voltar para o topo ](#indice-de-rotas)
+[ Voltar para o topo ](#índice-com-todas-as-rotas-do-projeto)
 
--   [POST - create marker](#61-POST)
--   [PATCH - update marker](#62-PATCH)
--   [DELETE - delete marker](#63-DELETE)
+- [POST - create marker](#61-POST)
+- [PATCH - update marker](#62-PATCH)
+- [DELETE - delete marker](#63-DELETE)
 
 ---
 
@@ -717,8 +1141,8 @@ Possíveis erros:
 
 Rota para criação de marcador
 
--   Necessário token de autorização
--   Necessário ser administrador ou ser instrutor do módulo
+- Necessário token de autorização
+- Necessário ser administrador ou ser instrutor do módulo
 
 | Campo   | Tipo    | Descrição                           |
 | ------- | ------- | ----------------------------------- |
@@ -768,7 +1192,7 @@ Possíveis erros:
 | Error | Message | Status Code |
 | ------------------------------------------------------------------------------|-------------------------------|-------------|
 | should not be able create a marker with h:m:s invalid | time not validate | 400 |
-| should no be able to create a video with invalid/expired token | Invalid or expired token | 401 |
+| should not be able to create a video with invalid/expired token | Invalid or expired token | 401 |
 | should not be able create a marker with h:m:s equals | this video needed to equal marks video | 400 |
 | should not be able create a marker without adm access | Instructor not allowed | 403 |
 | should not be able create a marker with invalid ID video | video not found | 400 |
@@ -783,8 +1207,8 @@ Possíveis erros:
 
 Rota para atualização de marcador
 
--   Necessário token de autorização
--   Necessário ser administrador ou ser instrutor do módulo
+- Necessário token de autorização
+- Necessário ser administrador ou ser instrutor do módulo
 
 | Campo | Tipo   | Descrição                 |
 | ----- | ------ | ------------------------- |
@@ -827,7 +1251,7 @@ Possíveis erros:
 
 ---
 
-## 6.3 **DELETE**
+## 5.3 **DELETE**
 
 ### Delete Marker
 
@@ -835,8 +1259,8 @@ Possíveis erros:
 
 Rota para deletar marcador
 
--   Necessário token de autorização
--   Necessário ser administrador ou ser instrutor do módulo
+- Necessário token de autorização
+- Necessário ser administrador ou ser instrutor do módulo
 
 | Campo | Tipo   | Descrição                  |
 | ----- | ------ | -------------------------- |
